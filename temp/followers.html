@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./followers.css">
+
+  <title>CribSpace | Anthony Jobber</title>
+</head>
+
+<body>
+
+  <nav id="nav-bar">
+
+    <div class="nav-left">
+
+      <h2><a href="./index.html" class="logo"><span class="logo-style">C</span> ribSpace</a></h2>
+
+    </div>
+    <div class="nav-right">
+
+      <div class="search-box">
+
+        <a><img src="./images/search.png" onclick="QueryListToggle()"></a>
+
+        <input type="text" placeholder=" search for a user... " id="search-inp" oninput="ShowInfoToggle(this.id)">
+
+      </div>
+      <div class="nav-user-icon is_online" onclick="SettingsMenuToggle()">
+
+        <img src="./images/profile-pic.png">
+
+      </div>
+
+      <!-- ---------------Small info ----------------------------- -->
+
+      <div class="small-info" id="info">
+        <p>click the search icon when done</p>
+      </div>
+
+      <!---------------settings menu  ---------------------->
+
+      <div id="settings-menu" class="settings-menu-original">
+        <div id="dark-btn">
+          <span></span>
+        </div>
+        <div class="settings-menu-inner">
+          <div class="write-post-user-profile">
+            <a href=""><img src="./images/profile-pic.png"></a>
+            <div>
+              <p>Anthony Jobber</p>
+              <a href="./user-profile.html">see your profile</a>
+            </div>
+          </div>
+          <hr>
+          <div class="write-post-user-profile">
+            <a href=""><img src="./images/feedback.png"></a>
+            <div>
+              <p>Feedback</p>
+              <a href="">Help us improve our design</a>
+            </div>
+          </div>
+          <hr>
+          <div class="settings-links">
+            <img src="./images/setting.png" class="settings-icon">
+            <a href="./custom_settings.html">custom profile settings</a>
+          </div>
+          <div class="settings-links">
+            <img src="./images/help.png" class="settings-icon">
+            <a href="">Help & Support</a>
+          </div>
+          <div class="settings-links">
+            <img src="./images/logout.png" class="settings-icon">
+            <a href="./logout.html">Log Out</a>
+          </div>
+        </div>
+        <!-- --------------------- Query list------------------------------ -->
+      </div>
+      <div class="query-list" id="query-listing">
+        <p>Search Results</p>
+        <div class="listings-container">
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-5.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Henry Gibbin</h5>
+              <p>react developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-1.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Damsel Jeremy</h5>
+              <p>.NET developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-4.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Albert Fart</h5>
+              <p>Node developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </nav>
+
+  <div class="container" id="body-container">
+
+    <div class="left-sidebar">
+
+      <div class="important-links">
+        <a href="/index.html"><img id="home-icon" src="/images/profile-home.png">Home</a>
+        <a href="/followers.html" class="current"><img id="addfriends-icon" src="./images/icons8-follower-64.png">Your
+          followers</a>
+      </div>
+
+      <div class="shortcuts-links">
+        <h3>Your Space: </h3>
+        <a href="./create_post.html">
+          <h2 id="addpost-icon">+</h2>New Post
+        </a>
+        <a href="./user-profile.html"><img id="account-image" src="./images/icons8-user-32.png">Your Crib</a>
+        <a href="./notif.html"><img id="short-notif-icon" src="./images/profile-job.png">Notifications</a>
+        <a href="./logout.html"><img src="./images/logout.png">Log Out</a>
+      </div>
+
+      <div class="about-link">
+        <a href=""><img id="about-img" src="./images/profile-study.png">About CribSpace</a>
+      </div>
+
+      <div class="footer">
+        <p>CribSpace &copy; 2023 | All rights reserved</p>
+      </div>
+
+    </div>
+    <div class="main-content">
+      <div class="title">
+        <h3>Follower requests</h3>
+        <p>You have 6 requests</p>
+      </div>
+      <div id="requests-container">
+        <div id="request-obj" class="requests">
+          <div class="profile-img">
+            <a href=""><img src="./images/member-6.png"></a>
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Janet Miller</h5>
+              <small>software developer</small>
+            </div>
+            <div class="buttons">
+              <a class="accept">Accept</a>
+              <a class="decline">Decline</a>
+            </div>
+          </div>
+        </div>
+        <div id="request-ob" class="requests">
+          <div class="profile-img">
+            <a href=""><img src="./images/member-5.png"></a>
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Connor Benson</h5>
+              <small>Angular developer</small>
+            </div>
+            <div class="buttons">
+              <a class="accept">Accept</a>
+              <a class="decline">Decline</a>
+            </div>
+          </div>
+        </div>
+        <div id="reque-ob" class="requests">
+          <div class="profile-img">
+            <a href=""><img src="./images/member-3.png"></a>
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Pappy Dunman</h5>
+              <small>Flutter developer</small>
+            </div>
+            <div class="buttons">
+              <a class="accept">Accept</a>
+              <a class="decline">Decline</a>
+            </div>
+          </div>
+        </div>
+        <div id="request-oj" class="requests">
+          <div class="profile-img">
+            <a href=""><img src="./images/member-2.png"></a>
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Brandon Stally</h5>
+              <small>IT journalist</small>
+            </div>
+            <div class="buttons">
+              <a class="accept">Accept</a>
+              <a class="decline">Decline</a>
+            </div>
+          </div>
+        </div>
+        <div id="req-obj" class="requests">
+          <div class="profile-img">
+            <a href=""><img src="./images/member-1.png"></a>
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Jamin Anvil</h5>
+              <small>IT instructor</small>
+            </div>
+            <div class="buttons">
+              <a class="accept">Accept</a>
+              <a class="decline">Decline</a>
+            </div>
+          </div>
+        </div>
+        <div id="request-obj" class="requests">
+          <div class="profile-img">
+            <a><img src="./images/member-9.png"></a>
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Janet Miller</h5>
+              <small>software developer</small>
+            </div>
+            <div class="buttons">
+              <a class="accept">Accept</a>
+              <a class="decline">Decline</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="title">
+        <h3>Your followers</h3>
+        <p>You have 120 followers</p>
+      </div>
+      <div id="followers-container">
+        <div class="followers">
+          <div class="profile-img">
+            <img src="./images/busy-road.jpg">
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Culling Ruby</h5>
+              <small>RTA Journalist</small>
+            </div>
+          </div>
+        </div>
+        <div class="followers">
+          <div class="profile-img">
+            <img src="./images/julen-rey-azcona-bm5_NQOJ1KI-unsplash.jpg">
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Andrew Lapiewr</h5>
+              <small>RTA Journalist</small>
+            </div>
+          </div>
+        </div>
+        <div class="followers">
+          <div class="profile-img">
+            <img src="./images/status-2.png">
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Kevin hart</h5>
+              <small>RTA Journalist</small>
+            </div>
+          </div>
+        </div>
+        <div class="followers">
+          <div class="profile-img">
+            <img src="./images/wheat-field.jpg">
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Cussy Savier</h5>
+              <small>NTA Journalist</small>
+            </div>
+          </div>
+        </div>
+        <div class="followers">
+          <div class="profile-img">
+            <img src="./images/mailchimp-lAx4E6Gl06s-unsplash.jpg">
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Ruby Curry</h5>
+              <small>RTID Analyst</small>
+            </div>
+          </div>
+        </div>
+        <div class="followers">
+          <div class="profile-img">
+            <img src="./images/arent-you-cute.jpg">
+          </div>
+          <div class="details">
+            <div class="info">
+              <h5>Culling Ruby</h5>
+              <small>RTA Journalist</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <script src="./followers.js"></script>
+</body>
+
+</html>

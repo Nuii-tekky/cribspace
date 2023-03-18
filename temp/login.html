@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./login.css">
+
+  <title>CribSpace | Login</title>
+</head>
+
+<body>
+
+  <nav id="nav-bar">
+
+    <div class="nav-left">
+
+      <h2><a href="./index.html" class="logo"><span class="logo-style">C</span> ribSpace</a></h2>
+
+    </div>
+    <div class="nav-right">
+      <button id="signup-btn"> Sign up</button>
+    </div>
+
+  </nav>
+  
+  <div class="main-container">
+    <div class="sub-container">
+
+      <div class="header-messages">
+        <h4 id="heading">Login To Your CribSpace Account</h4>
+        <p id="message" class="mes-remove">Sorry! invalid credentials</p>
+      </div>
+      <div class="form-container">
+        <form id="login-form" onsubmit="submitloginform()">
+          <input type="text" placeholder="username or email..." class="inputs" required>
+          <input type="password" placeholder="password" class="inputs" required>
+          <button type="submit" id="login-btn">Login...</button>
+        </form>
+        <div class="footer-message">
+          <h5>Dont have an account? <span id="signup-recom">Signup here</span></h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="./login.js"></script>
+</body>
+
+</html>

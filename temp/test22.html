@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      height: 150rem;
+    }
+
+    h3{
+      position: sticky;
+      top: 0;
+    }
+
+    h2{
+      color: #d91212;
+    }
+  </style>
+
+</head>
+<body>
+  <h2>uiux</h2>
+  <h3 id="hh"> </h3>
+
+  <script>
+    const heading= document.getElementById("hh")
+
+    const scrollposi= ()=>{
+      var scrollpos= window.scrollY
+      if(scrollpos >= 200 && scrollpos <= 212){
+        document.body.style.background= "red"
+      }
+      else{
+        document.body.style.background= ""
+      }
+      heading.textContent= `the scroll positon is ${scrollpos}`
+      return true
+    }
+
+    window.addEventListener("scroll",scrollposi)
+  </script>
+</body>
+</html>

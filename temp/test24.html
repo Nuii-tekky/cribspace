@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{height: 333rem;}
+    button{
+      position: sticky;
+      top: 20%;
+    }
+  </style>
+</head>
+<body>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium aliquid architecto, commodi deserunt autem dolor aliquam voluptatem reprehenderit non exercitationem. Asperiores magni aliquid officiis quos ad tempore eius illum temporibus harum velit sunt quia similique, odio, dolorum doloremque nam rem eveniet amet voluptates doloribus et dolor! Iure, similique eaque accusamus, non ex velit suscipit nobis deleniti aut nemo quae quam sit a veniam consequuntur repudiandae minus aspernatur beatae minima. Dolores ex eaque optio voluptate corrupti id quasi ratione? Minima, odio accusantium neque quam dolor eligendi repellat maiores sequi rem, doloribus distinctio voluptas illo quaerat, laudantium tempore nesciunt saepe temporibus? Fugit a doloribus quis natus magni ullam, amet, beatae ut exercitationem id similique suscipit veritatis. Modi dicta tempora dignissimos optio. Facilis, quos! Distinctio amet similique, delectus voluptates excepturi eaque ea quia dolorem adipisci ad corporis vel incidunt eligendi earum repudiandae fug eveniet, corporis eligendi omnis! Consectetur repellendus earum assumenda! Delectus provident est, cum necessitatibus hic in aliquid amet error magnam obcaecati.tem! Earum mollitia molestiae recusandae. Iste praesentium quisquam Omnis incidunt mollitia laboriosam voluptates quaerat impedit nobis, natus dolores nulla! Eaque vero facilis minima ipsam magni repudiandae, mollitia omnis quidem reiciendis libero rem voluptatem inventore exercitationem odio delectus culpa? Aliquam facilis asperiores nostrum nihil molestias ducimus, id vel dolores quasi magni a, distit omnis harum expedita! Nobis eum eos nemo saepe numquam mollitia eligendi odio velit obcaecati repellat et illo, est error. Doloribus voluptas, repellendus animi iure accusantium, id nisi omnis temporibus fugit consequuntur ab suscipit! Possimus dicta, quos harum recusandae hic iusto inventore officia ullam volupta reiciendis distinctio voluptatum cumque, provident dolores placeat illo veniam et aut fuga sequi consequuntur totam earum eos, auteminctio dignissimos repellendus placeat iure temporibus quaerat! Quos optio provident, dolore veniam iusto deleniti excepturi doloremque molestiae autem odio suscipit illum porro, praesentium temporibus at vitae, assumenda consectetur facilis cumque totam ad inventore? Eos adipisci impedit neque optio ipsam voluptates vero accusamus labore nulla autem magni aliquam itaque quae vel aperiam, quod consectetur quia velit. Tenetur nihil nemo excepturi sint minima velit ab odit aliquam, eligendi fugiat? Totam nam natus similique deserunt doloribus.</p>
+  <button id="btn" onclick="run()">Click</button>
+  <button onclick="setpos()">set pos</button>
+  <button onclick="show()">console</button>
+  <script>
+    let arr= []
+    const run= ()=>{
+      window.scroll(0,0)
+      return true
+    }
+
+    const setpos=()=>{
+      arr.push(window.scrollY)
+      return true
+    }
+
+    const show= ()=>{
+      console.log(arr)
+      return true
+    }
+  </script>
+</body>
+</html>

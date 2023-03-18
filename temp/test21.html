@@ -1,0 +1,48 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .no-js{
+      background: #333;
+      color: white;
+    }
+
+    img{
+      margin: 23rem;
+      width: 34px;
+      height: 34px;
+    }
+
+    body{
+      height: 234rem;
+    }
+  </style>
+  
+</head>
+<body id="no">
+  <img src="./images/autumn-leaf.jpg" onclick="ChangeBackground()">
+  <script>
+    const body= document.getElementById("no")
+    const posi= ()=>{
+      return window.scrollY
+    }
+    const ChangeBackground=()=>{
+      if(posi() > 1){
+        console.log("you fucking did it..............")
+      }
+      return body.classList.toggle("no-js")
+    }
+
+
+
+    
+  </script>
+</body>
+</html>

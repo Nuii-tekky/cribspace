@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./home.css">
+
+  <title>CribSpace | Welcome</title>
+</head>
+
+<body>
+
+  <nav id="nav-bar">
+
+    <div class="nav-left">
+
+      <h2><a href="./index.html" class="logo"><span class="logo-style">C</span> ribSpace</a></h2>
+
+    </div>
+    <div class="nav-right">
+
+      <div class="search-box">
+                                                                    
+        <a><img src="./images/search.png" onclick="QueryListToggle()"></a>
+
+        <input type="text" placeholder=" search for a user... "  id ="search-inp" oninput="ShowInfoToggle(this.id)">
+
+      </div>
+      <div class="nav-user-icon is_online" onclick="SettingsMenuToggle()">
+
+        <img src="./images/profile-pic.png">
+
+      </div>
+
+      <!-- ---------------Small info ----------------------------- -->
+
+      <div class="small-info" id="info">
+        <p>click the search icon when done</p>
+      </div>
+
+      <!---------------settings menu  ---------------------->
+
+      <div id="settings-menu" class="settings-menu-original">
+        <div id="dark-btn">
+          <span></span>
+        </div>
+        <div class="settings-menu-inner">
+          <div class="write-post-user-profile">
+            <a href=""><img src="./images/profile-pic.png"></a>
+            <div>
+              <p>Anthony Jobber</p>
+              <a href="./user-profile.html">see your profile</a>
+            </div>
+          </div>
+          <hr>
+          <div class="write-post-user-profile">
+            <a href=""><img src="./images/feedback.png"></a>
+            <div>
+              <p>Feedback</p>
+              <a href="">Help us improve our design</a>
+            </div>
+          </div>
+          <hr>
+          <div class="settings-links">
+            <img src="./images/setting.png" class="settings-icon">
+            <a href="./custom_settings.html">custom profile settings</a>
+          </div>
+          <div class="settings-links">
+            <img src="./images/help.png" class="settings-icon">
+            <a href="">Help & Support</a>
+          </div>
+          <div class="settings-links">
+            <img src="./images/logout.png" class="settings-icon">
+            <a href="./logout.html">Log Out</a>
+          </div>
+        </div>
+        <!-- --------------------- Query list -------------------------------->
+      </div>
+      <div class="query-list" id="query-listing">
+        <p>Search Results</p>
+        <div class="listings-container">
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-5.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Henry Gibbin</h5>
+              <p>react developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-1.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Damsel Jeremy</h5>
+              <p>.NET developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-4.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Albert Fart</h5>
+              <p>Node developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </nav>
+
+  <div class="container" id="body-container">
+
+    <div class="left-sidebar">
+
+      <div class="important-links">
+        <a href="#" class="current"><img id="home-icon" src="/images/profile-home.png">Home</a>
+        <a href="/followers.html"><img id="addfriends-icon" src="./images/icons8-follower-64.png">Your followers</a>
+      </div>
+
+      <div class="shortcuts-links">
+        <h3>Your Space: </h3>
+        <a href="./create_post.html">
+          <h2 id="addpost-icon">+</h2>New Post
+        </a>
+        <a href="./user-profile.html"><img id="account-image" src="./images/icons8-user-32.png">Your Crib</a>
+        <a href="./logout.html"><img src="./images/logout.png">Log Out</a>
+      </div>
+
+      <div class="about-link">
+        <a href=""><img id="about-img" src="./images/profile-study.png">About CribSpace</a>
+      </div>
+
+      <div class="footer">
+        <p>CribSpace &copy; 2023 | All rights reserved</p>
+      </div>
+
+    </div>
+
+    <div class="main-content">
+
+      <div class="write-post-container">
+        <div class="write-post-user-profile">
+          <a href=""><img src="./images/profile-pic.png"></a>
+          <div>
+            <p>Anthony Jobber</p>
+            <small>IT specialist</small>
+          </div>
+        </div>
+
+        <div class="post-input-container">
+          <textarea rows="3" placeholder="hey Anthony,tell us somethin...."></textarea>
+          <a href="/" class="post-input-send">Done</a>
+          <a href="./create_post.html" id="add-photos-icon"><img src="./images/photo.png">Add your photos</a>
+        </div>
+      </div>
+
+      <div class="post-container">
+        <div class="write-post-user-profile">
+          <a href=""><img src="./images/profile-pic.png"></a>
+          <div>
+            <p>Anthony Jobber</p>
+            <span>September 30,2023 | 10:00am</span>
+          </div>
+        </div>
+        <p class="post-text">Just preping for halloween</p>
+        <a href="./images/pumpkins.jpg" target="_blank"><img src="./images/pumpkins.jpg" class="post-img"></a>
+        <div class="activity-icons">
+          <div class="react"><img src="./images/heart.png">
+            <p id="no-likes">23</p>
+          </div>
+          <div class="react"><img src="./images/icons8-topic-48.png">
+            <p id="no-comments">10</p>
+          </div>
+          <div class="add-comment">
+            <img src="./images/profile-pic.png">
+            <input type="text" placeholder="comment here...">
+          </div>
+          <a href="" class="submit-comment">send</a>
+        </div>
+      </div>
+      <div class="post-container">
+        <div class="write-post-user-profile">
+          <a href=""><img src="./images/profile-pic.png"></a>
+          <div>
+            <p>Anthony Jobber</p>
+            <span>September 25,2023 | 11:00am</span>
+          </div>
+        </div>
+        <p class="post-text">Shopping in macau,nice adventure</p>
+        <a href="./images/macau.jpg" target="_blank"><img src="./images/macau.jpg" class="post-img"></a>
+        <div class="activity-icons">
+          <div class="react"><img src="./images/love (1).png">
+            <p id="no-likes">23</p>
+          </div>
+          <div class="react"><img src="./images/icons8-topic-48.png">
+            <p id="no-comments">11</p>
+          </div>
+          <div class="add-comment">
+            <img src="./images/profile-pic.png">
+            <input type="text" placeholder="comment here...">
+          </div>
+          <a href="" class="submit-comment">send</a>
+        </div>
+      </div>
+      <div class="post-container">
+        <div class="write-post-user-profile">
+          <a href=""><img src="./images/profile-pic.png"></a>
+          <div>
+            <p>Anthony Jobber</p>
+            <span>September 23,2023 | 11:00am</span>
+          </div>
+        </div>
+        <p class="post-text">Beach times uhnn???</p>
+        <a href="./images/Screenshot (153).png" target="_blank"><img src="./images/Screenshot (153).png"
+            class="post-img"></a>
+        <div class="activity-icons">
+          <div class="react"><img src="./images/heart.png">
+            <p id="no-likes">23</p>
+          </div>
+          <div class="react"><img src="./images/icons8-topic-48.png">
+            <p id="no-comments">45</p>
+          </div>
+          <div class="add-comment">
+            <img src="./images/profile-pic.png">
+            <input type="text" placeholder="comment here...">
+          </div>
+          <a href="" class="submit-comment">send</a>
+        </div>
+      </div>
+      <div class="post-container">
+        <div class="write-post-user-profile">
+          <a href=""><img src="./images/profile-pic.png"></a>
+          <div>
+            <p>Anthony Jobber</p>
+            <span>July 30,2023 | 10:00am</span>
+          </div>
+        </div>
+        <p class="post-text">When you finally fix that annoying bug</p>
+        <a href="./images/Screenshot (161).png" target="_blank"><img src="./images/Screenshot (161).png"
+            class="post-img"></a>
+        <div class="activity-icons">
+          <div class="react"><div class="love" id="love"></div>
+            <p id="no-likes">55</p>
+          </div>
+          <div class="react"><img src="./images/icons8-topic-48.png" onclick="ShowCommentsToggle()">
+            <p id="no-comments">39</p>
+          </div>
+          <div class="add-comment">
+            <img src="./images/profile-pic.png">
+            <input type="text" placeholder="comment here...">
+          </div>
+          <a href="" class="submit-comment">send</a>
+        </div>
+      </div>
+      <div class="post-container">
+        <div class="write-post-user-profile">
+          <a href=""><img src="./images/profile-pic.png"></a>
+          <div>
+            <p>Anthony Jobber</p>
+            <span>July 30,2023 | 10:00am</span>
+          </div>
+        </div>
+        <p class="post-text">The criminal master-mind,Respect!!!</p>
+        <a href="./images/Screenshot (74).png" target="_blank"><img src="./images/Screenshot (74).png"
+            class="post-img"></a>
+        <div class="activity-icons">
+          <div class="react"><img src="./images/heart.png">
+            <p id="no-likes">24</p>
+          </div>
+          <div class="react"><img src="./images/icons8-topic-48.png">
+            <p id="no-comments">45</p>
+          </div>
+          <div class="add-comment">
+            <img src="./images/profile-pic.png">
+            <input type="text" placeholder="comment here...">
+          </div>
+          <a href="" class="submit-comment">send</a>
+        </div>
+      </div>
+      <div class="post-container" id="post-container">
+        <div class="write-post-user-profile">
+          <a href=""><img src="./images/profile-pic.png"></a>
+          <div>
+            <p>Anthony Jobber</p>
+            <span>July 28,2023 | 3:00pm</span>
+          </div>
+        </div>
+        <p class="post-text">Brand new whip for my girl</p>
+        <a href="./images/red-car.jpg" target="_blank"><img src="./images/red-car.jpg" class="post-img"></a>
+        <div class="activity-icons">
+          <div class="react"><img src="./images/heart.png">
+            <p id="no-likes">44</p>
+          </div>
+          <div class="react"><img src="./images/icons8-topic-48.png" onclick="ShowCommentsToggle()">
+            <p id="no-comments">5</p>
+          </div>
+          <div class="add-comment">
+            <img src="./images/profile-pic.png">
+            <input type="text" placeholder="comment here...">
+          </div>
+          <a href="" class="submit-comment">send</a>
+        </div>
+        <div class="comments-div">
+          <h4 id="comments-h4">Comments</h4>
+          <div class="comments">
+            <div class="user-comment-id">
+              <a href=""><img src="./images/feed-image-2.png"></a>
+              <p>Anthonia Chapel</p>
+            </div>
+            <h4 class="comment">I love to comment a lot</h4>
+          </div>
+          <div class="comments">
+            <div class="user-comment-id">
+              <a href=""><img src="./images/feed-image-5.png"></a>
+              <p>Lilly docker</p>
+            </div>
+            <h4 class="comment">Thats a really nice car,you should be proud</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="post-container">
+        <div class="write-post-user-profile">
+          <a href=""><img src="./images/profile-pic.png"></a>
+          <div>
+            <p>Anthony Jobber</p>
+            <span>February 25,2023 | 1:00pm</span>
+          </div>
+        </div>
+        <p class="post-text">Its pretty in Chilly in Norway</p>
+        <a href="./images/christmas.jpg" target="_blank"><img src="./images/christmas.jpg" class="post-img"></a>
+        <div class="activity-icons">
+          <div class="react"><img src="./images/heart.png">
+            <p id="no-likes">90</p>
+          </div>
+          <div class="react"><img src="./images/icons8-topic-48.png">
+            <p id="no-comments">45</p>
+          </div>
+          <div class="add-comment">
+            <img src="./images/profile-pic.png">
+            <input type="text" placeholder="comment here...">
+          </div>
+          <a href="" class="submit-comment">send</a>
+        </div>
+      </div>
+
+      <div class="post-container">
+        <div class="write-post-user-profile">
+          <a href=""><img src="./images/profile-pic.png"></a>
+          <div>
+            <p>Anthony Jobber</p>
+            <span>February 13,2023 | 12:56pm</span>
+          </div>
+        </div>
+        <p class="post-text">Hi my name is Anthony jobbers and i have just posted a content on my first post feed i am
+          glad</p>
+        <div class="activity-icons">
+          <div class="react"><img src="./images/love (1).png">
+            <p id="no-likes">748</p>
+          </div>
+          <div class="react"><img src="./images/icons8-topic-48.png">
+            <p id="no-comments">32</p>
+          </div>
+          <div class="add-comment">
+            <img src="./images/profile-pic.png">
+            <input type="text" placeholder="comment here...">
+          </div>
+          <a href="" class="submit-comment">send</a>
+        </div>
+      </div>
+
+      <button type="button" id="load-more-btn">Load more</button>
+    </div>
+    <div class="right-sidebar">
+
+      <div class="sidebar-notif-title">
+        <h4>Notifications </h4>
+        <a href="./notif.html" id="notif-title-link">see more</a>
+      </div>
+
+      <div class="sidebar-notif">
+        <div class="notif-icon">
+          <h3>!</h3>
+        </div>
+        <div class="notif-para">
+          <h5>This is a test for Notifications and i am trying to make it long</h5>
+          <p>2minutes ago</p>
+
+        </div>
+      </div>
+      <div class="sidebar-notif">
+        <div class="notif-icon">
+          <h3>!</h3>
+        </div>
+        <div class="notif-para">
+          <h5>This is a test for Notifications and i am trying to make it long</h5>
+          <p>3minutes ago</p>
+
+        </div>
+      </div>
+      <div class="sidebar-notif">
+        <div class="notif-icon">
+          <h3>!</h3>
+        </div>
+        <div class="notif-para">
+          <h5>This is a test for Notifications and i am trying to make it long</h5>
+          <p>5minutes ago</p>
+
+        </div>
+      </div>
+
+      <div class="sidebar-notif-title recommend-users">
+        <h5>Cribbers you can follow</h5>
+      </div>
+      <div class="recom-users">
+        <div class="recom-list">
+          <div class="recom-user-img"><a href=""><img src="./images/member-1.png"></a></div>
+          <div class="recom-user-info">
+            <h5>Alex Gibson</h5>
+            <p>cloud engineer</p>
+          </div>
+          <a href="/" class="follow-user">follow</a>
+        </div>
+        <div class="recom-list">
+          <div class="recom-user-img"><a href=""><img src="./images/member-2.png"></a></div>
+          <div class="recom-user-info">
+            <h5>Nicolas kai</h5>
+            <p>C++ developer</p>
+          </div>
+          <a href="/" class="follow-user">follow</a>
+        </div>
+        <div class="recom-list">
+          <div class="recom-user-img"><a href=""><img src="./images/member-3.png"></a></div>
+          <div class="recom-user-info">
+            <h5>Cindy Davis</h5>
+            <p>django developer</p>
+          </div>
+          <a href="/" class="follow-user">follow</a>
+        </div>
+        <div class="recom-list">
+          <div class="recom-user-img"><a href=""><img src="./images/member-4.png"></a></div>
+          <div class="recom-user-info">
+            <h5>Christian Powers</h5>
+            <p>data scientist</p>
+          </div>
+          <a href="/" class="follow-user">follow</a>
+        </div>
+        <div class="recom-list">
+          <div class="recom-user-img"><a href=""><img src="./images/member-5.png"></a></div>
+          <div class="recom-user-info">
+            <h5 id="eve">Henry Gibbin</h5>
+            <p>react developer</p>
+          </div>
+          <a href="/" class="follow-user">follow</a>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+  <script src="./home.js"></script>
+</body>
+
+</html>

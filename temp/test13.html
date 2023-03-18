@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    button {
+      display: inline-block;
+      width: 18%;
+      padding: 4px 5px;
+      margin: auto;
+      background: #0ea85b;
+      color: #fff;
+      border: 0;
+      outline: none;
+      border-radius: 2px;
+      /* box-shadow: 2px 3px #777; */
+    }
+
+    button:active {
+      transition: transform 0.06s ease;
+      transform: scale(0.96);
+    }
+  </style>
+</head>
+
+<body>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <h1 id="head"></h1>
+  <button>
+    click me
+  </button>
+  <input type="text" name="" id="inp" oninput="runner()">
+
+  <p id="p" onclick="run()">paragraph </p>
+  <script>
+    let arr= []
+    const run = () => {
+      const para = document.getElementById("p")
+      return para.style["font-weight"]= ["700"]
+    }
+
+    const runner=()=>{      
+      const input = document.getElementById("inp")
+      const head= document.getElementById("head")
+      console.log(input.value)
+      if (input.value=== null){
+        let arr=[]
+      }
+      else{
+        arr.push(input)
+        if (arr.length > 4){
+          head.textContent= 'array is full'
+        }
+        else{
+          head.textContent='empty array'
+        }
+      }
+      
+      return true
+    }
+
+
+  </script>
+</body>
+
+</html>

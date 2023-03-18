@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="file" id="file">
+  <input type="text" id="inp">
+  <input type="number" id="adam" max="4444444444">
+  <p id="para"></p>
+
+  <script>
+    const para = document.getElementById("para")
+
+    const file = document.querySelector("#file")
+    file.addEventListener("change", (e) => {
+      const [file_select] = e.target.files
+      // get the filename and size from the constant created above
+      const { name: Filename, size } = file_select
+      // convert size in bytes to kilobytes>
+      const Filesize = (size / 100).toFixed(2)
+      const regex= new RegExp('[^.]+$')
+      const extension= Filename.match(regex)
+      const allowed_ext= ['img','png','jpg','jpeg','gif','svg']
+      if (allowed_ext.includes(`${extension}` )=== true){
+        para.textContent= 'very good'
+      } 
+      else{
+        para.textContent= 'very badddd'
+      }
+      console.log((`${extension}`).charAt(0))
+
+      
+    })
+     
+    document.getElementById("inp").placeholder= 'it has worked'
+    // const mylist= ['morning','afternoon','evening']
+    // if('afternoon' in mylist.values()){console.log('yessssssssss')}
+    // else{console.log('noooooooooooooooooooooooooooooo')}
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./custom-settings.css">
+
+  <title>Anthony | Account Settings</title>
+</head>
+
+<body id="body">
+ 
+  <nav id="nav-bar">
+
+    <div class="nav-left">
+
+      <h2><a href="./index.html" class="logo"><span class="logo-style">C</span> ribSpace</a></h2>
+
+    </div>
+    <div class="nav-right">
+
+      <div class="search-box">
+
+        <a><img src="./images/search.png" onclick="QueryListToggle()"></a>
+
+        <input type="text" placeholder=" search for a user... "  id ="search-inp" oninput="ShowInfoToggle(this.id)">
+
+      </div>
+      <div class="nav-user-icon is_online" onclick="SettingsMenuToggle()">
+
+        <img src="./images/profile-pic.png">
+
+      </div>
+
+      <!-- ---------------Small info ----------------------------- -->
+
+      <div class="small-info" id="info">
+        <p>click the search icon when done</p>
+      </div>
+
+      <!---------------settings menu  ---------------------->
+
+      <div id="settings-menu" class="settings-menu-original">
+        <div id="dark-btn">
+          <span></span>
+        </div>
+        <div class="settings-menu-inner">
+          <div class="write-post-user-profile">
+            <a href=""><img src="./images/profile-pic.png"></a>
+            <div>
+              <p>Anthony Jobber</p>
+              <a href="./user-profile.html">see your profile</a>
+            </div>
+          </div>
+          <hr>
+          <div class="write-post-user-profile">
+            <a href=""><img src="./images/feedback.png"></a>
+            <div>
+              <p>Feedback</p>
+              <a href="">Help us improve our design</a>
+            </div>
+          </div>
+          <hr>
+          <div class="settings-links">
+            <img src="./images/setting.png" class="settings-icon">
+            <a href="./custom_settings.html">custom profile settings</a>
+          </div>
+          <div class="settings-links">
+            <img src="./images/help.png" class="settings-icon">
+            <a href="">Help & Support</a>
+          </div>
+          <div class="settings-links">
+            <img src="./images/logout.png" class="settings-icon">
+            <a href="./logout.html">Log Out</a>
+          </div>
+        </div>
+        <!-- --------------------- Query list ----------------------------- -->
+      </div>
+      <div class="query-list" id="query-listing">
+        <p>Search Results</p>
+        <div class="listings-container">
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-5.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Henry Gibbin</h5>
+              <p>react developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-1.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Damsel Jeremy</h5>
+              <p>.NET developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-4.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Albert Fart</h5>
+              <p>Node developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </nav>
+  <div class="container" id="body-container">
+    <div class="left-sidebar">
+      <div class="important-links">
+        <a href="./index.html"><img id="home-icon" src="/images/profile-home.png">Home</a>
+        <a href="/followers.html"><img id="addfriends-icon" src="./images/icons8-follower-64.png">Your followers</a>
+      </div>
+
+      <div class="shortcuts-links">
+        <h3>Your Space: </h3>
+        <a href="./create_post.html">
+          <h2 id="addpost-icon">+</h2>New Post
+        </a> 
+        <a href="./user-profile.html"><img id="account-image" src="./images/icons8-user-32.png">Your Crib</a>
+        <a href="./notif.html"><img id="short-notif-icon" src="./images/profile-job.png">Notifications</a>
+        <a href="./logout.html"><img src="./images/logout.png">Log Out</a>
+      </div>
+
+      <div class="about-link">
+        <a href=""><img id="about-img" src="./images/profile-study.png">About CribSpace</a>
+      </div>
+
+      <div class="footer">
+        <p>CribSpace &copy; 2023 | All rights reserved</p>
+      </div>
+
+    </div>
+    
+    <div class="main-content">
+      <div class="write-post-container">
+        <h3 class="upl-heading">Anthony Jobber | Account Settings</h3>
+      </div>
+      <div class="write-post-container">
+        <h5 class="upl-heading">..update your profile image,Bio and so much more </h5>
+      </div>
+      <div class="upload-profile-pic">
+        <div class="phase-1">
+          <img src="./images/profile-pic.png" alt="">
+          <h4 id="upl-heading">update your profile image... </h4>
+          <div class="input-file-div">
+            <input type="file" id="file" class="file">
+            <label for="file">
+              Select file
+            </label>
+          </div>
+        </div>
+        <div class="phase-2">
+          <input type="submit" value=" upload image " id="upload-p-img" class="upload-p-img" onclick="overlayHandler()">
+        </div>
+      </div>
+      <div class="write-post-container">
+        <h4 class="upl-heading">Upload Your Bio....</h4>
+      </div>
+      <div class="upload-profile-pic">
+        <div class="bio">
+          <img src="./images/logo4.png">
+          <textarea placeholder="your bio is currently empty"></textarea>
+          <input type="submit" value="update bio" id="upload-bio" onclick="overlayHandler()">
+        </div>
+
+      </div>
+      <div class="write-post-container">
+        <h4 class="upl-heading">Your Details...</h4>
+      </div>
+      <div class="confirm-overlay-js" id="confirm-overlay">
+        <div class="confirm-div-js" id="confirm-div">
+          <h4>Are you sure you want to save changes</h4>
+          <div class="options">
+            <a id="yes" class="yes" onclick="confirmHandler(this.id)">yes</a>
+            <a id="no" class="no" onclick="confirmHandler(this.id)">Back</a>
+          </div>
+        </div>
+      </div>
+      <div class="main-details-container">
+        <div class="sub-details-container">
+          <div class="username-div">
+            <h5>Update Username</h5>
+            <input type="text" name="" id="" placeholder="Anthony Jobber" maxlength="30">
+            <button type="submit" onclick="overlayHandler()">update</button>
+          </div>
+          <div class="username-div">
+            <h5>Update Email</h5>
+            <input type="email" name="" id="" placeholder="test@test.com" maxlength="35">
+            <button type="submit" onclick="overlayHandler()">update</button>
+          </div>
+          <div class="username-div">
+            <h5>Update work field/job</h5>
+            <input type="text" name="" id="" placeholder="IT specialist" maxlength="30">
+            <button type="submit" onclick="overlayHandler()">update</button>
+          </div>
+          <div class="username-div">
+            <h5>Update your location</h5>
+            <input type="text" name="" id="" placeholder="madrid/spain" maxlength="30">
+            <button type="submit" onclick="overlayHandler()">update</button>
+          </div>
+        </div>
+        <div class="mobile-div">
+          <h5>Update mobile-number</h5>
+          <input type="number" name="" id="" placeholder="+234 567 5758 5885">
+          <button type="submit" onclick="overlayHandler()">update</button>
+        </div>
+      </div>
+
+    </div>
+    
+  </div>
+  
+  <script src="./custom_settings.js"></script>
+</body>
+
+</html>

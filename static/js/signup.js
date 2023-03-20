@@ -39,8 +39,8 @@ const updatemessage = (message, color, tmargin) => {
     else if (value === "step2") {
       msg.style.marginLeft = "9%"
     }
-    else if(value === "step3"){
-      msg.style.marginLeft= "14%"
+    else if (value === "step3") {
+      msg.style.marginLeft = "14%"
     }
   }
   else {
@@ -58,7 +58,7 @@ p1.addEventListener("input", () => {
   if (p1.value === "") {
     let message = "...Discover your space"
     updatemessage(message, okcolor, "normal")
-    addborder(p1, "green")
+    addborder(p1, "")
     p2.setAttribute("readonly", true)
     p2.value = ""
     addborder(p2, "")
@@ -70,7 +70,7 @@ p1.addEventListener("input", () => {
 })
 
 
-const submitform = async () => { }
+const submitform = async (a1,a2,a3,a4,a5,a6) => {}
 
 
 const validateformdata = () => {
@@ -78,72 +78,53 @@ const validateformdata = () => {
   const ln = document.getElementById("lname")
   const em = document.getElementById("email")
   const us = document.getElementById("uname")
-  const occ = document.getElementById("work")
-  const location = document.getElementById("location")
   const p1 = document.getElementById("pass1")
   const p2 = document.getElementById("pass2")
 
 
   if (p1.value.length >= 6) {
     if (p1.value == p2.value) {
-      let em_val = em.value
       addborder(p1)
       addborder(p2)
+      let em_val = em.value
       if (em_val.endsWith(".com") && em_val.search("@") !== -1 && em_val !== "") {
         em.style.border = ""
         if (fn.value !== "") {
 
           if (ln.value !== "") {
             if (us.value !== "") {
-              if (occ.value !== "") {
-                if (location.value !== "") {
-                  if (location.value.search(",") !== -1) {
-                    addborder(fn)
-                    addborder(ln)
-                    addborder(em)
-                    addborder(us)
-                    addborder(occ)
-                    addborder(location)
-                    addborder(p1)
-                    addborder(p2)
-                    updatemessage("You are all set to go...", okcolor)
-                    submitform(fn, ln, em, us, occ, location, p1, p2)
-                    return true
-                  }
-                  else {
-                    let message = "please put a comma after city name"
-                    addborder(location, "red")
-                    updatemessage(message, cautioncolor, "step3")
-                  }
-                }
-                else {
-                  addborder(location, "red")
-                  let message = "please fill the entire form"
-                  updatemessage(message, cautioncolor)
-                }
-              }
-              else {
-                addborder(occ, "red")
-                let message = "please fill the entire form"
-                updatemessage(message, cautioncolor)
-              }
+              addborder(fn)
+              addborder(ln)
+              addborder(em)
+              addborder(us)
+              addborder(p1)
+              addborder(p2)
+              updatemessage("You are all set to go...", okcolor)
+              submitform(fn, ln, em, us, p1, p2)
+              return true
             }
             else {
               addborder(us, "red")
               let message = "please fill the entire form"
               updatemessage(message, cautioncolor)
+              p1.value = ""
+              p2.value = ""
             }
           }
           else {
             addborder(ln, "red")
             let message = "please fill the entire form"
             updatemessage(message, cautioncolor)
+            p1.value = ""
+            p2.value = ""
           }
         }
         else {
           addborder(fn, "red")
           let message = "please fill the entire form"
           updatemessage(message, cautioncolor)
+          p1.value = ""
+          p2.value = ""
         }
 
       }
@@ -151,6 +132,8 @@ const validateformdata = () => {
         let message = "invalid email address"
         updatemessage(message, cautioncolor)
         addborder(em, "red")
+        p1.value = ""
+        p2.value = ""
       }
     }
     else {
@@ -173,5 +156,3 @@ submitbtn.addEventListener("click", (e) => {
   e.preventDefault()
   validateformdata()
 })
-
-

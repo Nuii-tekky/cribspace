@@ -70,7 +70,59 @@ p1.addEventListener("input", () => {
 })
 
 
-const submitform = async (a1,a2,a3,a4,a5,a6) => {}
+
+const Title = input => {
+  if (typeof (input) === "string") {
+    let first_char = input.charAt(0)
+    let updated_first_char = first_char.toUpperCase()
+    let newString = input.replace(first_char, updated_first_char)
+    return newString
+  }
+  else {
+    console.log("fuck off")
+  }
+}
+
+
+const submitform = async (a1, a2, a3, a4, a5, a6) => {
+  const firstnamee = a1.value;
+  const lastnamee = a2.value;
+  const emaill = a3.value;
+  const usernamee = a4.value;
+  const passwordd = a5.value;
+  const token = a6.value;
+
+
+
+
+
+  const data = {
+    Firstname: Title(firstnamee),
+    Lastname: Title(lastnamee),
+    email: emaill,
+    username: Title(usernamee),
+    password: passwordd
+  }
+
+
+  const endpoint = "http://127.0.0.1:8000/api/createnewuser"
+
+
+  const request_params = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "X-CSRFToken": `${token}`
+    },
+    body: JSON.stringify(data)
+  }
+
+  const response = await fetch(endpoint, request_params)
+  console.log(response)
+
+}
+
 
 
 const validateformdata = () => {
@@ -80,8 +132,7 @@ const validateformdata = () => {
   const us = document.getElementById("uname")
   const p1 = document.getElementById("pass1")
   const p2 = document.getElementById("pass2")
-
-
+  const tk = document.getElementById("token")
   if (p1.value.length >= 6) {
     if (p1.value == p2.value) {
       addborder(p1)
@@ -100,7 +151,8 @@ const validateformdata = () => {
               addborder(p1)
               addborder(p2)
               updatemessage("You are all set to go...", okcolor)
-              submitform(fn, ln, em, us, p1, p2)
+
+              submitform(fn, ln, em, us, p1, tk)
               return true
             }
             else {

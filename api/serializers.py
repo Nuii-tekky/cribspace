@@ -4,14 +4,14 @@ from home.models import Profile
 from django.contrib.auth import get_user_model
 
 class UserSerializer(serializers.ModelSerializer):
-  class meta:
+  class Meta:
     model= get_user_model()
     fields= '__all__'
 
 
 class ProfileSerializeer(serializers.ModelSerializer):
   user = UserSerializer   
-  class meta:
+  class Meta:
     model= Profile
     fields='__all__'
 

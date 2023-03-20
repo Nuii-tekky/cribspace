@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 
 <head>
   <meta charset="UTF-8">
@@ -8,7 +10,8 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="./signup.css">
+  <link rel="stylesheet" href="{%static 'css/signup.css' %}">
+
 
   <title>CribSpace | Signup</title>
 </head>
@@ -43,6 +46,7 @@
           <input type="text" placeholder="username" class="inputs" required maxlength="20" id="uname">
           <input type="password" placeholder="password" class="inputs" required id="pass1">
           <input type="password" placeholder="confirm password" class="inputs" required id="pass2" readonly>
+          <input type="hidden" id="token" value="{{ csrf_token }}">
           <button type="submit" id="signup-btn">Signup</button>
         </form>
         <div class="footer-message">
@@ -52,8 +56,7 @@
     </div>
   </div>
 
-
-  <script src="./signup.js"></script>
+  <script src="{%static 'js/signup.js' %}"></script>
 </body>
 
 </html>

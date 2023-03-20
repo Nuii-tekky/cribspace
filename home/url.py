@@ -3,5 +3,6 @@ from . import views
 
 
 urlpatterns = [  
-    path('testing',views.test,name="null")
+    path('signup',views.rendersignup,name='signupform'),
+    path('signup',views.renderlogin,name= "loginform")
 ]

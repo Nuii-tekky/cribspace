@@ -7,3 +7,6 @@ def rendersignup(req):
 
 def renderlogin(req):
   return render(req,"login.html")
+
+def renderlogout(req):
+  return render(req,"logout.html")

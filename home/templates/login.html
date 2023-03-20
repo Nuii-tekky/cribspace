@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="./login.css">
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
 
   <title>CribSpace | Login</title>
 </head>
@@ -36,9 +38,10 @@
         <p id="message" class="mes-remove">Sorry! invalid credentials</p>
       </div>
       <div class="form-container">
-        <form id="login-form" onsubmit="submitloginform()">
-          <input type="text" placeholder="username or email..." class="inputs" required>
-          <input type="password" placeholder="password" class="inputs" required>
+        <form id="login-form">
+          <input type="text" placeholder="username or email..." class="inputs" required id="uname">
+          <input type="password" placeholder="password" class="inputs" id="pass" required>
+          <input type="hidden" value="{{ csrf_token }}">
           <button type="submit" id="login-btn">Login...</button>
         </form>
         <div class="footer-message">
@@ -49,7 +52,7 @@
   </div>
 
 
-  <script src="./login.js"></script>
+  <script src="{% static 'js/login.js' %}"></script>
 </body>
 
 </html>

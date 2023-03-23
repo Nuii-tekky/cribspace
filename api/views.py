@@ -17,3 +17,16 @@ def createnewuser(req,format=None):
     return Response({"details": "user saved"})  
   return Response({"details":"not saved"})
 
+
+@api_view(['POST'])
+def verifyuserexistence(req,format= None):
+  try:
+    pass
+  except:
+    pass
+
+
+
+
+
+

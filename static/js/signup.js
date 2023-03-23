@@ -92,13 +92,9 @@ const submitform = async (a1, a2, a3, a4, a5, a6) => {
   const passwordd = a5.value;
   const token = a6.value;
 
-
-
-
-
   const data = {
-    Firstname: Title(firstnamee),
-    Lastname: Title(lastnamee),
+    first_name: Title(firstnamee),
+    last_name: Title(lastnamee),
     email: emaill,
     username: Title(usernamee),
     password: passwordd
@@ -108,7 +104,7 @@ const submitform = async (a1, a2, a3, a4, a5, a6) => {
   const endpoint = "http://127.0.0.1:8000/api/createnewuser"
 
 
-  const request_params = {
+  const request_params = {   
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -119,6 +115,7 @@ const submitform = async (a1, a2, a3, a4, a5, a6) => {
   }
 
   const response = await fetch(endpoint, request_params)
+  const details= await response.json()
   console.log(response)
 
 }
@@ -208,3 +205,9 @@ submitbtn.addEventListener("click", (e) => {
   e.preventDefault()
   validateformdata()
 })
+
+
+function renderloginpage(){
+  let endpoint= "http://127.0.0.1:8000/home/login"
+  window.location.replace(endpoint)
+}

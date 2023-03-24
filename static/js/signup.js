@@ -83,6 +83,11 @@ const Title = input => {
   }
 }
 
+const updatedom=async (a1,a2,a3,a4,a5,a6)=>{
+ const responsedata= await submitform(a1,a2,a3,a4,a5,a6)
+ console.log(responsedata)
+}
+
 
 const submitform = async (a1, a2, a3, a4, a5, a6) => {
   const firstnamee = a1.value;
@@ -116,7 +121,7 @@ const submitform = async (a1, a2, a3, a4, a5, a6) => {
 
   const response = await fetch(endpoint, request_params)
   const details= await response.json()
-  console.log(response)
+  return details
 
 }
 
@@ -148,8 +153,8 @@ const validateformdata = () => {
               addborder(p1)
               addborder(p2)
               updatemessage("You are all set to go...", okcolor)
-
-              submitform(fn, ln, em, us, p1, tk)
+              updatedom(fn,ln,em,us,p1,tk)
+              
               return true
             }
             else {

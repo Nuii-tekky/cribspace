@@ -32,13 +32,13 @@ const updatemessage = (message, color, tmargin) => {
     msg.textContent = `${message}`
     msg.style.color = `${color}`
     if (value === "normal") {
-      msg.style.marginLeft = "22%"
+      msg.style.marginLeft = "28%"
     }
     else if (value === "step2") {
       msg.style.marginLeft = "9%"
     }
     else if (value === "step3") {
-      msg.style.marginLeft = "14%"
+      msg.style.marginLeft = "21%"
     }
   }
   else {
@@ -62,19 +62,35 @@ const Title = input => {
   }
 }
 
+const validateform=(a1,a2,a3)=>{
+  let username=a1
+  let password= a2
+  if (username.value === "" || password.value===""){
+    updatemessage("please fill the entire form","red","step3")
+  }
+  else{
+    updatedom(a1,a2,a3)
+  }
+}
 
 const submitform = async (a4, a5, a6) => {
   const usernamee = a4.value;
   const passwordd = a5.value;
   const token= a6.value
 
-  let username = Title(usernamee)
+  let username = ""
+  if(usernamee.endsWith(".com")){
+    username= usernamee
+  }
+  else{
+    username= Title(usernamee)
+  }
   let password = passwordd
+
   const data= {
     user: username,
     passwd: password
   }
-
 
   const endpoint = `http://127.0.0.1:8000/api/verifyuser`
 
@@ -89,17 +105,26 @@ const submitform = async (a4, a5, a6) => {
   }
 
   const response = await fetch(endpoint, request_param)
-  console.log(response)
-
+  const response_data= await response.json()
+  return response_data
 }
 
+const updatedom=async (a1,a2,a3)=>{
+  let responsedata= await submitform(a1, a2,a3)
+  if(responsedata["details"]==="no such user"){
+    updatemessage("invalid credentials","red","normal")
+    a1.value=""
+    a2.value=""
+  }
+
+}
 
 submitbtn.addEventListener("click", (e) => {
   e.preventDefault()
   const us = document.getElementById("uname")
   const p1 = document.getElementById("pass")
   const tk= document.getElementById("token")
-  submitform(us, p1,tk)
+  validateform(us,p1,tk)
 })
 
 function rendersignuppage() {

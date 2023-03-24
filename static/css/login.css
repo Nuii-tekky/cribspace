@@ -127,22 +127,11 @@ nav {
 }
 
 .message {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   font-size: 14px;
   font-weight: bolder;
-  color: red;
-  margin-left: 72px;
-  /* line-height: 3px; */
 }
 
-.mes-remove{
-  height: 0;
-  width: 0;
-  padding: 0;
-  margin: 0;
-  visibility: hidden;
-  font-size: 1px;
-}
 
 .form-container {
   background: rgb(250, 248, 248);

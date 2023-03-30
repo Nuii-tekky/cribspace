@@ -17,14 +17,14 @@
       background: #989898;
       height: 100vh;
       overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     a {
       text-decoration: none;
-
     }
 
-    a:active{
+    a:active {
       transition: all 0.4s ease;
       transform: scale(0.89967);
     }
@@ -44,14 +44,14 @@
       padding: 15px;
       background: #515151;
       color: #ddd;
-      border-radius: 8px;
+      border-radius: 4px;
       display: block;
       margin: 0 auto;
     }
 
     .body h3 {
       color: #b7b7b7;
-      font-size: 18px;
+      font-size: 16px;
       margin-bottom: 20px;
     }
 
@@ -62,45 +62,27 @@
     }
 
     .yes {
-      background: #e5e5e5;
+      background: #c5c5c5;
       text-align: center;
       cursor: pointer;
       border-radius: 3px;
-      padding: 4px 7px;
+      padding: 4px 5px;
       color: black;
-      transition: 0.4s ease-out
+      transition: 0.4s ease-out;
+      font-size: 15px;
+      font-weight: 600;
 
-    }
-
-    .yes-js {
-      color: #e5e5e5;
-      text-align: center;
-      cursor: pointer;
-      border-radius: 3px;
-      padding: 4px 7px;
-      background: black;
-      transition: 0.4s ease-out
     }
 
     .no {
-      background: #171717;
+      background: #353434;
       text-align: center;
       cursor: pointer;
       border-radius: 3px;
-      padding: 4px 7px;
+      padding: 4px 5px;
       color: whitesmoke;
       transition: 0.4s ease-out;
 
-    }
-
-    .no-js {
-      color: #171717;
-      text-align: center;
-      cursor: pointer;
-      border-radius: 3px;
-      padding: 4px 7px;
-      background: whitesmoke;
-      transition: 0.4s ease-out;
     }
   </style>
 </head>
@@ -110,42 +92,60 @@
     <div class="body">
       <h3>Are you so you want to logout???</h3>
       <div class="options">
-        <a id="yes" class="yes">Yes</a>
-        <a id="no" class="no">No</a>
+        <a id="yes" class="yes" onclick="logout()">Yes</a>
+        <a id="no" class="no" onclick="goback()">Back</a>
       </div>
     </div>
   </div>
 
   <script>
-
-
     const yes_btn = document.getElementById("yes")
     const no_btn = document.getElementById("no")
+    let redirectendpoint = "http://127.0.0.1:8000/home/auth/redirector"
 
-
-    const MouseEnter = () => {
-      yes_btn.classList.remove("yes")
-        yes_btn.classList.add("yes-js")
-        no_btn.classList.remove("no")
-        no_btn.classList.add("no-js")
-        return true
+    function MouseEnter() {
+      yes_btn.classList.replace("yes", "no")
+      no_btn.classList.replace("no", "yes")
     }
-    const MouseLeave =()=>{
-      yes_btn.classList.remove("yes-js")
-        yes_btn.classList.add("yes")
-        no_btn.classList.remove("no-js")
-        no_btn.classList.add("no")
-        return true
+    function MouseLeave() {
+      yes_btn.classList.replace("no", "yes")
+      no_btn.classList.replace("yes", "no")
     }
 
-    const hoverBtn = () => {
-      yes_btn.onmouseenter = MouseEnter      
+    function hoverBtn() {
+      yes_btn.onmouseenter = MouseEnter
       yes_btn.onmouseleave = MouseLeave
-      no_btn.onmouseenter  = MouseEnter
-      no_btn.onmouseleave  = MouseLeave
+      no_btn.onmouseenter = MouseEnter
+      no_btn.onmouseleave = MouseLeave
     }
 
-    hoverBtn()
+    function logout(){
+      sessionStorage.removeItem("token")
+      renderredirector()
+    }
+
+    function goback(){
+      if(!sessionStorage.getItem("backendpoint")){
+        renderredirector()
+      }
+      else{
+        let endpoint= sessionStorage.getItem("backendpoint")
+        window.location.replace(endpoint)
+      }
+    }
+    function renderredirector() {
+      window.location.replace(redirectendpoint)
+    }
+
+      function checkuserauthenticity() {
+      if (!sessionStorage.getItem("token")) {
+        renderredirector()
+      }
+      else{
+        hoverBtn()
+      }
+    }
+    window.onload = checkuserauthenticity
   </script>
 </body>
 

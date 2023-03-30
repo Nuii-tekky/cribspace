@@ -1,5 +1,4 @@
 
-
 console.log("initiating......")
 console.log("templated loaded")
 
@@ -7,6 +6,27 @@ const submitbtn = document.getElementById("login-btn")
 const cautioncolor = "#f41212" || "#bd1e24"
 const okcolor = "#ea9b1b"
 
+function rendersignuppage() {
+  let endpoint = "http://127.0.0.1:8000/home/auth/signup"
+  window.location.replace(endpoint)
+}
+
+function renderredirector() {
+  let endpoint = "http://127.0.0.1:8000/home/auth/redirector"
+  window.location.replace(endpoint)
+}
+
+const Title = input => {
+  if (typeof (input) === "string") {
+    let first_char = input.charAt(0)
+    let updated_first_char = first_char.toUpperCase()
+    let newString = input.replace(first_char, updated_first_char)
+    return newString
+  }
+  else {
+    console.log("fuck off")
+  }
+}
 
 const addborder = (elementt, color) => {
   const green = "#0fd945"
@@ -22,8 +42,6 @@ const addborder = (elementt, color) => {
     elementt.style.border = ""
   }
 }
-
-
 
 const updatemessage = (message, color, tmargin) => {
   if (tmargin) {
@@ -49,85 +67,113 @@ const updatemessage = (message, color, tmargin) => {
 
 }
 
-
-const Title = input => {
-  if (typeof (input) === "string") {
-    let first_char = input.charAt(0)
-    let updated_first_char = first_char.toUpperCase()
-    let newString = input.replace(first_char, updated_first_char)
-    return newString
+const validateform = (a1, a2, a3) => {
+  let username = a1
+  let password = a2
+  if (username.value === "" || password.value === "") {
+    updatemessage("please fill the entire form", "red", "step3")
   }
   else {
-    console.log("fuck off")
-  }
-}
-
-const validateform=(a1,a2,a3)=>{
-  let username=a1
-  let password= a2
-  if (username.value === "" || password.value===""){
-    updatemessage("please fill the entire form","red","step3")
-  }
-  else{
-    updatedom(a1,a2,a3)
+    updatedom(a1, a2, a3)
   }
 }
 
 const submitform = async (a4, a5, a6) => {
-  const usernamee = a4.value;
-  const passwordd = a5.value;
-  const token= a6.value
+  if (!sessionStorage.getItem("token")) {
+    const usernamee = a4.value;
+    const passwordd = a5.value;
+    const token = a6.value
 
-  let username = ""
-  if(usernamee.endsWith(".com")){
-    username= usernamee
+    let username = ""
+    if (usernamee.endsWith(".com")) {
+      username = usernamee
+    }
+    else {
+      username = Title(usernamee)
+    }
+    let password = passwordd
+
+    const data = {
+      user: username,
+      passwd: password
+    }
+
+    const endpoint = `http://127.0.0.1:8000/api/verifyuser`
+
+    const request_param = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CSRFToken": `${token}`
+      },
+      body: JSON.stringify(data)
+    }
+
+    const response = await fetch(endpoint, request_param)
+    const response_data = await response.json()
+    console.log(response_data)
+    return response_data
   }
   else{
-    username= Title(usernamee)
+    let token= sessionStorage.getItem("token")
+    let response_data= {"details":"user exists","token": `${token}`}
+    return response_data
   }
-  let password = passwordd
-
-  const data= {
-    user: username,
-    passwd: password
-  }
-
-  const endpoint = `http://127.0.0.1:8000/api/verifyuser`
-
-  const request_param = {
-    method: "POST",
-    headers:{
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "X-CSRFToken": `${token}`
-    },
-    body: JSON.stringify(data)
-  }
-
-  const response = await fetch(endpoint, request_param)
-  const response_data= await response.json()
-  return response_data
 }
 
-const updatedom=async (a1,a2,a3)=>{
-  let responsedata= await submitform(a1, a2,a3)
-  if(responsedata["details"]==="no such user"){
-    updatemessage("invalid credentials","red","normal")
-    a1.value=""
-    a2.value=""
-  }
+async function fetchhomepage(a1) {
+  const token = a1
+  let authendpoint = `http://127.0.0.1:8000/home/auth/authuser`
 
+  const response = await fetch(authendpoint, {
+    method: "GET",
+    headers: {
+      "Authorization": `Tokenjh ${token}`,
+      "Requestredirect": "homepage"
+    }
+  })
+
+  if (response.redirected) {
+    const url = response.url;
+    window.location.replace(url)
+  }
+  else {
+    const response_data = await response.json()
+    console.log(response_data)
+    if (response_data['detail'] === "Authentication credentials were not provided.") {
+      renderredirector()
+    }
+    else if (response_data['detail'] === "") {
+      renderredirector()
+    }
+  }
+}
+
+async function updatedom(a1, a2, a3) {
+  let responsedata = await submitform(a1, a2, a3)
+  if (responsedata["details"] === "no such user") {
+    updatemessage("invalid credentials", "red", "normal")
+    a1.value = ""
+    a2.value = ""
+  }
+  else if (responsedata["details"] === "user exists") {
+    const token = await responsedata["token"]
+    sessionStorage.setItem("access_token", token)
+    fetchhomepage(token)
+  }
 }
 
 submitbtn.addEventListener("click", (e) => {
   e.preventDefault()
   const us = document.getElementById("uname")
   const p1 = document.getElementById("pass")
-  const tk= document.getElementById("token")
-  validateform(us,p1,tk)
+  const tk = document.getElementById("token")
+  validateform(us, p1, tk)
 })
 
-function rendersignuppage() {
-  let endpoint = "http://127.0.0.1:8000/home/signup"
-  window.location.replace(endpoint)
+window.onload= ()=>{
+  if(sessionStorage.getItem("isthisfirsttime")){
+    sessionStorage.removeItem("isthisfirsttime")
+  }
 }

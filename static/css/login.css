@@ -126,6 +126,10 @@ nav {
   font-weight: 600;
 }
 
+.green{
+  color: var(--primary-color);
+}
+
 .message {
   margin-bottom: 10px;
   font-size: 14px;

@@ -34,13 +34,13 @@
     <div class="sub-container">
 
       <div class="header-messages">
-        <h4 id="heading">Login To Your CribSpace Account</h4>
+        <h4 id="heading">Login To Your <span class="green">Crib</span>Space Account</h4>
         <p id="message" class="message"></p>
       </div>
       <div class="form-container">
         <form id="login-form">
-          <input type="text" placeholder="username or email..." class="inputs" required id="uname">
-          <input type="password" placeholder="password" class="inputs" id="pass" required>
+          <input type="text" placeholder="username or email..." class="inputs" required id="uname" spellcheck="false">
+          <input type="password" placeholder="password" class="inputs" id="pass" spellcheck="false" required>
           <input type="hidden" value="{{ csrf_token }}" id="token">
           <button type="submit" id="login-btn">Login...</button>
         </form>

@@ -9,6 +9,15 @@ const p2 = document.getElementById("pass2")
 const cautioncolor = "#f41212" || "#bd1e24"
 const okcolor = "#ea9b1b"
 
+function renderredirector() {
+  let endpoint = "http://127.0.0.1:8000/home/auth/redirector"
+  window.location.replace(endpoint)
+}
+
+function renderloginpage() {
+  let endpoint = "http://127.0.0.1:8000/home/auth/login"
+  window.location.replace(endpoint)
+}
 
 const addborder = (elementt, color) => {
   const green = "#0fd945"
@@ -23,32 +32,6 @@ const addborder = (elementt, color) => {
   else {
     elementt.style.border = ""
   }
-}
-
-
-
-const updatemessage = (message, color, tmargin) => {
-  if (tmargin) {
-    let value = tmargin
-    const msg = document.getElementById("message")
-    msg.textContent = `${message}`
-    msg.style.color = `${color}`
-    if (value === "normal") {
-      msg.style.marginLeft = "22%"
-    }
-    else if (value === "step2") {
-      msg.style.marginLeft = "9%"
-    }
-    else if (value === "step3") {
-      msg.style.marginLeft = "14%"
-    }
-  }
-  else {
-    const msg = document.getElementById("message")
-    msg.textContent = `${message}`
-    msg.style.color = `${color}`
-  }
-
 }
 
 p1.addEventListener("input", () => {
@@ -66,16 +49,14 @@ p1.addEventListener("input", () => {
   else {
     p2.removeAttribute("readonly")
   }
-
 })
 
-
-
 const Title = input => {
-  if (typeof (input) === "string") {
-    let first_char = input.charAt(0)
+  if (typeof(input) === "string") {
+    let m_input= input
+    let first_char = m_input.charAt(0)
     let updated_first_char = first_char.toUpperCase()
-    let newString = input.replace(first_char, updated_first_char)
+    let newString = m_input.replace(first_char, updated_first_char)
     return newString
   }
   else {
@@ -83,13 +64,89 @@ const Title = input => {
   }
 }
 
-const updatedom=async (a1,a2,a3,a4,a5,a6)=>{
- const responsedata= await submitform(a1,a2,a3,a4,a5,a6)
- console.log(responsedata)
+const updatemessage = (message, color, tmargin) => {
+  if (tmargin) {
+    let value = tmargin
+    const msg = document.getElementById("message")
+    msg.textContent = `${message}`
+    msg.style.color = `${color}`
+    if (value === "normal") {
+      msg.style.marginLeft = "22%"
+    }
+    else if (value === "step2") {
+      msg.style.marginLeft = "9%"
+    }
+    else if (value === "step3") {
+      msg.style.marginLeft = "14%"
+    }
+    else if (value === "step4") {
+      msg.style.marginLeft = "25%"
+    }
+  }
+  else {
+    const msg = document.getElementById("message")
+    msg.textContent = `${message}`
+    msg.style.color = `${color}`
+  }
+
 }
 
+async function fetchpromptpage(a1){
+  const token = a1
+  let authendpoint = `http://127.0.0.1:8000/home/auth/authuser`
 
-const submitform = async (a1, a2, a3, a4, a5, a6) => {
+  const response = await fetch(authendpoint, {
+    method: "GET",
+    headers: {
+      "Authorization": `Token ${token}`,
+      "Requestredirect": "userpromptpage"
+    }
+  })
+
+  if (response.redirected) {
+    const url = response.url;
+    window.location.replace(url)
+  }
+  else {
+    const response_data = await response.json()
+    console.log(response_data)
+    if (response_data['detail'] === "Authentication credentials were not provided.") {
+      renderredirector()
+    }
+    else if(response_data['detail'] === "Invalid token."){
+      renderredirector()
+    }
+  }
+}
+
+async function updatedom(a1, a2, a3, a4, a5, a6,a7){
+  const responsedata = await submitform(a1, a2, a3, a4, a5, a6)
+  if (responsedata["details"] === "username exists") {
+    updatemessage("username already exists", "red", "normal")
+    a4.value = ""
+    addborder(a4, "red")
+  }
+  else if (responsedata["details"] === "email exists") {
+    updatemessage("email already exists", "red", "step4")
+    a3.value = ""
+    addborder(a3, "red")
+  }
+  else if(responsedata["reason"]=== "invalid inputs"){
+    updatemessage("please dont use special characters","red","step3")
+    addborder(a4,"red")
+    a5.value= ""
+    a7.value=""
+  }
+  else if (responsedata["details"] === "user saved") {
+    let usertoken = responsedata["token"]
+    sessionStorage.setItem("token", usertoken)
+    sessionStorage.setItem("isthisfirsttime", true)
+    fetchpromptpage(usertoken)
+  }
+  console.log(responsedata)
+}
+
+const submitform = async (a1, a2, a3, a4, a5, a6,a7) => {
   const firstnamee = a1.value;
   const lastnamee = a2.value;
   const emaill = a3.value;
@@ -104,12 +161,9 @@ const submitform = async (a1, a2, a3, a4, a5, a6) => {
     username: Title(usernamee),
     password: passwordd
   }
-
-
   const endpoint = "http://127.0.0.1:8000/api/createnewuser"
 
-
-  const request_params = {   
+  const request_params = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -118,16 +172,12 @@ const submitform = async (a1, a2, a3, a4, a5, a6) => {
     },
     body: JSON.stringify(data)
   }
-
   const response = await fetch(endpoint, request_params)
-  const details= await response.json()
+  const details = await response.json()
   return details
-
 }
 
-
-
-const validateformdata = () => {
+function validateformdata(){
   const fn = document.getElementById("fname")
   const ln = document.getElementById("lname")
   const em = document.getElementById("email")
@@ -135,6 +185,7 @@ const validateformdata = () => {
   const p1 = document.getElementById("pass1")
   const p2 = document.getElementById("pass2")
   const tk = document.getElementById("token")
+
   if (p1.value.length >= 6) {
     if (p1.value == p2.value) {
       addborder(p1)
@@ -153,8 +204,8 @@ const validateformdata = () => {
               addborder(p1)
               addborder(p2)
               updatemessage("You are all set to go...", okcolor)
-              updatedom(fn,ln,em,us,p1,tk)
-              
+              updatedom(fn, ln, em, us, p1, tk,p2)
+
               return true
             }
             else {
@@ -212,7 +263,3 @@ submitbtn.addEventListener("click", (e) => {
 })
 
 
-function renderloginpage(){
-  let endpoint= "http://127.0.0.1:8000/home/login"
-  window.location.replace(endpoint)
-}

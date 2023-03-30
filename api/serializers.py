@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     fields= '__all__'
 
 
-class ProfileSerializeer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
   user = UserSerializer   
   class Meta:
     model= Profile

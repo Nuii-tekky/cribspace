@@ -10,28 +10,38 @@ const cautioncolor = "#f41212" || "#bd1e24"
 const okcolor = "#ea9b1b"
 
 function renderredirector() {
-  let endpoint = "http://127.0.0.1:8000/home/auth/redirector"
+  let endpoint = "http://127.0.0.1:8000/auth/redirector"
   window.location.replace(endpoint)
 }
 
 function renderloginpage() {
-  let endpoint = "http://127.0.0.1:8000/home/auth/login"
+  let endpoint = "http://127.0.0.1:8000/auth/login"
   window.location.replace(endpoint)
 }
 
-const addborder = (elementt, color) => {
+function addborder(elementt, color){
   const green = "#0fd945"
   const red = cautioncolor
-
   if (color == "red") {
     elementt.style.border = `1px solid ${color}`
   }
   else if (color == "green") {
     elementt.style.border = `1px solid ${color}`
   }
-  else {
+  else if(color == "purple") {
+    elementt.style.border = `1px solid ${color}` 
+  }
+  else if(color=="none"){
     elementt.style.border = ""
   }
+}
+
+function addmultipleborder(...args){
+  let elements= args
+  elements.forEach(item=>{
+    console.log("working fine.....")
+    addborder(item,"none")
+  })
 }
 
 p1.addEventListener("input", () => {
@@ -44,7 +54,7 @@ p1.addEventListener("input", () => {
     addborder(p1, "")
     p2.setAttribute("readonly", true)
     p2.value = ""
-    addborder(p2, "")
+    addborder(p2, "none")
   }
   else {
     p2.removeAttribute("readonly")
@@ -64,7 +74,7 @@ const Title = input => {
   }
 }
 
-const updatemessage = (message, color, tmargin) => {
+function updatemessage (message, color, tmargin){
   if (tmargin) {
     let value = tmargin
     const msg = document.getElementById("message")
@@ -88,13 +98,11 @@ const updatemessage = (message, color, tmargin) => {
     msg.textContent = `${message}`
     msg.style.color = `${color}`
   }
-
 }
 
 async function fetchpromptpage(a1){
   const token = a1
-  let authendpoint = `http://127.0.0.1:8000/home/auth/authuser`
-
+  let authendpoint = `http://127.0.0.1:8000/auth/authuser`
   const response = await fetch(authendpoint, {
     method: "GET",
     headers: {
@@ -102,7 +110,6 @@ async function fetchpromptpage(a1){
       "Requestredirect": "userpromptpage"
     }
   })
-
   if (response.redirected) {
     const url = response.url;
     window.location.replace(url)
@@ -162,7 +169,6 @@ const submitform = async (a1, a2, a3, a4, a5, a6,a7) => {
     password: passwordd
   }
   const endpoint = "http://127.0.0.1:8000/api/createnewuser"
-
   const request_params = {
     method: "POST",
     headers: {
@@ -185,7 +191,6 @@ function validateformdata(){
   const p1 = document.getElementById("pass1")
   const p2 = document.getElementById("pass2")
   const tk = document.getElementById("token")
-
   if (p1.value.length >= 6) {
     if (p1.value == p2.value) {
       addborder(p1)
@@ -194,18 +199,11 @@ function validateformdata(){
       if (em_val.endsWith(".com") && em_val.search("@") !== -1 && em_val !== "") {
         em.style.border = ""
         if (fn.value !== "") {
-
           if (ln.value !== "") {
             if (us.value !== "") {
-              addborder(fn)
-              addborder(ln)
-              addborder(em)
-              addborder(us)
-              addborder(p1)
-              addborder(p2)
+              addmultipleborder(fn,ln,em,us,p1,p2)
               updatemessage("You are all set to go...", okcolor)
               updatedom(fn, ln, em, us, p1, tk,p2)
-
               return true
             }
             else {
@@ -214,6 +212,7 @@ function validateformdata(){
               updatemessage(message, cautioncolor)
               p1.value = ""
               p2.value = ""
+              addmultipleborder(fn,ln,em,p1,p2)
             }
           }
           else {
@@ -222,6 +221,7 @@ function validateformdata(){
             updatemessage(message, cautioncolor)
             p1.value = ""
             p2.value = ""
+            addmultipleborder(fn,em,us,p1,p2)
           }
         }
         else {
@@ -230,8 +230,8 @@ function validateformdata(){
           updatemessage(message, cautioncolor)
           p1.value = ""
           p2.value = ""
+          addmultipleborder(ln,em,us,p1,p2)
         }
-
       }
       else {
         let message = "invalid email address"
@@ -239,6 +239,7 @@ function validateformdata(){
         addborder(em, "red")
         p1.value = ""
         p2.value = ""
+        addmultipleborder(fn,ln,us,p1,p2)
       }
     }
     else {
@@ -246,13 +247,14 @@ function validateformdata(){
       updatemessage(message, cautioncolor)
       addborder(p1, "red")
       addborder(p2, "red")
-
+      addmultipleborder(fn,ln,em,us)
     }
   }
   else {
     let message = "passwords must be more than 6 characters"
     updatemessage(message, cautioncolor, "step2")
     addborder(p1, "red")
+    addmultipleborder(fn,ln,em,us,p2)
     p2.value = ""
   }
 }
@@ -261,5 +263,3 @@ submitbtn.addEventListener("click", (e) => {
   e.preventDefault()
   validateformdata()
 })
-
-

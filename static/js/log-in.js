@@ -7,12 +7,12 @@ const cautioncolor = "#f41212" || "#bd1e24"
 const okcolor = "#ea9b1b"
 
 function rendersignuppage() {
-  let endpoint = "http://127.0.0.1:8000/home/auth/signup"
+  let endpoint = "http://127.0.0.1:8000/auth/signup"
   window.location.replace(endpoint)
 }
 
 function renderredirector() {
-  let endpoint = "http://127.0.0.1:8000/home/auth/redirector"
+  let endpoint = "http://127.0.0.1:8000/auth/redirector"
   window.location.replace(endpoint)
 }
 
@@ -124,12 +124,12 @@ const submitform = async (a4, a5, a6) => {
 
 async function fetchhomepage(a1) {
   const token = a1
-  let authendpoint = `http://127.0.0.1:8000/home/auth/authuser`
+  let authendpoint = `http://127.0.0.1:8000/auth/authuser`
 
   const response = await fetch(authendpoint, {
     method: "GET",
     headers: {
-      "Authorization": `Tokenjh ${token}`,
+      "Authorization": `Token ${token}`,
       "Requestredirect": "homepage"
     }
   })

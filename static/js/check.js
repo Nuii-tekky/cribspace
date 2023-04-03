@@ -1,7 +1,7 @@
 const header= document.getElementById("heading")
 
-let redirectendpoint = "http://127.0.0.1:8000/home/auth/redirector"
-let authendpoint = "http://127.0.0.1:8000/home/auth/authuser"
+let redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
+let authendpoint = "http://127.0.0.1:8000/auth/authuser"
 let getuserendpoint= "http://127.0.0.1:8000/api/getbasicuserdata"
 
 function renderredirector() {

@@ -22,7 +22,6 @@ def createnewuser(req,format=None):
         if serializer.is_valid():
           serializer.save()
           db_obj= get_user_model().objects.get(username= requsername)
-          serialisedprofile= ProfileSerializer()
           token,created= Token.objects.get_or_create(user= db_obj)
           return Response({"details": "user saved","token":token.key})  
         return Response({"details":"not saved","reason":"invalid inputs"})

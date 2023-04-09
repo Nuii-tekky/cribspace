@@ -115,9 +115,9 @@ const submitform = async (a4, a5, a6) => {
     console.log(response_data)
     return response_data
   }
-  else{
-    let token= sessionStorage.getItem("token")
-    let response_data= {"details":"user exists","token": `${token}`}
+  else {
+    let token = sessionStorage.getItem("token")
+    let response_data = { "details": "user exists", "token": `${token}` }
     return response_data
   }
 }
@@ -159,7 +159,9 @@ async function updatedom(a1, a2, a3) {
   }
   else if (responsedata["details"] === "user exists") {
     const token = await responsedata["token"]
-    sessionStorage.setItem("access_token", token)
+    const userid = await responsedata["user_id"]
+    sessionStorage.setItem("token", token)
+    sessionStorage.setItem("id_user", userid)
     fetchhomepage(token)
   }
 }
@@ -172,8 +174,8 @@ submitbtn.addEventListener("click", (e) => {
   validateform(us, p1, tk)
 })
 
-window.onload= ()=>{
-  if(sessionStorage.getItem("isthisfirsttime")){
+window.onload = () => {
+  if (sessionStorage.getItem("isthisfirsttime")) {
     sessionStorage.removeItem("isthisfirsttime")
   }
 }

@@ -1,0 +1,32 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Not Allowed</title>
+  <link rel="stylesheet" href="{%static 'css/verify.css' %}">
+</head>
+<body>
+  <div class="main-container">
+    <h3 class="heading"> User not allowed </h3>
+    <div class="subcontainer">
+      <h4>
+        Sorry you have to be <span class="green"> logged</span> in to access this page
+      </h4>
+      <h5>Do you want to ?</h5>
+      <div class="buttons">
+        <button id="login" onclick="renderloginpage()">Log in</button>
+        <button id="signup" onclick="rendersignuppage()">Sign up</button>
+      </div>
+      <div class="footer">
+        All rights reserved   &copy; CribSpace | 2023
+      </div>
+    </div>
+  </div>
+  <script src="{%static 'js/verify.js' %}"></script>
+</body>
+</html>

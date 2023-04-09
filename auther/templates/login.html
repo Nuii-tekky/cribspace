@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="{%static 'css/login.css'  %}">
+
+  <title>CribSpace | Login</title>
+</head>
+
+<body>
+
+  <nav id="nav-bar">
+    <div class="nav-left">
+      <h2><a class="logo"><span class="logo-style">C</span>ribSpace</a></h2>
+    </div>
+    <div class="nav-right">
+      <button id="signup-btn" onclick="rendersignuppage()"> Sign up</button>
+    </div>
+  </nav>
+  
+  <div class="main-container">
+    <div class="sub-container">`
+
+      <div class="header-messages">
+        <h4 id="heading">Login To Your <span class="green">Crib</span>Space Account</h4>
+        <p id="message" class="message"></p>
+      </div>
+      <div class="form-container">
+        <form id="login-form" onsubmit="submitloginform()">
+          <input type="text" id="uname" placeholder="username or email..." class="inputs" required spellcheck="false">
+          <input type="password" id="pass" placeholder="password" class="inputs" required>
+          <input type="hidden" id="token" value="{{ csrf_token }}">
+          <button type="submit" id="login-btn">Login...</button>
+        </form>
+        <div class="footer-message">
+          <h5>Dont have an account? <span id="signup-recom" onclick="rendersignuppage()">Signup here</span></h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="{%static 'js/log-in.js'%}"></script>
+</body>
+
+</html>

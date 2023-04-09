@@ -1,6 +1,9 @@
 const body = document.getElementById("body")
 const overlaycontainer = document.getElementById("confirm-overlay")
 const confirmdiv = document.getElementById("confirm-div")
+const logoutoverlaycontainer = document.getElementById("confirm-logout-overlay")
+const logoutconfirmdiv = document.getElementById("confirm-logout-div")
+
 const upl_heading = document.getElementById("upl-heading");
 const post_container = document.getElementById("post-container");
 const body_container = document.getElementById("body-container");
@@ -8,18 +11,22 @@ const DarkBtn = document.getElementById("dark-btn");
 const QueryList = document.getElementById("query-listing");
 const small_info = document.getElementById("info");
 const navbar = document.getElementById("nav-bar");
-const settingmenu = document.getElementById("settings-menu");
 
+const settingmenu = document.getElementById("settings-menu");
+const redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
+const authendpoint = "http://127.0.0.1:8000/auth/authuser"
+const getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
+
+window.onload = checkuserauthenticity
 
 // Toggle effect when user image on navbar is clicked
 
-const SettingsMenuToggle = () => {
+function SettingsMenuToggle() {
   settingmenu.classList.toggle("settings-menu-javascripted")
   settingmenu.onmouseleave = function () {
     settingmenu.classList.toggle("settings-menu-javascripted")
     return true
   }
-  return true
 }
 
 // Toggle the dark mode btn
@@ -31,7 +38,7 @@ DarkBtn.onclick = function () {
   document.body.classList.toggle('dark-theme')
 
   // saving the theme to local storage
-  if (localStorage.getItem('theme') == 'light') { localStorage.setItem(localStorage.setItem("theme", "dark")) }
+  if (localStorage.getItem('theme') == 'light') {localStorage.setItem("theme", "dark") }
   else { localStorage.setItem("theme", "light") }
 }
 
@@ -137,7 +144,7 @@ const MouseLeave = () => {
   return true
 }
 
-const hoverBtn = () => {
+function hoverBtn(){
   yes_btn.onmouseenter = MouseEnter
   yes_btn.onmouseleave = MouseLeave
   no_btn.onmouseenter = MouseEnter
@@ -151,34 +158,216 @@ const scrollposition = () => {
 }
 // overlay effect when user is prompted to confirm changes
 
-let scrollposi_array= []
-const overlayHandler = () => {
-  let currentposition= scrollposition()
+let scrollposi_array = []
+
+function overlayHandler(){
+  let currentposition = scrollposition()
   scrollposi_array.push(currentposition)
-  window.scroll(0,0)
-  overlaycontainer.classList.remove("confirm-overlay-js")
-  overlaycontainer.classList.add("confirm-overlay")
-  confirmdiv.classList.remove("confirm-div-js")
-  confirmdiv.classList.add("confirm-div")
+  window.scroll(0, 0)
+  overlaycontainer.classList.replace("confirm-overlay-js","confirm-overlay")
+  confirmdiv.classList.replace("confirm-div-js","confirm-div")
   body.style.overflow = "hidden"
-  return true
 }
 
+function logoutoverlay(){
+  window.scroll(0,0)
+  logoutoverlaycontainer.classList.replace("confirm-overlay-js","confirm-overlay")
+  logoutconfirmdiv.classList.replace("confirm-div-js","confirm-div")
+  body.style.overflow = "hidden"
+}
 
 // handling the overlay prompt message
 
-const confirmHandler = (id) => {
+function confirmchangesHandler(id){
   const option = document.getElementById(id)
-  if (option.textContent === "Back") {
-    var lastvalue= scrollposi_array.length - 1
-    window.scroll(0,scrollposi_array[lastvalue])
-    overlaycontainer.classList.remove("confirm-overlay")
-    overlaycontainer.classList.add("confirm-overlay-js")
-    confirmdiv.classList.remove("confirm-div")
-    confirmdiv.classList.add("confirm-div-js")
-    body.style.overflow = "scroll"
+  if (option.textContent === "cancel") {
+    var lastvalue = scrollposi_array.length - 1
+    window.scroll(0, scrollposi_array[lastvalue])
+    overlaycontainer.classList.replace("confirm-overlay", "confirm-overlay-js")
+    confirmdiv.classList.replace("confirm-div", "confirm-div-js")
+    body.style.overflow = ""
   }
   else if (option.textContent === "yes") { window.location.reload() }
 }
 
+async function confirmlogouthandler(id){
+  const option = document.getElementById(id)
+  if (option.textContent === "cancel") {
+    logoutoverlaycontainer.classList.replace("confirm-overlay", "confirm-overlay-js")
+    logoutconfirmdiv.classList.replace("confirm-div", "confirm-div-js")
+    body.style.overflow = ""
+  }
+  else{
+    sessionStorage.removeItem("token")
+    window.location.reload()
+  }
+}
 
+function renderredirector() {
+  window.location.replace(redirectendpoint)
+}
+
+function loadurl(url) {
+  let endpoint = url
+  window.location.replace(endpoint)
+}
+
+const usertoken = () => {
+  const token = sessionStorage.getItem("token")
+  return token
+}
+
+const userid=()=>{
+  const userid= sessionStorage.getItem("id_user")
+  return userid
+}
+
+const fetchuserdata=async ()=>{
+  let token= usertoken()
+  let getuserendpoint= "http://127.0.0.1:8000/api/getbasicuserdata"
+  let response= await fetch(getuserendpoint,{
+    method:"GET",
+    headers:{
+      "Authorization": token
+    }
+  })
+  let responsedata=await response.json()
+  return responsedata
+}
+
+const fetchuserprofiledata=async()=>{
+  let id_access= userid()
+  let endpoint= "http://127.0.0.1:8000/api/getprofiledata"
+  let request_params= {
+    method:"GET",
+    headers:{
+      "Accept":"application/json",
+      "iduser":`${id_access}`
+    }
+  }
+  let res     = await fetch(endpoint,request_params)
+  let res_data= await res.json()
+  return res_data
+}
+
+async function updatedom(){
+  const profiledata    = await fetchuserprofiledata()
+  const userdata       = await fetchuserdata()
+
+  const username       = await userdata["details"]["username"]
+  const email          = await userdata["details"]["email"]
+  const profileimgurl  = await profiledata["details"]["profileimage"]
+  const bio            = await profiledata["details"]["bio"]
+  const location       = await profiledata["details"]["location"]
+  const occupation     = await profiledata["details"]["occupation"]
+  const telephone      = await profiledata["details"]["telephone"]
+
+  const profileimgs    = document.querySelectorAll(".profile-img")
+  const usernamespots  = document.querySelectorAll(".username")
+
+  const bioinput       = document.getElementById("bio-input")
+  const usernameinput  = document.getElementById("username-input")
+  const emailinput     = document.getElementById("email-input")
+  const occupationinput= document.getElementById("occupation-input")
+  const locationinput  = document.getElementById("location-input")
+  const telephoneinput = document.getElementById("telephone-input")
+
+  profileimgs.forEach((profileimg)=>{
+    profileimg.src=profileimgurl
+  })
+
+  usernamespots.forEach((usernameitem)=>{
+    usernameitem.textContent=`${username}`
+  })
+
+  usernameinput.placeholder=`${username}`
+  emailinput.placeholder=`${email}`
+  bioinput.placeholder=`${bio}`
+  occupationinput.placeholder=`${occupation}`
+  locationinput.placeholder=`${location}`
+  telephoneinput.placeholder=`+234 ${telephone}`
+}
+
+
+async function checkuserauthenticity() {
+  if (!sessionStorage.getItem("token") || !sessionStorage.getItem("id_user")){
+    renderredirector()
+  }
+  else{
+    updatedom()
+  }
+}
+
+async function fetchpage(pagename,is_logout) {
+  let redirect = pagename
+  let access = usertoken()
+  const request_params = {
+    method: "GET",
+    headers: {
+      "Authorization": `Token ${access}`,
+      "Requestredirect": `${redirect}`
+    }
+  }
+  const response = await fetch(authendpoint, request_params)
+  if (response.redirected) {
+    let url = response.url
+    loadurl(url)
+  }
+  else {
+    let data = await response.json()
+    console.log(data)
+  }
+}
+
+
+//   </form>
+//   <button onclick="send()" id="submit-btn">Post image</button>
+//   <h5 id="message">please make sure the image is less than 10mb</h5>
+
+
+//   <script>
+//     const image_input = document.getElementById("target_img")
+//     const image_title = document.getElementById("img_title")
+//     const message = document.getElementById("message")
+
+//     async function send() {
+
+//       let p_image = image_input.files[0];
+//       let p_title = image_title.value;
+
+//       console.log(p_image)
+//       let form = new FormData()
+//       form.append("title", Title(p_title));
+//       form.append("img", p_image);
+//       form.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+//       console.log(form)
+
+//       let image_endpoint = "http://127.0.0.1:8000/api/upload-image"
+
+//       const response = await fetch(
+//         image_endpoint,
+//         {
+//           method: "POST",
+//           headers: {
+//             "hello": "hi python terminal"
+//           },
+//           body: form
+//         },
+
+//       )
+
+//       const data = await response.json()
+
+//       if (data["saved"] === "image saved") {
+//         message.style.color = "yellowgreen"
+//         message.textContent = "image uploaded successfully 🎷🎷🎷"
+//       }
+//       else if(data["saved"] === "image not saved"){
+//         message.style.color = "rgb(255, 218, 9)"
+//         message.textContent = "image upload failed "
+//       }
+//       else if(data["saved"]=== "object exists"){
+//         message.style.color = "rgb(255, 218, 9)"
+//         message.textContent = "Sorry that title already exists in our database"
+//       }
+//     }

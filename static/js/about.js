@@ -3,13 +3,13 @@ const body_container  = document.getElementById("body-container");
 const navbar          = document.getElementById("nav-bar"       );
 const settingmenu     = document.getElementById("settings-menu" );
 const DarkBtn         = document.getElementById("dark-btn"      );
-const commentList     = document.querySelector (".comments-div" );
+// const commentList     = document.querySelector (".comments-div" );
 const QueryList       = document.getElementById("query-listing" );
 const small_info      = document.getElementById("info"          );
 const lefty           = document.getElementById("features-left" );
 const righty          = document.getElementById("features-right");
-const top1            = document.getElementById("only")  
-const bottom          = document.getElementById("only-2")  
+const top1            = document.getElementById("only"          );
+const bottom          = document.getElementById("only-2"        );  
 const lefty2          = document.getElementById("features-left-2" );
 const righty2         = document.getElementById("features-right-2");
 const lefty3          = document.getElementById("features-left-3" );
@@ -80,19 +80,6 @@ const ShowInfoToggle = (id) => {
   }
   return true
 }
-
-
-
-let person= class person {
-    let (fname, lname, age) {
-    this.firstname = fname;
-    this.lastname = lname;
-    this.age = age;
-    return this.firstname + "  " + this.lastname + "  " + this.age;
-  }
-}
-let personx= new person()
-console.log(personx.let("ekomobong","marcus",34))
 
 
 // hover effect on intro boxes

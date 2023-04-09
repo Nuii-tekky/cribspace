@@ -9,17 +9,7 @@ const p2 = document.getElementById("pass2")
 const cautioncolor = "#f41212" || "#bd1e24"
 const okcolor = "#ea9b1b"
 
-function renderredirector() {
-  let endpoint = "http://127.0.0.1:8000/auth/redirector"
-  window.location.replace(endpoint)
-}
-
-function renderloginpage() {
-  let endpoint = "http://127.0.0.1:8000/auth/login"
-  window.location.replace(endpoint)
-}
-
-function addborder(elementt, color){
+function addborder(elementt, color) {
   const green = "#0fd945"
   const red = cautioncolor
   if (color == "red") {
@@ -28,19 +18,19 @@ function addborder(elementt, color){
   else if (color == "green") {
     elementt.style.border = `1px solid ${color}`
   }
-  else if(color == "purple") {
-    elementt.style.border = `1px solid ${color}` 
+  else if (color == "purple") {
+    elementt.style.border = `1px solid ${color}`
   }
-  else if(color=="none"){
+  else if (color == "none") {
     elementt.style.border = ""
   }
 }
 
-function addmultipleborder(...args){
-  let elements= args
-  elements.forEach(item=>{
+function addmultipleborder(...args) {
+  let elements = args
+  elements.forEach(item => {
     console.log("working fine.....")
-    addborder(item,"none")
+    addborder(item, "none")
   })
 }
 
@@ -62,8 +52,8 @@ p1.addEventListener("input", () => {
 })
 
 const Title = input => {
-  if (typeof(input) === "string") {
-    let m_input= input
+  if (typeof (input) === "string") {
+    let m_input = input
     let first_char = m_input.charAt(0)
     let updated_first_char = first_char.toUpperCase()
     let newString = m_input.replace(first_char, updated_first_char)
@@ -74,7 +64,17 @@ const Title = input => {
   }
 }
 
-function updatemessage (message, color, tmargin){
+function renderredirector() {
+  let endpoint = "http://127.0.0.1:8000/auth/redirector"
+  window.location.replace(endpoint)
+}
+
+function renderloginpage() {
+  let endpoint = "http://127.0.0.1:8000/auth/login"
+  window.location.replace(endpoint)
+}
+
+function updatemessage(message, color, tmargin) {
   if (tmargin) {
     let value = tmargin
     const msg = document.getElementById("message")
@@ -100,7 +100,7 @@ function updatemessage (message, color, tmargin){
   }
 }
 
-async function fetchpromptpage(a1){
+async function fetchpromptpage(a1) {
   const token = a1
   let authendpoint = `http://127.0.0.1:8000/auth/authuser`
   const response = await fetch(authendpoint, {
@@ -120,13 +120,13 @@ async function fetchpromptpage(a1){
     if (response_data['detail'] === "Authentication credentials were not provided.") {
       renderredirector()
     }
-    else if(response_data['detail'] === "Invalid token."){
+    else if (response_data['detail'] === "Invalid token.") {
       renderredirector()
     }
   }
 }
 
-async function updatedom(a1, a2, a3, a4, a5, a6,a7){
+async function updatedom(a1, a2, a3, a4, a5, a6, a7) {
   const responsedata = await submitform(a1, a2, a3, a4, a5, a6)
   if (responsedata["details"] === "username exists") {
     updatemessage("username already exists", "red", "normal")
@@ -138,22 +138,24 @@ async function updatedom(a1, a2, a3, a4, a5, a6,a7){
     a3.value = ""
     addborder(a3, "red")
   }
-  else if(responsedata["reason"]=== "invalid inputs"){
-    updatemessage("please dont use special characters","red","step3")
-    addborder(a4,"red")
-    a5.value= ""
-    a7.value=""
+  else if (responsedata["reason"] === "invalid inputs") {
+    updatemessage("please dont use special characters", "red", "step3")
+    addborder(a4, "red")
+    a5.value = ""
+    a7.value = ""
   }
   else if (responsedata["details"] === "user saved") {
     let usertoken = responsedata["token"]
+    let userid    = responsedata["userid"]
     sessionStorage.setItem("token", usertoken)
+    sessionStorage.setItem("id_user",userid)
     sessionStorage.setItem("isthisfirsttime", true)
     fetchpromptpage(usertoken)
   }
   console.log(responsedata)
 }
 
-const submitform = async (a1, a2, a3, a4, a5, a6,a7) => {
+const submitform = async (a1, a2, a3, a4, a5, a6, a7) => {
   const firstnamee = a1.value;
   const lastnamee = a2.value;
   const emaill = a3.value;
@@ -183,7 +185,7 @@ const submitform = async (a1, a2, a3, a4, a5, a6,a7) => {
   return details
 }
 
-function validateformdata(){
+function validateformdata() {
   const fn = document.getElementById("fname")
   const ln = document.getElementById("lname")
   const em = document.getElementById("email")
@@ -201,9 +203,9 @@ function validateformdata(){
         if (fn.value !== "") {
           if (ln.value !== "") {
             if (us.value !== "") {
-              addmultipleborder(fn,ln,em,us,p1,p2)
+              addmultipleborder(fn, ln, em, us, p1, p2)
               updatemessage("You are all set to go...", okcolor)
-              updatedom(fn, ln, em, us, p1, tk,p2)
+              updatedom(fn, ln, em, us, p1, tk, p2)
               return true
             }
             else {
@@ -212,7 +214,7 @@ function validateformdata(){
               updatemessage(message, cautioncolor)
               p1.value = ""
               p2.value = ""
-              addmultipleborder(fn,ln,em,p1,p2)
+              addmultipleborder(fn, ln, em, p1, p2)
             }
           }
           else {
@@ -221,7 +223,7 @@ function validateformdata(){
             updatemessage(message, cautioncolor)
             p1.value = ""
             p2.value = ""
-            addmultipleborder(fn,em,us,p1,p2)
+            addmultipleborder(fn, em, us, p1, p2)
           }
         }
         else {
@@ -230,7 +232,7 @@ function validateformdata(){
           updatemessage(message, cautioncolor)
           p1.value = ""
           p2.value = ""
-          addmultipleborder(ln,em,us,p1,p2)
+          addmultipleborder(ln, em, us, p1, p2)
         }
       }
       else {
@@ -239,7 +241,7 @@ function validateformdata(){
         addborder(em, "red")
         p1.value = ""
         p2.value = ""
-        addmultipleborder(fn,ln,us,p1,p2)
+        addmultipleborder(fn, ln, us, p1, p2)
       }
     }
     else {
@@ -247,14 +249,14 @@ function validateformdata(){
       updatemessage(message, cautioncolor)
       addborder(p1, "red")
       addborder(p2, "red")
-      addmultipleborder(fn,ln,em,us)
+      addmultipleborder(fn, ln, em, us)
     }
   }
   else {
     let message = "passwords must be more than 6 characters"
     updatemessage(message, cautioncolor, "step2")
     addborder(p1, "red")
-    addmultipleborder(fn,ln,em,us,p2)
+    addmultipleborder(fn, ln, em, us, p2)
     p2.value = ""
   }
 }

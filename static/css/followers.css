@@ -225,8 +225,10 @@
 
 .write-post-user-profile img {
   width: 2.8125rem;
+  height: 2.8125rem;
   border-radius: 50%;
   margin-right: 0.625rem;
+  object-fit: cover;
 }
 
 .write-post-user-profile p {
@@ -438,8 +440,10 @@ nav {
 
 .nav-user-icon img {
   width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   cursor: pointer;
+  object-fit: cover;
 }
 
 .nav-user-icon img:active{

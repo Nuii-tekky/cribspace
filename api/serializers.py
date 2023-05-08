@@ -1,6 +1,7 @@
 
 from rest_framework import serializers
 from auther.models import Profile
+from home.models import aboutModel
 from django.contrib.auth import get_user_model
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,4 +17,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     fields='__all__'
  
 
+class AboutModelSerialiser(serializers.ModelSerializer):
+  class Meta:
+    model=aboutModel
+    fields='__all__'
 

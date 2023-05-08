@@ -1,20 +1,23 @@
-const body = document.getElementById("body")
-const overlaycontainer = document.getElementById("confirm-overlay")
-const confirmdiv = document.getElementById("confirm-div")
-const logoutoverlaycontainer = document.getElementById("confirm-logout-overlay")
-const logoutconfirmdiv = document.getElementById("confirm-logout-div")
-const updateaffirmbtn= document.getElementById("upt-affirm")
-const logoutaffirmbtn= document.getElementById("log-affirm")
+"use strict";
 
-const upl_heading = document.getElementById("upl-heading");
-const post_container = document.getElementById("post-container");
-const body_container = document.getElementById("body-container");
-const DarkBtn = document.getElementById("dark-btn");
-const QueryList = document.getElementById("query-listing");
-const small_info = document.getElementById("info");
-const navbar = document.getElementById("nav-bar");
+const body = document.querySelector("#body")
+const overlaycontainer = document.querySelector("#confirm-overlay")
+const confirmdiv = document.querySelector("#confirm-div")
+const updateaffirmbtn = document.querySelector("#upt-affirm")
+const updateunaffirmbtn = document.querySelector("#upt-unaffirm")
+const logoutoverlaycontainer = document.querySelector("#confirm-logout-overlay")
+const logoutconfirmdiv = document.querySelector("#confirm-logout-div")
+const logoutaffirmbtn = document.querySelector("#log-affirm")
 
-const settingmenu = document.getElementById("settings-menu");
+const upl_heading = document.querySelector("#upl-heading");
+const post_container = document.querySelector("#post-container");
+const body_container = document.querySelector("#body-container");
+const DarkBtn = document.querySelector("#dark-btn");
+const QueryList = document.querySelector("#query-listing");
+const small_info = document.querySelector("#info");
+const navbar = document.querySelector("#nav-bar");
+const settingmenu = document.querySelector("#settings-menu");
+
 const redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 const authendpoint = "http://127.0.0.1:8000/auth/authuser"
 const getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
@@ -40,15 +43,15 @@ DarkBtn.onclick = function () {
   document.body.classList.toggle('dark-theme')
 
   // saving the theme to local storage
-  if (localStorage.getItem('theme') == 'light') { localStorage.setItem("theme", "dark") }
+  if (localStorage.getItem('theme') === 'light') { localStorage.setItem("theme", "dark") }
   else { localStorage.setItem("theme", "light") }
 }
 
-if (localStorage.getItem('theme') == 'light') {
+if (localStorage.getItem('theme') === 'light') {
   DarkBtn.classList.remove('dark-btn-on')
   document.body.classList.remove('dark-theme')
 }
-else if (localStorage.getItem('theme') == 'dark') {
+else if (localStorage.getItem('theme') === 'dark') {
   DarkBtn.classList.add('dark-btn-on')
   document.body.classList.add('dark-theme')
 }
@@ -103,7 +106,7 @@ file.addEventListener("change", (e) => {
   const extension = Filename.match(regex)
 
   // write complete file name to the div for such
-  const uplbtn = document.getElementById("upload-p-img")
+  const uplbtn = document.querySelector("#upload-p-img")
   if (allowed_ext.includes(`${extension}`) === false) {
     if (vowels.includes((`${extension}`).charAt(0)) === true) {
       upl_heading.textContent = `sorry you cant upload an ${extension} file `
@@ -121,32 +124,24 @@ file.addEventListener("change", (e) => {
   return true
 })
 
+
 // handling confirm-div-btn hover effect
 
-const yes_btn = document.getElementById("yes")
-const no_btn = document.getElementById("no")
-
-
 function MouseEnter() {
-  yes_btn.classList.remove("yes")
-  yes_btn.classList.add("yes-js")
-  no_btn.classList.remove("no")
-  no_btn.classList.add("no-js")
-  return true
+  updateaffirmbtn.classList.replace("yes", "yes-js")
+  updateunaffirmbtn.classList.replace("no", "no-js")
 }
+
 function MouseLeave() {
-  yes_btn.classList.remove("yes-js")
-  yes_btn.classList.add("yes")
-  no_btn.classList.remove("no-js")
-  no_btn.classList.add("no")
-  return true
+  updateaffirmbtn.classList.replace("yes-js", "yes")
+  updateunaffirmbtn.classList.replace("no-js", "no")
 }
 
 function hoverBtn() {
-  yes_btn.onmouseenter = MouseEnter
-  yes_btn.onmouseleave = MouseLeave
-  no_btn.onmouseenter = MouseEnter
-  no_btn.onmouseleave = MouseLeave
+  updateaffirmbtn.onmouseenter = MouseEnter
+  updateaffirmbtn.onmouseleave = MouseLeave
+  updateunaffirmbtn.onmouseenter = MouseEnter
+  updateunaffirmbtn.onmouseleave = MouseLeave
 }
 
 hoverBtn()
@@ -176,6 +171,7 @@ function removeUpdateOverlay() {
   body.style.overflow = ""
 }
 
+
 function logoutOverlay() {
   window.scroll(0, 0)
   logoutoverlaycontainer.classList.replace("confirm-overlay-js", "confirm-overlay")
@@ -183,54 +179,14 @@ function logoutOverlay() {
   body.style.overflow = "hidden"
 }
 
-function removeLogoutOverlay(){
-  overlaycontainer.classList.replace("confirm-overlay", "confirm-overlay-js")
-  confirmdiv.classList.replace("confirm-div", "confirm-div-js")
-  let lastvalue = scrollposi_array.length - 1
-  window.scroll(0, scrollposi_array[lastvalue])
+function removeLogoutOverlay() {
+  logoutoverlaycontainer.classList.replace("confirm-overlay", "confirm-overlay-js")
+  logoutconfirmdiv.classList.replace("confirm-div", "confirm-div-js")
   body.style.overflow = ""
 }
 
-// updating details
-
-function submitClickHandler(id){
-  const btn_el = document.querySelector(`#${id}`)
-  const prev_el= btn_el.previousElementSibling
-  const prev_el_val= prev_el.value
-  if(prev_el_val !== undefined && prev_el_val !== ""){
-    updateOverlay()
-    updateaffirmbtn.addEventListener("click",()=>{
-      sortInputValues(prev_el)
-    })
-  }
-  else{removeUpdateOverlay()}
-}
-
-function sortInputValues(inp){
-  const input_el= inp
-  if(input_el.type == "file"){
-    submitFile(input_el)
-  }
-  else{
-    const input_el_val= input_el.value
-    const input_el_name= input_el.name
-    submitData(input_el_val,input_el_name)
-  }
-}
-
-function submitData(a1,a2){
-  const key= a2
-  const value=a1
-
-  const databody= {
-    key:value
-  }
-
-  let 
-}
-
 // Page onload workings 
-function removeToken(){
+function removeToken() {
   sessionStorage.removeItem("token")
   window.location.reload()
 }
@@ -241,7 +197,7 @@ function renderRedirector() {
 
 function loadUrl(url) {
   let endpoint = url
-  window.location.replace(endpoint)
+  window.location.href=`${endpoint}`
 }
 
 const userToken = () => {
@@ -282,9 +238,30 @@ const userProfileData = async () => {
   return res_data
 }
 
-async function updateDom() {
-  const profiledata = await userProfileData()
-  const userdata = await userData()
+async function updateDom(hardfetch = true) {
+  if (hardfetch === true) {
+    const profiledata = await userProfileData()
+    const userdata = await userData()
+    writeContentsToDom(profiledata,userdata)
+  }
+  else{
+    // call on the cached response
+  }
+}
+
+async function writeContentsToDom(profiledata,userdata) {
+  const profileimgs = document.querySelectorAll(".profile-img")
+  const usernamespots = document.querySelectorAll(".username")
+  const domtitle = document.querySelector("#domtitle")
+
+  const bioinput = document.querySelector("#bio-input")
+  const usernameinput = document.querySelector("#username-input")
+  const emailinput = document.querySelector("#email-input")
+  const occupationinput = document.querySelector("#occupation-input")
+  const locationinput = document.querySelector("#location-input")
+  const telephoneinput = document.querySelector("#telephone-input")
+
+  const allinputs = document.querySelectorAll("input")
 
   const username = await userdata["details"]["username"]
   const email = await userdata["details"]["email"]
@@ -294,17 +271,6 @@ async function updateDom() {
   const occupation = await profiledata["details"]["occupation"]
   const telephone = await profiledata["details"]["telephone"]
 
-  const profileimgs = document.querySelectorAll(".profile-img")
-  const usernamespots = document.querySelectorAll(".username")
-  const domtitle = document.getElementById("domtitle")
-
-  const bioinput = document.getElementById("bio-input")
-  const usernameinput = document.getElementById("username-input")
-  const emailinput = document.getElementById("email-input")
-  const occupationinput = document.getElementById("occupation-input")
-  const locationinput = document.getElementById("location-input")
-  const telephoneinput = document.getElementById("telephone-input")
-
   profileimgs.forEach((profileimg) => {
     profileimg.src = profileimgurl
   })
@@ -312,6 +278,13 @@ async function updateDom() {
   usernamespots.forEach((usernameitem) => {
     usernameitem.textContent = `${username}`
   })
+
+  allinputs.forEach((inp) => {
+    inp.value = ""
+    inp.style.borderBottom = ""
+  })
+
+  bioinput.value = ""
 
   domtitle.textContent = `${username} | Account settings`
 
@@ -321,6 +294,7 @@ async function updateDom() {
   occupationinput.placeholder = `${occupation}`
   locationinput.placeholder = `${location}`
   telephoneinput.placeholder = `+234 ${telephone}`
+
 }
 
 
@@ -352,5 +326,193 @@ async function fetchPage(pagename, is_logout) {
     let data = await response.json()
     console.log(data)
   }
+}
+
+
+// updating details
+
+function submitClickHandler(id) {
+  const btn_el = document.querySelector(`#${id}`)
+  const prev_el = btn_el.previousElementSibling
+  const prev_el_val = prev_el.value
+  if (prev_el_val !== undefined && prev_el_val !== "") {
+    updateOverlay()
+    updateaffirmbtn.onclick = () => {
+      removeUpdateOverlay()
+      sortInputValues(prev_el)
+    }
+  }
+}
+
+function uploadClickHandler() {
+  const input_el = document.querySelector("#file")
+  const input_el_val = input_el.files[0]
+  if (input_el_val !== undefined && input_el_val !== null) {
+    updateOverlay()
+    updateaffirmbtn.addEventListener("click", () => {
+      removeUpdateOverlay()
+      submitProfileImage(input_el)
+    })
+  }
+}
+
+function sortInputValues(inp) {
+  const input_el = inp
+  if (input_el.type == "file") {
+    submitProfileImage(input_el)
+  }
+  else {
+    const input_el_val = input_el.value
+    const input_el_name = input_el.name
+    if (input_el_name == "username" || input_el_name == "email") {
+      submitUserData(input_el_val, input_el_name)
+    }
+    else { submitProfileData(input_el_val, input_el_name) }
+  }
+}
+
+const Title = input => {
+  if (typeof (input) === "string") {
+    let first_char = input.charAt(0)
+    let updated_first_char = first_char.toUpperCase()
+    let newString = input.replace(first_char, updated_first_char)
+    return newString
+  }
+  else {
+    console.log("fuck off")
+  }
+}
+
+async function submitUserData(a1, a2) {
+  let obj_key = a2
+  let value = a1
+  const userid = userId()
+
+  if (obj_key == "username") {
+    value = Title(a1)
+  }
+
+  const databody = {
+    [obj_key]: value
+  }
+
+  let fieldname = obj_key
+
+  let updateendpoint = `http://127.0.0.1:8000/api/updateuserdata/${userid}`
+  let req_config = {
+    method: "PUT",
+    headers: {
+      "Accept": "application/json",
+      "Content-type": "application/json",
+      "fieldname": fieldname
+    },
+    body: JSON.stringify(databody)
+  }
+
+  const res = await fetch(updateendpoint, req_config)
+  const res_data = await res.json()
+  console.log(res_data)
+  if (res_data["details"] === "info updated" && res_data["affectedfield"] === "") {
+    removeUpdateOverlay()
+    updateDom()
+  }
+  else if (res_data["details"] === "object exists") {
+    removeUpdateOverlay()
+    showInputError(res_data)
+  }
+  else {
+    removeUpdateOverlay()
+    tryagain(res_data)
+  }
+
+}
+
+async function showInputError(inp) {
+  let field = inp["affectedfield"]
+  let inputel = document.querySelector(`[name=${field}]`)
+  let inputval = inputel.value
+
+  inputel.style.borderBottom = "0.0625rem solid red"
+  inputel.value = ""
+  inputel.placeholder = `sorry, ${inputval} already exists`
+}
+
+async function tryagain(inp) {
+  let field = inp["affectedfield"]
+  let inputel =  document.querySelector(`[name=${field}]`)
+  let inputval = inputel.value
+
+  inputel.style.borderBottom = "0.0625rem solid red"
+  inputel.value = ""
+  inputel.placeholder = `sorry, try something else`
+
+}
+
+async function submitProfileData(a1, a2) {
+  let obj_key = a2
+  let value = a1
+  const userid = userId()
+
+  const databody = {
+    [obj_key]: value
+  }
+
+  let updateendpoint = `http://127.0.0.1:8000/api/updateprofile/${userid}`
+  let req_config = {
+    method: "PUT",
+    headers: {
+      "Accept": "application/json",
+      "Content-type": "application/json",
+      "is-image": false,
+    },
+    body: JSON.stringify(databody)
+  }
+
+  const res = await fetch(updateendpoint, req_config)
+  const res_data = await res.json()
+  console.log(res_data)
+  if (res_data["details"] === "profile updated") {
+    updateDom()
+  }
+  else {
+    removeUpdateOverlay()
+  }
+}
+
+async function submitProfileImage(inp) {
+  const input_el = inp
+  const inputfile = input_el.files[0]
+  const userid = userId()
+
+  const databody = new FormData()
+  databody.append("profileimage", inputfile)
+
+  const config = {
+    method: "PUT",
+    headers: {
+      "is-image": true
+    },
+    body: databody
+  }
+
+  let updateendpoint = `http://127.0.0.1:8000/api/updateprofile/${userid}`
+  const res = await fetch(updateendpoint, config)
+  const res_data = await res.json()
+  if (res_data["details"] === "profile updated") {
+    updateDom()
+  }
+  else {
+    removeUpdateOverlay()
+  }
+}
+
+// logging out
+
+function logoutHandler() {
+  logoutOverlay()
+  logoutaffirmbtn.addEventListener("click", () => {
+    removeToken()
+    window.location.reload()
+  })
 }
 

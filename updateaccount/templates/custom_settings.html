@@ -62,17 +62,21 @@
             <a href=""><img src="{%static 'images/images/feedback.png'%}"></a>
             <div>
               <p>Feedback</p>
-              <a style="cursor: auto;">Help us improve our design</a>
+              <a style="cursor: pointer;" onclick="fetchPage('feedbackpage')">Help us improve our design</a>
             </div>
           </div>
           <hr>
           <div class="settings-links">
             <img src="{%static 'images/images/help.png'%}" class="settings-icon">
-            <a style="cursor: auto;">Help & Support</a>
+            <a style="cursor: auto;" onclick="fetchPage('feedbackpage')">Help & Support</a>
+          </div>
+          <div class="settings-links">
+            <img src="{%static 'images/images/setting.png'%}" class="settings-icon">
+            <a>custom profile settings</a>
           </div>
           <div class="settings-links">
             <img src="{%static 'images/images/logout.png'%}" class="settings-icon">
-            <a onclick="logoutoverlay()" style="cursor: auto;">Log Out</a>
+            <a onclick="logoutHandler()" style="cursor: pointer;">Log Out</a>
           </div>
         </div>
         <!-- --------------------- Query list ----------------------------- -->
@@ -127,7 +131,7 @@
             src="{%static 'images/images/icons8-user-32.png'%}">Your Crib</a>
         <a onclick="fetchPage('notificationspage')"><img id="short-notif-icon"
             src="{%static 'images/images/profile-job.png'%}">Notifications</a>
-        <a onclick="logoutoverlay()"><img src="{%static 'images/images/logout.png'%}">Log Out</a>
+        <a onclick="logoutHandler()"><img src="{%static 'images/images/logout.png'%}">Log Out</a>
       </div>
 
       <div class="about-link">
@@ -160,7 +164,7 @@
           </div>
         </div>
         <div class="phase-2">
-          <button id="upload-p-img" class="upload-p-img" onclick="overlayHandler()"> upload image </button>
+          <button id="upload-p-img" class="upload-p-img" onclick="uploadClickHandler()"> upload image </button>
         </div>
       </div>
       <div class="write-post-container">
@@ -169,8 +173,8 @@
       <div class="upload-profile-pic">
         <div class="bio">
           <img src="{%static 'images/images/logo4.png'%}">
-          <textarea id="bio-input"></textarea>
-          <button id="submit-bio" onclick="overlayHandler()">update bio</button>
+          <textarea id="bio-input" name="bio"></textarea>
+          <button id="submit-bio" onclick="submitClickHandler(this.id)">update bio</button>
         </div>
 
       </div>
@@ -181,8 +185,8 @@
         <div class="confirm-div-js" id="confirm-div">
           <h4>Are you sure you want to save changes</h4>
           <div class="options">
-            <a id="upt-affirm" class="yes" onclick="confirmchangesHandler(this.id)">yes</a>
-            <a id="no" class="no" onclick="confirmchangesHandler(this.id)">cancel</a>
+            <a id="upt-affirm" class="yes">yes</a>
+            <a id="upt-unaffirm" class="no" onclick="removeUpdateOverlay()">cancel</a>
           </div>
         </div>
       </div>
@@ -190,30 +194,29 @@
         <div class="sub-details-container">
           <div class="username-div">
             <h5>Update Username</h5>
-            <input type="text" id="username-input" maxlength="30">
-            <button id="submit-user" onclick="overlayHandler()">update</button>
+            <input type="text" maxlength="20" name="username" id="username-input" spellcheck="false">
+            <button id="submit-user" onclick="submitClickHandler(this.id)">update</button>
           </div>
           <div class="username-div">
             <h5>Update Email</h5>
-            <input type="email" id="email-input" maxlength="35">
-            <button id="submit-email" onclick="overlayHandler()">update</button>
+            <input type="email" maxlength="35" name="email" id="email-input" spellcheck="false">
+            <button id="submit-email" onclick="submitClickHandler(this.id)">update</button>
           </div>
           <div class="username-div">
             <h5>Update work field/job</h5>
-            <input type="text" id="occupation-input" maxlength="30">
-            <button id="submit-occ" onclick="overlayHandler()">update</button>
+            <input type="text"  maxlength="30" name="occupation" id="occupation-input" spellcheck="false">
+            <button id="submit-occ" onclick="submitClickHandler(this.id)">update</button>
           </div>
           <div class="username-div">
             <h5>Update your location</h5>
-            <input type="text" id="location-input" maxlength="30">
-            <button id="submit-loc" onclick="overlayHandler()">update</button>
+            <input type="text" maxlength="30" name="location" id="location-input" spellcheck="false">
+            <button id="submit-loc" onclick="submitClickHandler(this.id)">update</button>
           </div>
         </div>
         <div class="mobile-div">
           <h5>Update mobile-number</h5>
-          <input type="number" id="telephone-input">
-          <button id="submit-tele" onclick="overlayHandler(this.id)">update</button>
-          <input type="hidden" value="{{ csrf_token }}">
+          <input type="number" name="telephone" id="telephone-input">
+          <button id="submit-tele" onclick="submitClickHandler(this.id)">update</button>
         </div>
       </div>
 
@@ -223,7 +226,7 @@
         <h4>Are you sure you want to logout</h4>
         <div class="options">
           <a id="log-affirm" class="yes">logout</a>
-          <a id="unaffirm" class="no" onclick="removeLogoutOverlay()">cancel</a>
+          <a id="no" class="no" onclick="removeLogoutOverlay()">cancel</a>
         </div>
       </div>
     </div>

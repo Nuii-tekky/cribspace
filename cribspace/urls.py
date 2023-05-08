@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),   
     path('auth/',include('auther.url')),
     path('api/',include('api.url')),
-    path('accountsettings',include('updateaccount.url'))
+    path('accountsettings',include('updateaccount.url')),
+    path('cribspace/',include('home.url')),
 ]
 
 urlpatterns= urlpatterns+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

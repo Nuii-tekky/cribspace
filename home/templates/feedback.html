@@ -1,0 +1,622 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" conts="IE=edge">
+  <meta name="viewport" contst="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{%static 'css/feedback.css'%}">
+  <title id="domtitle"></title>
+</head>
+
+<body id="body">
+
+  <nav id="nav-bar">
+
+    <div class="nav-left">
+
+      <h2><a onclick="fetchPage('homepage')" class="logo"><span class="logo-style">C</span> ribSpace</a></h2>
+
+    </div>
+    <div class="nav-right">
+
+      <div class="search-box">
+
+        <a><img src="{%static 'images/images/search.png'%}" onclick="queryListToggle()"></a>
+
+        <input type="text" placeholder=" search for a user... " id="search-inp" oninput="showInfoToggle(this.id)">
+
+      </div>
+      <div class="nav-user-icon is_online" onclick="settingsMenuToggle()">
+
+        <img class="profile-img">
+
+      </div>
+
+      <!-- ---------------Small info ----------------------------- -->
+
+      <div class="small-info" id="info">
+        <p>click the search icon when done</p>
+      </div>
+
+      <!---------------settings menu  ---------------------->
+
+      <div id="settings-menu" class="settings-menu-original">
+        <div id="dark-btn">
+          <span></span>
+        </div>
+        <div class="settings-menu-inner">
+          <div class="write-post-user-profile">
+            <a onclick="fetchPage('profilepage')"><img class="profile-img"></a>
+            <div>
+              <p class="username"></p>
+              <a onclick="fetchPage('profilepage')" style="cursor: pointer;">see your profile</a>
+            </div>
+          </div>
+          <hr>
+          <div class="write-post-user-profile">
+            <a href=""><img src="{%static 'images/images/feedback.png'%}"></a>
+            <div>
+              <p>Feedback</p>
+              <a style="cursor: pointer;" >Help us improve our design</a>
+            </div>
+          </div>
+          <hr>
+          <div class="settings-links">
+            <img src="{%static 'images/images/help.png'%}" class="settings-icon">
+            <a style="cursor: auto;">Help & Support</a>
+          </div>
+          <div class="settings-links">
+            <img src="{%static 'images/images/setting.png'%}" class="settings-icon">
+            <a onclick="fetchPage('accountsettingpage')">custom profile settings</a>
+          </div>
+          <div class="settings-links">
+            <img src="{%static 'images/images/logout.png'%}" class="settings-icon">
+            <a onclick="logoutHandler()" style="cursor: pointer;">Log Out</a>
+          </div>
+        </div>
+        <!-- --------------------- Query list ----------------------------- -->
+      </div>
+      <div class="query-list" id="query-listing">
+        <p>Search Results</p>
+        <div class="listings-container">
+          <div class="recom-list">
+            <div class="recom-user-img"><a><img src="./images/member-5.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Henry Gibbin</h5>
+              <p>react developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-1.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Damsel Jeremy</h5>
+              <p>.NET developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+          <div class="recom-list">
+            <div class="recom-user-img"><a href=""><img src="./images/member-4.png"></a></div>
+            <div class="recom-user-info">
+              <h5>Albert Fart</h5>
+              <p>Node developer</p>
+            </div>
+            <a href="/" class="follow-user">follow</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nav>
+  <div class="container" id="body-container">
+    <div class="left-sidebar">
+      <div class="important-links">
+        <a onclick="fetchPage('homepage')" style="cursor: pointer;"><img id="home-icon"
+            src="{%static 'images/images/profile-home.png'%}">Home</a>
+        <a onclick="fetchPage('followerspage')" style="cursor: pointer;"><img id="addfriends-icon"
+            src="{%static 'images/images/icons8-follower-64.png'%}">Your followers</a>
+      </div>
+
+      <div class="shortcuts-links">
+        <h3>Your Space: </h3>
+        <a onclick="fetchPage('createpostpage')" style="cursor: pointer;">
+          <h2 id="addpost-icon">+</h2>New Post
+        </a>
+        <a onclick="fetchPage('userprofilepage')" style="cursor: pointer;"><img id="account-image"
+            src="{%static 'images/images/icons8-user-32.png'%}">Your Crib</a>
+        <a onclick="fetchPage('notificationspage')" style="cursor: pointer;"><img id="short-notif-icon"
+            src="{%static 'images/images/profile-job.png'%}">Notifications</a>
+        <a onclick="logoutHandler()" style="cursor: pointer;"><img src="{%static 'images/images/logout.png'%}" >Log Out</a>
+      </div>
+      <div class="about-link">
+        <a onclick="fetchPage('aboutpage')" class="current" style="cursor: pointer;"><img id="about-img"
+            src="{%static 'images/images/profile-study.png'%}" >About
+          CribSpace</a>
+      </div>
+
+      <div class="footer">
+        <p>CribSpace &copy; 2023 | All rights reserved</p>
+      </div>
+
+    </div>
+
+    <div class="main-content">
+      <div class="confirm-overlay-js" id="confirm-logout-overlay">
+        <div class="confirm-div-js" id="confirm-logout-div">
+          <h4>Are you sure you want to logout</h4>
+          <div class="options">
+            <a id="log-affirm" class="yes">logout</a>
+            <a id="no" class="no" onclick="removeLogoutOverlay()">cancel</a>
+          </div>
+        </div>
+      </div>
+      <div class="write-post-container">
+        <h3 class="upl-heading">Help & Feedback/Support</h3>
+      </div>
+      <div class="write-post-container">
+        <h4>
+          The entire CribSpace Team wishes you a warm welcome to this platform.
+          <em>We</em> appreciate you for signing up.
+        </h4>
+      </div>
+      <div class="write-post-container">
+        <h4>
+          This section was added to:
+        </h4>
+        <div id="lists">
+          <ul id="main">
+            <li>Assist with your navigation on our site</li>
+            <li>Provide internal and external links for your convenience</li>
+            <li>Provide media with which you can:
+              <ul id="sub">
+                <li>. Contact us for possible service rendering..</li>
+                <li>. Add/Recommend new features to CribSpace </li>
+                <li>. Provide Motivational support (if any)</li>
+              </ul>
+            </li>
+            <li>Provide a place where you can file complaints,bugs and compliments</li>
+          </ul>
+        </div>
+      </div>
+      <div class="write-post-container">
+        <h3 class="upl-heading">Our pages</h3>
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Landing Page</h4>
+            <p>
+              The Landing page is the page that is rendered to the user after login verification has been completed or
+              after signup procedures...
+              It is basically your home feed.
+              <br>
+
+              <span id="emphasise">
+                It has the following features:
+                <ul class="list-landing-features">
+                  <li>Navigation Bar</li>
+                  <li>Primary Sidebar</li>
+                  <li>Secondary Sidebar</li>
+                  <li>Post Field</li>
+                  <li>Main content</li>
+                </ul>
+              </span>
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/homep.png'%}" target="_blank"><img src="{%static 'images/images/homep.png'%}" alt=""></a>
+            </div>
+            <button class="link-btn" onclick="fetchPage('homepage')">Explore..</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Followers Page</h4>
+            <p>
+              The followers page is a destination to see requests that are sent to you from other cribbers.
+              You also see a complete list of all your followers
+              <br>
+
+              <span id="emphasise">
+                It has the following features:
+                <ul class="list-landing-features">
+                  <li>Navigation Bar</li>
+                  <li>Primary Sidebar</li>
+                  <li>Main content</li>
+                  <li>Buttons to decline or accept requests</li>
+                </ul>
+              </span>
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/followers.png'%}" target="_blank"><img src="{%static 'images/images/followers.png'%}" alt=""></a>
+            </div>
+            <button class="link-btn" onclick="fetchPage('followerspage')">Explore..</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>New Post</h4>
+            <p>
+              Its as cool as it sounds...
+              The new post page allows you to create a caption-only post,image-only post,or a complete post.
+              <br>
+
+              <span id="emphasise">
+                It has the following features:
+                <ul class="list-landing-features">
+                  <li>Navigation Bar</li>
+                  <li>Primary Sidebar</li>
+                  <li>Main content</li>
+                  <li>Textbox for the caption</li>
+                  <li>File select field to select the image</li>
+                  <li>Create post button</li>
+                </ul>
+              </span>
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/createpost.png'%}" target="_blank"><img src="{%static 'images/images/createpost.png'%}"></a>
+            </div>
+            <button class="link-btn" onclick="fetchPage('createpostpage')">Explore..</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Your crib</h4>
+            <p>
+              Your crib is just your own space.
+              Or you can say your account blueprint...
+              <br>
+
+              <span id="emphasise">
+                It has the following features:
+                <ul class="list-landing-features">
+                  <li>Navigation Bar</li>
+                  <li>Primary Sidebar</li>
+                  <li>Main content</li>
+                  <li>Your own details</li>
+                  <li>Your followers</li>
+                  <li>And your posts</li>
+                </ul>
+              </span>
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/profile_pix.png'%}" target="_blank"><img src="{%static 'images/images/profile_pix.png'%}"></a>
+            </div>
+            <button class="link-btn" onclick="fetchPage('profilepage')">Explore..</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Notifications</h4>
+            <p>
+              This is where we can communicate to you.
+              Important updates,warnings and many more
+              You can remove any notification you like..
+              <br>
+
+              <span id="emphasise">
+                It has the following features:
+                <ul class="list-landing-features">
+                  <li>Navigation Bar</li>
+                  <li>Primary Sidebar</li>
+                  <li>Main content</li>
+                  <li>Detailed Notification box</li>
+                  <li>remove notif-box icon</li>
+                </ul>
+              </span>
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/notifications.png'%}" target="_blank"><img src="{%static 'images/images/notifications.png'%}"></a>
+            </div>
+            <button class="link-btn" onclick="fetchPage('notificationspage')">Explore..</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="write-post-container my" id="aboutpage">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>About Page</h4>
+            <p>
+              Last but not least,our about page,which is a little trip round memory lane,whose memory???
+              The developers of CribSpace.                            
+              Stick around you'll love it.
+              <br>
+
+              <span id="emphasise">
+                It has the following features:
+                <ul class="list-landing-features">
+                  <li>Navigation Bar</li>
+                  <li>Primary Sidebar</li>
+                  <li>Main content</li>
+
+                </ul>
+              </span>
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/aboutpage.png'%}" target="_blank"><img src="{%static 'images/images/aboutpage.png'%}"></a>
+            </div>
+            <button class="link-btn" onclick="fetchPage('aboutpage')">Explore..</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="write-post-container">
+        <h3 class="upl-heading">Bars Explained</h3>
+        <p class="upl-para">The bars are just tools that enable swift and easy navigation throughout CribSpace...Learn
+          more below</p>
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Navigation Bar</h4>
+            <p>
+              This is the most Important bar of all.
+              It is located atop the main document.
+              It is positioned in a way that you can still access it while you scroll.
+              Read about its features below...
+              <br>
+
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/navvbar.png'%}" target="_blank"><img src="{%static 'images/images/navvbar.png'%}"></a>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="write-post-container">
+        <h4 class="upl-heading">Nav-bar features</h4>
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>CribSpace Logo</h4>
+            <p>
+              Our official logo is the first entity to be spotted.
+              It is on the left side of the navbar.
+              Other than being the symbol of our platform,the logo can be clicked and will automatically redirect you to
+              the home page or Landing page.
+              <br>
+
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/navvbar-logo.png'%}" target="_blank"><img src="{%static 'images/images/navvbar-logo.png'%}"></a>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Search box</h4>
+            <p>
+              The second entity to the right is the search-box.
+              With it you can search for any cribber in our database in realtime.It is fast,secure and very convenient.
+              <br>
+              Here's how to use:
+              <br>
+              <span>
+                <ul class="list-landing-features">
+                  <li>Type a name into the box</li>
+                  <li>Click the search icon on the left side of the box when done</li>
+                  <li>Await results</li>
+                  <li>If no results is seen,recheck spellings</li>
+                </ul>
+              </span>
+
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/navvbar-search.png'%}" target="_blank"><img src="{%static 'images/images/navvbar-search.png'%}"></a>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Display Photo</h4>
+            <p>
+              The display photo is yet another powerful tool in the navigation bar.
+              It is the dp of the currently logged-in user.
+              But wait there's more..
+              <br>
+              <br>
+              When the photo i clicked,a hidden bar appears.
+              It is the popup bar.
+              <br>
+              <br>
+              Click this <code style="color: rgb(157, 35, 157); cursor: pointer;" onclick="ScrollHandler()">&gt; popup bar &lt;</code> to read
+              about the popup bar.
+              <br>
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/navvbar-dp.png'%}" target="_blank"><img src="{%static 'images/images/navvbar-dp.png'%}"></a>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="write-post-container">
+        <h4 class="upl-heading">Other Bars</h4>
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Primary Sidebar</h4>
+            <p>
+              The primary sidebar contains links to virtually all pages and its available in all pages as well...
+              <br>
+              This are the components of the bar:
+              <span>
+                <ul class="list-landing-features">
+                  <li>Home Page link</li>
+                  <li>Followers page link</li>
+                  <li>New post link</li>
+                  <li>Your crib link</li>
+                  <li>Notification page link</li>
+                  <li>About CribSpace link</li>
+                  <li>The footer text</li>
+                </ul>
+              </span>
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/p-sidebar.png'%}" target="_blank"><img src="{%static 'images/images/p-sidebar.png'%}"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="write-post-container">
+        <p class="upl-para">Please note: The notification page link is not available in the primary sidebar if the page
+          is the home page or the notifications page</p>
+      </div>
+
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Secondary Sidebar</h4>
+            <p>
+              The secondary sidebar is only available in the home/landing Page.
+              Its purpose is to handle immediate notifications and recommend cribbers to follow while the user scrolls
+              through the main content
+              <br>
+              <br>
+              This are the components of the bar:
+              <span>
+                <ul class="list-landing-features">
+                  <li>Notification boxes</li>
+                  <li>Notification page link</li>
+                  <li>recommended cribbers box</li>
+                </ul>
+              </span>
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/s-sidebar.png'%}" target="_blank"><img src="{%static 'images/images/s-sidebar.png'%}"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="write-post-container my">
+        <div class="grid-info">
+          <div class="text-info">
+            <h4>Popup bar</h4>
+            <p>
+              The popup bar is by virtue,a bar that pops up when the user display photo on the navbar is clicked.
+
+              It acts as an additional navigation tool on our platform.
+              <br>
+              <br>
+              Our dark-theme feature is available Here.
+              It is in form of a button
+              It can be clicked to toggle between dark-theme and light-theme.
+            </p>
+          </div>
+          <div class="img-info">
+            <div class="img-self">
+              <a href="{%static 'images/images/navvbar-dp-pop.png'%}" target="_blank"><img src="{%static 'images/images/navvbar-dp-pop.png'%}"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="write-post-container">
+        <h3 class="upl-heading">Feedback & Support</h3>
+      </div>
+      <div class="contact-container my">
+        <div class="contact-container-left">
+          <h3 class="contact-heading">
+            <span class="green">Contact</span> Us
+          </h3>
+          <p class="contact-info">
+            Want to follow us | Offer recoms ?...
+            <br>
+            Click any of the links below and you will be redirected to that platform
+          </p>
+          <div class="contact-icons-container">
+            <div class="contact-icon">
+              <img src="{%static 'images/images/github-mark-white.png'%}">
+              <p>Github</p>
+            </div>
+            <div class="contact-icon">
+              <img src="{%static 'images/images/facebook.png'%}">
+              <p>Facebook</p>
+            </div>
+            <div class="contact-icon">
+              <img src="{%static 'images/images/linkedin.png'%}">
+              <p>LinkedIn</p>
+            </div>
+            <div class="contact-icon">
+              <img src="{%static 'images/images/slack.png'%}">
+              <p>Slack</p>
+            </div>
+            <div class="contact-icon">
+              <img src="{%static 'images/images/discord.png'%}">
+              <p>Discord</p>
+            </div>
+            <div class="contact-icon">
+              <img src="{%static 'images/images/gmail.png'%}">
+              <p>Email</p>
+            </div>
+          </div>
+        </div>
+        <div class="contact-container-right">
+          <h4 class="contact-heading">Report Issues,abuses or bugs</h4>
+          <p class="contact-info my">Your message will be sent to our email and you will receive a response as soon as
+            possible</p>
+          <textarea rows="8" placeholder=" .... type here"></textarea>
+          <button>send email</button>
+        </div>
+        
+      </div>
+      <button id="backtotop" onclick="scrollToTop()">Back to top</button>
+
+    </div>
+
+  </div>
+
+  <script src="{%static 'js/feedback.js'%}"></script>
+</body>
+
+</html>

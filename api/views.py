@@ -1,11 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from auther.models import Profile
 from django.db.models import Q
-from .serializers import UserSerializer,ProfileSerializer
 from django.contrib.auth import get_user_model
-from .messengers import createdefaultprofile,is_requestkeys_valid
+from .serializers import UserSerializer,ProfileSerializer,AboutModelSerialiser
+from auther.models import Profile
+from home.models import aboutModel
+from .messengers import createdefaultprofile,is_requestkeys_valid,imagerequestkey
 
 
 @api_view(['POST'])
@@ -86,13 +87,38 @@ def updateuserinfo(req,req_id):
     if db_obj is not None:
       try:
         reqdata= req.data
-        if is_requestkeys_valid(reqdata)["details"]==True:
-          serialised= UserSerializer(db_obj,data=req.data,partial=True)
-          if serialised.is_valid():
-            serialised.save()
-            return Response({"details":"user info updated"})
-          else:
-            return Response({"details":"user info not updated"})  
+        if is_requestkeys_valid(reqdata,model="usermodel")["details"]==True:
+          try:
+            isUsernameorEmail= req.headers['fieldname']
+            fieldaffected=""
+            if isUsernameorEmail== "username":
+              try:
+                db_obj= get_user_model().objects.get(username= req.data["username"])
+                fieldaffected="username"
+                return Response({"details":"object exists","affectedfield":fieldaffected}) 
+              except get_user_model().DoesNotExist:
+                serialised=UserSerializer(db_obj,data=req.data,partial=True)
+                if serialised.is_valid():
+                  serialised.save()
+                  return Response({"details":"info updated","affectedfield":fieldaffected})
+                else:
+                  fieldaffected="username"
+                  return Response({"details":"info not updated","affectedfield":fieldaffected})  
+            else:
+              try:
+                db_obj= get_user_model().objects.get(email= req.data["email"])
+                fieldaffected="email"
+                return Response({"details":"object exists","affectedfield":fieldaffected}) 
+              except get_user_model().DoesNotExist:
+                serialised=UserSerializer(db_obj,data=req.data,partial=True)
+                if serialised.is_valid():
+                  serialised.save()
+                  return Response({"details":"info updated","affectedfield":fieldaffected})
+                else:
+                  fieldaffected="email"
+                  return Response({"details":"info not updated","affectedfield":fieldaffected})  
+          except KeyError:
+            return Response({"details":"incomplete headers"})  
         else:
           return Response({"details":"invalid fields"})    
       except KeyError:
@@ -101,6 +127,8 @@ def updateuserinfo(req,req_id):
     return Response({"details":"no such user"})  
   except KeyError:
     return Response({"details":"key error"})  
+
+
 
 @api_view(['POST'])
 def createnewprofile(req):
@@ -141,25 +169,53 @@ def getuserprofiledata(req):
 @api_view(['PUT','POST'])
 def updateuserprofiledata(req,userid):
   try:
-    userid
+    db_obj= Profile.objects.get(id_user= userid)
     try:
-      db_obj= Profile.objects.get(id_user= userid)
-      try:
-        reqdata= req.data
-        if is_requestkeys_valid(reqdata)["details"]== True:
+      isImageField= req.headers['is-image']
+      if isImageField == False:
+        try:
+          reqdata= req.data
+          if is_requestkeys_valid(reqdata)["details"]== True:
+            if db_obj is not None:
+              serialised= ProfileSerializer(db_obj,data= req.data,partial=True)
+              if serialised.is_valid():
+                serialised.save()
+                return Response({"details":"profile updated"})
+              else:
+                return Response({"details":"profile not updated"})
+          else:
+            return Response({"details":"invalid fields"})
+        except ValueError:
+          return Response({"details":"incorrect request data error"})  
+      else:      
+        reqkey= imagerequestkey(req.data)
+        if is_requestkeys_valid(reqkey)["details"]== True:
           if db_obj is not None:
-            serialised= ProfileSerializer(db_obj,data= req.data,partial=True)
+            serialised=ProfileSerializer(db_obj,data=req.data,partial=True) 
             if serialised.is_valid():
               serialised.save()
               return Response({"details":"profile updated"})
             else:
-              return Response({"details":"profile not updated"})
+              return Response({"details":"profile not updated"})  
         else:
-          return Response({"details":"invalid fields"})
-      except ValueError:
-        return Response({"details":"value error"})    
-    except Profile.DoesNotExist:
-      return Response({"details":"invalid user id"})  
-  except KeyError:
-    return Response({"details":"invalid request data"})  
+          return Response({"details":"invalid fields"})      
+    except KeyError:
+      return Response({"details":"incomplete headers"})  
+  except Profile.DoesNotExist:
+    return Response({"details":"invalid user id"})  
 
+@api_view(["GET"])
+def getaboutobjects(req):
+  dbobj= aboutModel.objects.all()
+  serialised= AboutModelSerialiser(dbobj,many=True)
+  return Response({"details":serialised.data})
+
+@api_view(["POST"])
+def putdata(req):
+  data= req.data
+  siri= AboutModelSerialiser(data=data)
+  if siri.is_valid():
+    siri.save()
+    return Response({"details":siri.data})
+  else:
+    return Response({"details":siri.errors})  

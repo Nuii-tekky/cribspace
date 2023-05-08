@@ -67,7 +67,7 @@
   color: var(--input-color);
   transition: 0.4s ease-out;
   padding: 2px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -80,6 +80,7 @@
 .yes:active {
   transition: transform 0.06s ease;
   transform: scale(0.96);
+  font-size: smaller;
 }
 
 .yes-js {
@@ -90,13 +91,14 @@
   background: var(--input-color);
   transition: 0.4s ease-out;
   padding: 2px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .yes-js:active {
   transition: transform 0.06s ease;
   transform: scale(0.96);
+  font-size: smaller;
 }
 
 .no {
@@ -107,7 +109,7 @@
   color: var(--comment-color);
   transition: 0.4s ease-out;
   padding: 2px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 
 }
@@ -120,6 +122,7 @@
 .no:active {
   transition: transform 0.06s ease;
   transform: scale(0.96);
+  font-size: smaller;
 }
 
 .no-js {
@@ -130,13 +133,14 @@
   background: var(--comment-color);
   transition: 0.4s ease-out;
   padding: 2px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .no-js:active {
   transition: transform 0.06s ease;
   transform: scale(0.96);
+  font-size: smaller;
 }
 
 .confirm-logout{
@@ -243,6 +247,7 @@
 .sub-details-container .username-div button:active{
   transition: transform 0.06s ease;
   transform: scale(0.96);
+  font-size: smaller;
 }
 
 .main-details-container .mobile-div {
@@ -298,6 +303,7 @@
 
 .main-details-container .mobile-div button:active {
   transition: transform 0.06s ease;
+  font-size: smaller;
   transform: scale(0.96);
 }
 
@@ -385,6 +391,7 @@
   width: 6.25rem;
   height: 6.25rem;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .phase-1 h4 {
@@ -465,6 +472,7 @@
 .recom-list .follow-user:active{
   transition: all 0.4s ease;
   transform: scale(0.95);
+  font-size: smaller;
 }
 
 .recom-user-img a img {
@@ -516,8 +524,10 @@
 
 .write-post-user-profile img {
   width: 2.8125rem;
+  height: 2.8125rem;
   border-radius: 50%;
   margin-right: 0.625rem;
+  object-fit: cover;
 }
 
 .write-post-user-profile p {
@@ -660,6 +670,7 @@
 
 a {
   text-decoration: none;
+  cursor: pointer;
 }
 
 ul {
@@ -730,8 +741,10 @@ nav {
 
 .nav-user-icon img {
   width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   cursor: pointer;
+  object-fit: cover;
 }
 
 .nav-user-icon img:active{
@@ -757,6 +770,7 @@ nav {
 .search-box img:active{
   transition: all 0.4s ease;
   transform: scale(0.655);
+  font-size: smaller;
 }
 
 
@@ -885,6 +899,7 @@ nav {
 .settings-menu-original .write-post-user-profile a {
   font-size: 0.75rem;
   color: var(--secondary-color-2);
+  cursor: pointer;
 }
 
 .settings-menu-original .settings-menu-inner {
@@ -1125,6 +1140,7 @@ nav {
 }
 
 .input-file-div label:active{
-  transition: transform 0.06s ease;
+  transition: transform 0.46s ease;
   transform: scale(0.96);
+
 }

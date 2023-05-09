@@ -4,7 +4,7 @@ from rest_framework.authtoken.models import Token
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer,ProfileSerializer,AboutModelSerialiser
-from auther.models import Profile
+from userprofile.models import Profile
 from home.models import aboutModel
 from .messengers import createdefaultprofile,is_requestkeys_valid,imagerequestkey
 

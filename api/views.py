@@ -1,12 +1,13 @@
+from django.db.models import Q
+from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from django.db.models import Q
-from django.contrib.auth import get_user_model
-from .serializers import UserSerializer,ProfileSerializer,AboutModelSerialiser
+from .messengers import createdefaultprofile,is_requestkeys_valid,imagerequestkey
+from .serializers import UserSerializer,ProfileSerializer,AboutModelSerialiser,PostModelSerialiser
 from userprofile.models import Profile
 from home.models import aboutModel
-from .messengers import createdefaultprofile,is_requestkeys_valid,imagerequestkey
+from posts.models import Post
 
 
 @api_view(['POST'])
@@ -210,12 +211,30 @@ def getaboutobjects(req):
   serialised= AboutModelSerialiser(dbobj,many=True)
   return Response({"details":serialised.data})
 
-@api_view(["POST"])
-def putdata(req):
-  data= req.data
-  siri= AboutModelSerialiser(data=data)
-  if siri.is_valid():
-    siri.save()
-    return Response({"details":siri.data})
+
+@api_view(['POST']) 
+def createpostobject(req):
+  if len(req.data) != 0:
+    try:
+      username= req.data["user"]
+      user_obj= get_user_model().objects.get(username=username)
+      if user_obj is not None or user_obj is not {}:
+        serialised= PostModelSerialiser(data= req.data)
+        if serialised.is_valid():
+          serialised.save()
+          post_id= serialised.data["id"]
+          return Response({"details":"post saved","post_id":post_id})
+        else:
+          return Response({"details":"post not saved"}) 
+    except get_user_model().DoesNotExist:
+      return Response({"details":"invalid user"})
+    except KeyError:
+      return Response({"details":"invalid request keys"})  
   else:
-    return Response({"details":siri.errors})  
+    return Response({"details":"empty request"})    
+
+  
+# @api_view(['GET'])
+# def getpostbyid(req,id):
+#   try:
+#     postid= id

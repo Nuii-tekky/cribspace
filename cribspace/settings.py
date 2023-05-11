@@ -34,9 +34,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'auther',
     'api',
-    'createpost',
     'followers',
     'home',
+    'posts',
     'notifications',
     'updateaccount',
     'userprofile',

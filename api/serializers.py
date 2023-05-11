@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 from userprofile.models import Profile
 from home.models import aboutModel
-from createpost.models import Post
+from posts.models import Post
 
 class UserSerializer(serializers.ModelSerializer):
   class Meta:

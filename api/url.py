@@ -15,4 +15,5 @@ urlpatterns= [
   path('updateuserdata/<int:req_id>',views.updateuserinfo,name="updateuserinfo"),
   path('updateprofile/<int:userid>',views.updateuserprofiledata,name="updateuserprofile"),
   path('getaboutobjects',views.getaboutobjects,name="aboutobjects"),
+  path('addpost',views.createpostobject,name="createpost")
 ]

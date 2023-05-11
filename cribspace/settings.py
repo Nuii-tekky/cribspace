@@ -32,14 +32,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'account',
     'auther',
     'api',
     'followers',
     'home',
     'posts',
     'notifications',
-    'updateaccount',
-    'userprofile',
     'rest_framework',
     'rest_framework.authtoken',
     'django.contrib.admin',

@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from userprofile.models import Profile
+from account.models import Profile
 from home.models import aboutModel
 from posts.models import Post
 

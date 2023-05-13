@@ -1,19 +1,16 @@
-import requests
+import aiohttp
 import json
 from rest_framework.response import Response
 
 
-def createdefaultprofile(id):
+async def createdefaultprofile(id):
   pk= id
   if pk:
     endpoint= "http://127.0.0.1:8000/api/addprofile"
     form= json.dumps({"user":pk,"id_user":pk})
-    headers = {
-      'Content-Type': 'application/json',
-      'Accept':"application/json"
-    }
-    response = requests.request("POST", endpoint, headers=headers, data=form)
-    details= response.json()
+    async with aiohttp.ClientSession() as session:
+      async with session.post(endpoint,form) as response:
+        details=response.json()
     if details['details']== "profile saved":
       return Response({"details":"profile created"})
     else:
@@ -21,7 +18,7 @@ def createdefaultprofile(id):
   else:
     return Response({"details":"user id not provided"})
 
-  
+
 def is_requestkeys_valid(data,model= None):
   mutatedata= data
   allowed_keys_profile_model= ["bio","telephone","location","profileimage","occupation",'csrfmiddlewaretoken']

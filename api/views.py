@@ -227,8 +227,21 @@ def createpostobject(req):
    
 
   
-# @api_view(['GET'])
-# def getpostbyid(req,id):
-#   postid= id
-#   try:
+@api_view(['GET'])
+def getpostbyid(req,post_id):
+  try:
+    postid= post_id
+    postobj= Post.objects.get(id=postid)
+    if postobj is not None:
+      serialised= PostModelSerialiser(postobj,many=False)
+      return Response({"details":serialised.data})
+  except Post.DoesNotExist:
+    return Response({"details":"invalid post id"})    
+  except KeyError:
+    return Response({"details":"invalid request query"})
 
+@api_view(['POST'])
+def interact(req):
+  res= createdefaultprofile(req.data["sample"])
+  print(res)
+  return Response({"hdjd":"nnmmn"})

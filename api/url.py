@@ -15,5 +15,7 @@ urlpatterns= [
   path('updateuserdata/<int:req_id>',views.updateuserinfo,name="updateuserinfo"),
   path('updateprofile/<int:userid>',views.updateuserprofiledata,name="updateuserprofile"),
   path('getaboutobjects',views.getaboutobjects,name="aboutobjects"),
-  path('addpost',views.createpostobject,name="createpost")
+  path('addpost',views.createpostobject,name="createpost"),
+  path('getpost/post-id=<str:post_id>',views.getpostbyid,name="getpostbyid"),
+  path('interact',views.interact)
 ]

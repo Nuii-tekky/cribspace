@@ -3,6 +3,9 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.urls.exceptions import NoReverseMatch
+from django.urls import reverse
+from django.shortcuts import redirect
+
 
 def renderredirector(req):
   return render(req,"redirect.html")
@@ -22,12 +25,18 @@ def renderprompt(req):
 def authuser(req):
   try:
     requestheaders= req.headers
-    try:
-      requestedredirect= requestheaders["Requestredirect"]
-      return redirect(f"{requestedredirect}") 
-    except NoReverseMatch:
-      return Response({"details":"no such page"})
-    except KeyError:
-      return Response({"details":"no specified redirect page"})  
+    requestedredirect= requestheaders["Requestredirect"]
+    if requestedredirect == "postdetailpage":
+      postid= req.headers["postid"]
+      return redirect(reverse(f"{requestedredirect}",args=(postid,)))
+    if requestedredirect == "userprofilepage":
+      username= req.headers["username"]
+      return redirect(reverse(f"{requestedredirect}",args=(username,)))
+    return redirect(f"{requestedredirect}") 
+  except NoReverseMatch:
+    return Response({"details":"no such page"})
   except KeyError:
-    return Response({"details":"invalid headers"})  
+    return Response({"details":"no specified redirect page"})  
+ 
+
+

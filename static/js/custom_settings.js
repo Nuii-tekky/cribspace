@@ -30,13 +30,12 @@ function settingsMenuToggle() {
   settingmenu.classList.toggle("settings-menu-javascripted")
   settingmenu.onmouseleave = function () {
     settingmenu.classList.toggle("settings-menu-javascripted")
-    return true
   }
 }
 
 // Toggle the dark mode btn
 
-DarkBtn.onclick = function () {
+DarkBtn.onclick = ()=> {
   DarkBtn.classList.toggle("btn-on")
 
   // adding the dark mode feature
@@ -60,31 +59,29 @@ else { localStorage.setItem("theme", "light") }
 
 // Toggle effect  when search icon is clicked
 
-const queryListToggle = () => {
-  QueryList.classList.toggle("query-list-javascripted")
-  small_info.classList.remove("small-info-javascripted")
-  small_info.classList.add("small-info")
+function queryListToggle() {
+  QueryList.classList.toggle("query-list-javascripted");
+  small_info.classList.remove("small-info-javascripted");
+  small_info.classList.add("small-info");
   QueryList.onmouseleave = () => {
-    return QueryList.classList.toggle("query-list-javascripted")
-  }
-  return true
+    QueryList.classList.toggle("query-list-javascripted");
+  };
 }
 
 // toggle effect when typing into query box
 
-const showInfoToggle = (id) => {
-  const searchinput = document.getElementById(id)
-  let value = searchinput.value
+function showInfoToggle(id) {
+  const searchinput = document.getElementById(id);
+  let value = searchinput.value;
   if (value === null || value === '' || value === undefined) {
-    small_info.classList.remove("small-info-javascripted")
-    small_info.classList.add("small-info")
-    console.log("console is working")
+    small_info.classList.remove("small-info-javascripted");
+    small_info.classList.add("small-info");
+    console.log("console is working");
   }
   else if (value.length >= 2) {
-    small_info.classList.remove("info")
-    small_info.classList.add("small-info-javascripted")
+    small_info.classList.remove("info");
+    small_info.classList.add("small-info-javascripted");
   }
-  return true
 }
 
 // profile pic upload
@@ -296,7 +293,6 @@ async function writeContentsToDom(profiledata,userdata) {
   telephoneinput.placeholder = `+234 ${telephone}`
 
 }
-
 
 async function checkUserAuthenticity() {
   if (!sessionStorage.getItem("token") || !sessionStorage.getItem("id_user")) {

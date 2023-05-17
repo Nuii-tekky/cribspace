@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,11 +10,12 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="{%static 'css/custom-settings.css'%}">
-  <title id="domtitle"></title>
+  <link rel="stylesheet" href="{%static 'css/postdetail.css' %}">
+
+  <title>post detail</title>
 </head>
 
-<body id="body">
+<body>
 
   <nav id="nav-bar">
 
@@ -49,6 +51,7 @@
         <div id="dark-btn">
           <span></span>
         </div>
+        <p class="hidetext" id="postid">{{ post_id }}</p>
         <div class="settings-menu-inner">
           <div class="write-post-user-profile">
             <a><img class="profile-img"></a>
@@ -68,19 +71,19 @@
           <hr>
           <div class="settings-links">
             <img src="{%static 'images/images/help.png'%}" class="settings-icon">
-            <a style="cursor: auto;" onclick="fetchPage('feedbackpage')">Help & Support</a>
+            <a onclick="fetchPage('feedbackpage')">Help & Support</a>
           </div>
           <div class="settings-links">
             <img src="{%static 'images/images/setting.png'%}" class="settings-icon">
-            <a>custom profile settings</a>
+            <a onclick="fetchPage('accountsettingpage')">custom profile settings</a>
           </div>
           <div class="settings-links">
             <img src="{%static 'images/images/logout.png'%}" class="settings-icon">
             <a onclick="logoutHandler()" style="cursor: pointer;">Log Out</a>
           </div>
         </div>
+        <!-- --------------------- Query list ----------------------------- -->
       </div>
-      <!-- --------------------- Query list ----------------------------- -->
       <div class="query-list" id="query-listing">
         <p>Search Results</p>
         <div class="listings-container">
@@ -111,9 +114,10 @@
         </div>
       </div>
     </div>
-
   </nav>
+
   <div class="container" id="body-container">
+
     <div class="left-sidebar">
       <div class="important-links">
         <a onclick="fetchPage('homepage')"><img id="home-icon"
@@ -144,82 +148,59 @@
       </div>
 
     </div>
-
     <div class="main-content">
-      <div class="write-post-container">
-        <h3 class="upl-heading"><span class="username"></span> | Account Settings</h3>
+      <div class="post-container" id="postcontainer">
       </div>
-      <div class="write-post-container">
-        <h5 class="upl-heading">..update your profile image,Bio and so much more </h5>
-      </div>
-      <div class="upload-profile-pic">
-        <div class="phase-1">
+      <div class="activity-icons">
+        <div class="react">
+          <div class="love" id="love"></div>
+          <p id="no-likes">55</p>
+        </div>
+        <div class="react"><img src="{%static 'images/images/icons8-topic-48.png'%}">
+          <p id="no-comments">39</p>
+        </div>
+        <div class="add-comment">
           <img class="profile-img">
-          <h4 id="upl-heading">update your profile image... </h4>
-          <div class="input-file-div">
-            <input type="file" id="file" class="file">
-            <label for="file">
-              Select file
-            </label>
-          </div>
+          <input type="text" placeholder="comment here...">
         </div>
-        <div class="phase-2">
-          <button id="upload-p-img" class="upload-p-img" onclick="uploadClickHandler()"> upload image </button>
+        <a class="submit-comment">send</a>
+      </div>
+      <div class="comments-section">
+        <h3 class="commentheading">Comments</h3>
+        <div class="no-comments">
+          <h5 id="toshowcomment" class="showtext">...Be the first to comment</h5>
         </div>
-      </div>
-      <div class="write-post-container">
-        <h4 class="upl-heading">Upload Your Bio....</h4>
-      </div>
-      <div class="upload-profile-pic">
-        <div class="bio">
-          <img src="{%static 'images/images/logo4.png'%}">
-          <textarea id="bio-input" name="bio"></textarea>
-          <button id="submit-bio" onclick="submitClickHandler(this.id)">update bio</button>
-        </div>
-
-      </div>
-      <div class="write-post-container">
-        <h4 class="upl-heading">Your Details...</h4>
-      </div>
-      <div class="confirm-overlay-js" id="confirm-overlay">
-        <div class="confirm-div-js" id="confirm-div">
-          <h4>Are you sure you want to save changes</h4>
-          <div class="options">
-            <a id="upt-affirm" class="yes">yes</a>
-            <a id="upt-unaffirm" class="no" onclick="removeUpdateOverlay()">cancel</a>
+        <div class="comments" id="comments">
+          <!-- <div class="comment">
+            <div class="id">
+              <a><img src="./images/default_profile_pic.jpg"></a>
+              <p class="username">Anthony Jobber</p>
+            </div>
+            <p class="text">Hahahaha really funny</p>
           </div>
-        </div>
-      </div>
-      <div class="main-details-container">
-        <div class="sub-details-container">
-          <div class="username-div">
-            <h5>Update Username</h5>
-            <input type="text" maxlength="20" name="username" id="username-input" spellcheck="false">
-            <button id="submit-user" onclick="submitClickHandler(this.id)">update</button>
+          <div class="comment">
+            <div class="id">
+              <a><img src="./images/feed-image-3.png"></a>
+              <p class="username">Anthony Jobber</p>
+            </div>
+            <p class="text">Hahahaha really funny</p>
           </div>
-          <div class="username-div">
-            <h5>Update Email</h5>
-            <input type="email" maxlength="35" name="email" id="email-input" spellcheck="false">
-            <button id="submit-email" onclick="submitClickHandler(this.id)">update</button>
+          <div class="comment">
+            <div class="id">
+              <a><img src="./images/feed-image-4.png"></a>
+              <p class="username">Anthony Jobber</p>
+            </div>
+            <p class="text">Hahahaha really funny</p>
           </div>
-          <div class="username-div">
-            <h5>Update work field/job</h5>
-            <input type="text"  maxlength="30" name="occupation" id="occupation-input" spellcheck="false">
-            <button id="submit-occ" onclick="submitClickHandler(this.id)">update</button>
-          </div>
-          <div class="username-div">
-            <h5>Update your location</h5>
-            <input type="text" maxlength="30" name="location" id="location-input" spellcheck="false">
-            <button id="submit-loc" onclick="submitClickHandler(this.id)">update</button>
-          </div>
-        </div>
-        <div class="mobile-div">
-          <h5>Update mobile-number</h5>
-          <input type="number" name="telephone" id="telephone-input">
-          <button id="submit-tele" onclick="submitClickHandler(this.id)">update</button>
+          <div class="comment">
+            <div class="id">
+              <a><img src="./images/feed-image-5.png"></a>
+              <p class="username">Anthony Jobber</p>
+            </div>
+            <p class="text">Hahahaha really funny</p>
+          </div> -->
         </div>
       </div>
-
     </div>
     <div class="confirm-overlay-js" id="confirm-logout-overlay">
       <div class="confirm-div-js" id="confirm-logout-div">
@@ -231,8 +212,7 @@
       </div>
     </div>
   </div>
-  <script src=" {%static 'js/custom_settings.js'%} "></script>
-
+  <script src="{%static 'js/postdetail.js'%}"></script>
 </body>
 
 </html>

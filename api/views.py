@@ -3,12 +3,14 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from .messengers import createdefaultprofile,is_requestkeys_valid,imagerequestkey
+from .messengers import createdefaultprofile,is_requestkeys_valid,imagerequestkey,usernameobject
 from .serializers import UserSerializer,ProfileSerializer,AboutModelSerialiser,PostModelSerialiser
 from account.models import Profile
 from home.models import aboutModel
 from posts.models import Post
 
+
+# USER MODEL APIS
 
 @api_view(['POST'])
 def createnewuser(req,format=None):
@@ -28,6 +30,7 @@ def createnewuser(req,format=None):
           user_id= serializer.data["id"]
           profilecreate_res= createdefaultprofile(user_id)
           details= profilecreate_res.data['details']
+          print(details)
           if details== 'profile created':
             profilestate= True
           elif details == 'profile not created':
@@ -42,6 +45,7 @@ def createnewuser(req,format=None):
     return Response({"details":"username exists"})  
   except KeyError:
     return Response({"details":"key errror"})   
+
 
 
 @api_view(['POST'])
@@ -61,22 +65,6 @@ def verifyuserexistence(req,format= None):
     return Response({"details":"key errror"})  
 
 
-@api_view(["GET"])
-def getbasicuserinfo(req):
-  try:
-    token= req.headers["Authorization"]
-    attempted_user= get_user_model().objects.get(auth_token= token)
-    if attempted_user is not None and attempted_user != {}:
-      serialised= UserSerializer(attempted_user,many=False)  
-      init_return_data= serialised.data
-      return_data_copy= init_return_data.copy()
-      return_data_copy.pop("password")
-      final_data= return_data_copy.copy()
-      return Response({"details":final_data})
-  except get_user_model().DoesNotExist:
-      return Response({"details":"user not found"})
-  except KeyError:
-    return Response({"details":"key error"})   
 
 @api_view(['PUT'])    
 def updateuserinfo(req,req_id):
@@ -129,6 +117,43 @@ def updateuserinfo(req,req_id):
 
 
 
+@api_view(["GET"])
+def getuserinfo(req):
+  try:
+    token= req.headers["Authorization"]
+    attempted_user= get_user_model().objects.get(auth_token= token)
+    if attempted_user is not None and attempted_user != {}:
+      serialised= UserSerializer(attempted_user,many=False)  
+      init_return_data= serialised.data
+      return_data_copy= init_return_data.copy()
+      return_data_copy.pop("password")
+      final_data= return_data_copy.copy()
+      return Response({"details":final_data})
+  except get_user_model().DoesNotExist:
+      return Response({"details":"user not found"})
+  except KeyError:
+    return Response({"details":"key error"})   
+
+
+@api_view(["GET"])    
+def getusername(req):
+  try:
+    id= req.headers["userid"]
+    attempted_user= get_user_model().objects.get(id= id)
+    if attempted_user is not None and attempted_user != {}:
+      serialised= UserSerializer(attempted_user,many=False)  
+      init_return_data= usernameobject(serialised.data)
+      final_data= init_return_data.copy()
+      return Response({"details":final_data})
+  except get_user_model().DoesNotExist:
+      return Response({"details":"user not found"})
+  except KeyError:
+    return Response({"details":"key error"})
+
+
+# PROFILE MODEL APIS
+
+
 @api_view(['POST'])
 def createnewprofile(req):
   try:
@@ -144,23 +169,7 @@ def createnewprofile(req):
     else:
       return Response({"details":"profile not saved"})  
   except KeyError:
-    return Response({"details":"invalid request data"})
-    
-
-@api_view(['GET']) 
-def getuserprofiledata(req):
-  try:
-    iduser= req.headers["iduser"]
-    db_obj= Profile.objects.get(id_user= iduser)
-    if db_obj is not None and db_obj is not {}:
-      serialised_res= ProfileSerializer(db_obj,many=False)
-      return Response({"details":serialised_res.data})
-  except Profile.MultipleObjectsReturned:
-    return Response({"details":"multiple values returned"})    
-  except Profile.DoesNotExist:
-    return Response({"details":"invalid user id"})    
-  except KeyError:
-    return Response({"details":"invalid inputs"})  
+    return Response({"details":"invalid request data"})  
 
     
 @api_view(['PUT','POST'])
@@ -200,6 +209,24 @@ def updateuserprofiledata(req,userid):
   except Profile.DoesNotExist:
     return Response({"details":"invalid user id"})  
 
+@api_view(['GET']) 
+def getuserprofiledata(req):
+  try:
+    iduser= req.headers["iduser"]
+    db_obj= Profile.objects.get(id_user= iduser)
+    if db_obj is not None and db_obj is not {}:
+      serialised_res= ProfileSerializer(db_obj,many=False)
+      return Response({"details":serialised_res.data})
+  except Profile.MultipleObjectsReturned:
+    return Response({"details":"multiple values returned"})    
+  except Profile.DoesNotExist:
+    return Response({"details":"invalid user id"})    
+  except KeyError:
+    return Response({"details":"invalid inputs"})    
+
+
+# ABOUT MODEL API
+
 @api_view(["GET"])
 def getaboutobjects(req):
   dbobj= aboutModel.objects.all()
@@ -207,11 +234,13 @@ def getaboutobjects(req):
   return Response({"details":serialised.data})
 
 
+# POST MODEL APIS
+
 @api_view(['POST']) 
 def createpostobject(req):
   try:
-    user_id= req.data["user"]
-    user_obj= get_user_model().objects.get(id=user_id)
+    username= req.data["user"]
+    user_obj= get_user_model().objects.get(username=username)
     if user_obj is not None or user_obj is not {}:
       serialised= PostModelSerialiser(data= req.data)
       if serialised.is_valid():
@@ -240,8 +269,4 @@ def getpostbyid(req,post_id):
   except KeyError:
     return Response({"details":"invalid request query"})
 
-@api_view(['POST'])
-def interact(req):
-  res= createdefaultprofile(req.data["sample"])
-  print(res)
-  return Response({"hdjd":"nnmmn"})
+

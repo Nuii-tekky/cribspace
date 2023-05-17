@@ -1,16 +1,25 @@
+from itertools import chain
+import random
 import aiohttp
 import json
+import requests
 from rest_framework.response import Response
 
 
-async def createdefaultprofile(id):
+def createdefaultprofile(id):
   pk= id
   if pk:
     endpoint= "http://127.0.0.1:8000/api/addprofile"
     form= json.dumps({"user":pk,"id_user":pk})
-    async with aiohttp.ClientSession() as session:
-      async with session.post(endpoint,form) as response:
-        details=response.json()
+    # async with aiohttp.ClientSession() as session:
+    #   async with session.post(endpoint,form) as response:
+    #     details=response.json()
+    headers={
+      "Content-Type":"application/json"
+    }
+    response= requests.post(endpoint,data=form,headers=headers)
+    details= response.json()
+    print(details)
     if details['details']== "profile saved":
       return Response({"details":"profile created"})
     else:
@@ -52,3 +61,11 @@ def imagerequestkey(reqdata):
   returnformat= {reqdatakey:True}
   return returnformat
   
+
+def usernameobject(reqdata):
+  mutatedata= reqdata
+  init_obj={}
+  for key in list(mutatedata.keys()):
+    if key == "username":
+      init_obj={key:mutatedata[key]}
+  return init_obj     

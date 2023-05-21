@@ -22,7 +22,7 @@ const logoutaffirmbtn = document.querySelector("#log-affirm")
 
 const redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 const authendpoint = "http://127.0.0.1:8000/auth/authuser"
-const getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
+const getuserendpoint = "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
 
 
@@ -240,7 +240,6 @@ const userId = () => {
 
 const userData = async () => {
   let token = userToken()
-  let getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
   let response = await fetch(getuserendpoint, {
     method: "GET",
     headers: {
@@ -253,7 +252,7 @@ const userData = async () => {
 
 const userProfileData = async () => {
   let id_access = userId()
-  let endpoint = "http://127.0.0.1:8000/api/getprofiledata"
+  let endpoint = "http://127.0.0.1:8000/api/profiles/getprofiledata"
   let request_params = {
     method: "GET",
     headers: {
@@ -267,7 +266,7 @@ const userProfileData = async () => {
 }
 
 const contentData = async () => {
-  let endpoint = "http://127.0.0.1:8000/api/getaboutobjects"
+  let endpoint = "http://127.0.0.1:8000/api/home/getaboutobjects"
   let request_params = {
     method: "GET",
     headers: {

@@ -3,12 +3,12 @@ window.onload = checkUserAuthenticity
 
 const post_container = document.querySelector("#post-container");
 const body_container = document.querySelector("#body-container");
-const navbar         = document.querySelector("#nav-bar"       );
-const settingmenu    = document.querySelector("#settings-menu" );
-const DarkBtn        = document.querySelector("#dark-btn"      );
-const commentList    = document.querySelector (".comments-div" );
-const QueryList      = document.querySelector("#query-listing" );
-const small_info     = document.querySelector("#info"          );
+const navbar = document.querySelector("#nav-bar");
+const settingmenu = document.querySelector("#settings-menu");
+const DarkBtn = document.querySelector("#dark-btn");
+const commentList = document.querySelector(".comments-div");
+const QueryList = document.querySelector("#query-listing");
+const small_info = document.querySelector("#info");
 
 const logoutoverlaycontainer = document.querySelector("#confirm-logout-overlay")
 const logoutconfirmdiv = document.querySelector("#confirm-logout-div")
@@ -16,7 +16,7 @@ const logoutaffirmbtn = document.querySelector("#log-affirm")
 
 const redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 const authendpoint = "http://127.0.0.1:8000/auth/authuser"
-const getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
+const getuserendpoint = "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
 
 
@@ -24,7 +24,7 @@ const getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
 
 const settingsMenuToggle = () => {
   settingmenu.classList.toggle("settings-menu-javascripted")
-  settingmenu.onmouseleave = function(){
+  settingmenu.onmouseleave = function () {
     settingmenu.classList.toggle("settings-menu-javascripted")
     return true
   }
@@ -33,7 +33,7 @@ const settingsMenuToggle = () => {
 
 // Toggle the dark mode btn
 
-DarkBtn.onclick = ()=> {
+DarkBtn.onclick = () => {
   DarkBtn.classList.toggle("btn-on")
 
   // adding the dark mode feature
@@ -87,8 +87,8 @@ function scrollHandler() {
   window.scroll(0, 5234);
   return true;
 }
-function scrollToTop(){
-  window.scroll(0,0)
+function scrollToTop() {
+  window.scroll(0, 0)
 }
 
 
@@ -117,7 +117,7 @@ function renderRedirector() {
 
 function loadUrl(url) {
   let endpoint = url
-  window.location.href=`${endpoint}`
+  window.location.href = `${endpoint}`
 }
 
 const userToken = () => {
@@ -132,7 +132,6 @@ const userId = () => {
 
 const userData = async () => {
   let token = userToken()
-  let getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
   let response = await fetch(getuserendpoint, {
     method: "GET",
     headers: {
@@ -145,7 +144,7 @@ const userData = async () => {
 
 const userProfileData = async () => {
   let id_access = userId()
-  let endpoint = "http://127.0.0.1:8000/api/getprofiledata"
+  let endpoint = "http://127.0.0.1:8000/api/profiles/getprofiledata"
   let request_params = {
     method: "GET",
     headers: {
@@ -158,24 +157,10 @@ const userProfileData = async () => {
   return res_data
 }
 
-const contentData = async () => {
-  let endpoint = "http://127.0.0.1:8000/api/getaboutobjects"
-  let request_params = {
-    method: "GET",
-    headers: {
-      "Accept": "application/json"
-    }
-  }
-  let res = await fetch(endpoint, request_params)
-  let read_res = await res.json()
-  return read_res
-}
-
 async function updateDom(hardfetch = true) {
   if (hardfetch === true) {
     const profiledata = await userProfileData()
     const userdata = await userData()
-    const contentdata = await contentData()
     writeContentsToDom(profiledata, userdata)
   }
   else {
@@ -200,7 +185,6 @@ async function writeContentsToDom(profiledata, userdata) {
   })
 
   domtitle.textContent = `${username} | Help&Support/feedback`
-
 }
 
 async function checkUserAuthenticity() {

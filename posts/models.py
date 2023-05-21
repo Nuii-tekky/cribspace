@@ -22,16 +22,17 @@ class LikePost(models.Model):
   post_id=models.CharField(null=False,blank=False,max_length= 90)
   user= models.IntegerField(null=False,blank=False)
 
+  def __str__(self) -> str:
+    return f"like object created by {self.user} for {self.post_id}"
+
 
 class CommentPost(models.Model):
   post_id=models.CharField(null=False,blank=False,max_length= 90)
   user= models.IntegerField(null=False,blank=False)
   text= models.TextField(null=True,blank=True)
 
+  def __str__(self) -> str:
+    return f"comment object created by {self.user} for {self.post_id}"
 
-
-class FollowerUser(models.Model):
-  follower= models.IntegerField(null=False,blank=False)
-  user_followed=models.CharField(null=False,blank=False,max_length=100)
 
   

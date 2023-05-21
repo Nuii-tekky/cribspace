@@ -2,7 +2,7 @@
 console.log("initiating......")
 console.log("templated loaded")
 
-const submitbtn = document.getElementById("login-btn")
+const submitbtn = document.querySelector("#login-btn")
 const cautioncolor = "#f41212" || "#bd1e24"
 const okcolor = "#ea9b1b"
 
@@ -46,7 +46,7 @@ const addborder = (elementt, color) => {
 const updatemessage = (message, color, tmargin) => {
   if (tmargin) {
     let value = tmargin
-    const msg = document.getElementById("message")
+    const msg = document.querySelector("#message")
     msg.textContent = `${message}`
     msg.style.color = `${color}`
     if (value === "normal") {
@@ -60,7 +60,7 @@ const updatemessage = (message, color, tmargin) => {
     }
   }
   else {
-    const msg = document.getElementById("message")
+    const msg = document.querySelector("#message")
     msg.textContent = `${message}`
     msg.style.color = `${color}`
   }
@@ -98,7 +98,7 @@ const submitform = async (a4, a5, a6) => {
       passwd: password
     }
 
-    const endpoint = `http://127.0.0.1:8000/api/verifyuser`
+    const endpoint = `http://127.0.0.1:8000/api/users/verifyuser`
 
     const request_param = {
       method: "POST",
@@ -168,9 +168,9 @@ async function updatedom(a1, a2, a3) {
 
 submitbtn.addEventListener("click", (e) => {
   e.preventDefault()
-  const us = document.getElementById("uname")
-  const p1 = document.getElementById("pass")
-  const tk = document.getElementById("token")
+  const us = document.querySelector("#uname")
+  const p1 = document.querySelector("#pass")
+  const tk = document.querySelector("#token")
   validateform(us, p1, tk)
 })
 

@@ -1,19 +1,24 @@
 from django.db.models import Q
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from .messengers import createdefaultprofile,is_requestkeys_valid,imagerequestkey,usernameobject
-from .serializers import UserSerializer,ProfileSerializer,AboutModelSerialiser,PostModelSerialiser
+from asgiref.sync import async_to_sync
+
+from .messengers import (createdefaultprofile,is_requestkeys_valid,imagerequestkey, updatecommentcount, updatepostlike_count,usernameobject)
+
+from .serializers import (UserSerializer,ProfileSerializer,AboutModelSerialiser,PostModelSerialiser,LikePostModelSerializer,CommentPostSerializer)
+
 from account.models import Profile
 from home.models import aboutModel
-from posts.models import Post
+from posts.models import (Post,LikePost,CommentPost)
 
 
 # USER MODEL APIS
 
 @api_view(['POST'])
-def createnewuser(req,format=None):
+def createnewuser(req,format=None)->Response:
   try:
     requsername= req.data["username"]
     reqemail= req.data["email"]
@@ -28,9 +33,8 @@ def createnewuser(req,format=None):
           serializer.save()
           profilestate= False
           user_id= serializer.data["id"]
-          profilecreate_res= createdefaultprofile(user_id)
+          profilecreate_res= async_to_sync(createdefaultprofile)(user_id)
           details= profilecreate_res.data['details']
-          print(details)
           if details== 'profile created':
             profilestate= True
           elif details == 'profile not created':
@@ -47,9 +51,9 @@ def createnewuser(req,format=None):
     return Response({"details":"key errror"})   
 
 
-
 @api_view(['POST'])
-def verifyuserexistence(req,format= None):
+def verifyuserexistence(req,format= None)->Response:
+  returndata={}
   try:
     req_username_or_email= req.data.get("user")
     req_password= req.data.get("passwd")
@@ -58,16 +62,17 @@ def verifyuserexistence(req,format= None):
       serialised= UserSerializer(db_obj,many=False)
       userid= serialised.data["id"]
       token,created = Token.objects.get_or_create(user= db_obj)
-      return Response({"details":"user exists","token":token.key,"user_id":userid})
+      returndata={"details":"user exists","token":token.key,"user_id":userid}
   except get_user_model().DoesNotExist:  
-      return Response({"details":"no such user"})  
+      returndata={"details":"no such user"}
   except KeyError:
-    return Response({"details":"key errror"})  
-
+    returndata={"details":"key errror"}
+  return Response(returndata)  
 
 
 @api_view(['PUT'])    
-def updateuserinfo(req,req_id):
+def updateuserinfo(req,req_id)->Response:
+  returndata={}
   try:
     req_id
     db_obj= get_user_model().objects.get(id=req_id)
@@ -82,43 +87,45 @@ def updateuserinfo(req,req_id):
               try:
                 db_obj= get_user_model().objects.get(username= req.data["username"])
                 fieldaffected="username"
-                return Response({"details":"object exists","affectedfield":fieldaffected}) 
+                returndata={"details":"object exists","affectedfield":fieldaffected}
               except get_user_model().DoesNotExist:
                 serialised=UserSerializer(db_obj,data=req.data,partial=True)
                 if serialised.is_valid():
                   serialised.save()
-                  return Response({"details":"info updated","affectedfield":fieldaffected})
+                  returndata={"details":"info updated","affectedfield":fieldaffected}
                 else:
                   fieldaffected="username"
-                  return Response({"details":"info not updated","affectedfield":fieldaffected})  
+                  returndata={"details":"info not updated","affectedfield":fieldaffected}
             else:
               try:
                 db_obj= get_user_model().objects.get(email= req.data["email"])
                 fieldaffected="email"
-                return Response({"details":"object exists","affectedfield":fieldaffected}) 
+                returndata={"details":"object exists","affectedfield":fieldaffected}
               except get_user_model().DoesNotExist:
                 serialised=UserSerializer(db_obj,data=req.data,partial=True)
                 if serialised.is_valid():
                   serialised.save()
-                  return Response({"details":"info updated","affectedfield":fieldaffected})
+                  returndata={"details":"info updated","affectedfield":fieldaffected}
                 else:
                   fieldaffected="email"
-                  return Response({"details":"info not updated","affectedfield":fieldaffected})  
+                  returndata={"details":"info not updated","affectedfield":fieldaffected}
           except KeyError:
-            return Response({"details":"incomplete headers"})  
+            returndata={"details":"incomplete headers"}
         else:
-          return Response({"details":"invalid fields"})    
+          returndata={"details":"invalid fields"}   
       except KeyError:
-        return Response({"details":"no request data"})  
+        returndata={"details":"no request data"} 
   except get_user_model().DoesNotExist:
-    return Response({"details":"no such user"})  
+    returndata={"details":"no such user"}
   except KeyError:
-    return Response({"details":"key error"})  
+    returndata={"details":"key error"}
+  return Response(returndata)  
 
 
 
 @api_view(["GET"])
-def getuserinfo(req):
+def getuserinfo(req)->Response:
+  returndata={}
   try:
     token= req.headers["Authorization"]
     attempted_user= get_user_model().objects.get(auth_token= token)
@@ -128,15 +135,17 @@ def getuserinfo(req):
       return_data_copy= init_return_data.copy()
       return_data_copy.pop("password")
       final_data= return_data_copy.copy()
-      return Response({"details":final_data})
+      returndata={"details":final_data}
   except get_user_model().DoesNotExist:
-      return Response({"details":"user not found"})
+      returndata={"details":"user not found"}
   except KeyError:
-    return Response({"details":"key error"})   
+    returndata={"details":"key error"}  
+  return Response(returndata)  
 
 
 @api_view(["GET"])    
-def getusername(req):
+def getusername(req)->Response:
+  returndata={}
   try:
     id= req.headers["userid"]
     attempted_user= get_user_model().objects.get(id= id)
@@ -144,36 +153,38 @@ def getusername(req):
       serialised= UserSerializer(attempted_user,many=False)  
       init_return_data= usernameobject(serialised.data)
       final_data= init_return_data.copy()
-      return Response({"details":final_data})
+      returndata={"details":final_data}
   except get_user_model().DoesNotExist:
-      return Response({"details":"user not found"})
+      returndata={"details":"user not found"}
   except KeyError:
-    return Response({"details":"key error"})
-
+    returndata={"details":"key error"}
+  return Response(returndata)
 
 # PROFILE MODEL APIS
 
-
 @api_view(['POST'])
-def createnewprofile(req):
+def createnewprofile(req)->Response:
+  returndata={}
   try:
     req.data
     db_obj= Profile.objects.get(user= req.data["user"])
     if db_obj is not None:
-      return Response({"details":"profile exists"})
+      returndata={"details":"profile exists"}
   except Profile.DoesNotExist:
     profile_siri= ProfileSerializer(data= req.data)
     if profile_siri.is_valid():
       profile_siri.save()
-      return Response({"details":"profile saved"})
+      returndata={"details":"profile saved"}
     else:
-      return Response({"details":"profile not saved"})  
+      returndata={"details":"profile not saved"}
   except KeyError:
-    return Response({"details":"invalid request data"})  
+    returndata={"details":"invalid request data"}
+  return Response(returndata)    
 
     
 @api_view(['PUT','POST'])
-def updateuserprofiledata(req,userid):
+def updateuserprofiledata(req,userid)->Response:
+  returndata={}
   try:
     db_obj= Profile.objects.get(id_user= userid)
     isImageField= req.headers['is-image']
@@ -185,13 +196,13 @@ def updateuserprofiledata(req,userid):
             serialised= ProfileSerializer(db_obj,data= req.data,partial=True)
             if serialised.is_valid():
               serialised.save()
-              return Response({"details":"profile updated"})
+              returndata={"details":"profile updated"}
             else:
-              return Response({"details":"profile not updated"})
+              returndata={"details":"profile not updated"}
           else:
-            return Response({"details":"invalid fields"})
+            returndata={"details":"invalid fields"}
       except ValueError:
-        return Response({"details":"incorrect request data error"})  
+        returndata={"details":"incorrect request data error"}
     else:      
       reqkey= imagerequestkey(req.data)
       if is_requestkeys_valid(reqkey)["details"]== True:
@@ -199,36 +210,39 @@ def updateuserprofiledata(req,userid):
           serialised=ProfileSerializer(db_obj,data=req.data,partial=True) 
           if serialised.is_valid():
             serialised.save()
-            return Response({"details":"profile updated"})
+            returndata={"details":"profile updated"}
           else:
-            return Response({"details":"profile not updated"})  
+            returndata={"details":"profile not updated"}
       else:
-        return Response({"details":"invalid fields"})      
+        returndata={"details":"invalid fields"}
   except KeyError:
-      return Response({"details":"incomplete headers"})  
+      returndata={"details":"incomplete headers"}  
   except Profile.DoesNotExist:
-    return Response({"details":"invalid user id"})  
+    returndata={"details":"invalid user id"}
+  return Response(returndata)  
 
 @api_view(['GET']) 
-def getuserprofiledata(req):
+def getuserprofiledata(req)->Response:
+  returndata={}
   try:
     iduser= req.headers["iduser"]
     db_obj= Profile.objects.get(id_user= iduser)
     if db_obj is not None and db_obj is not {}:
       serialised_res= ProfileSerializer(db_obj,many=False)
-      return Response({"details":serialised_res.data})
+      returndata={"details":serialised_res.data}
   except Profile.MultipleObjectsReturned:
-    return Response({"details":"multiple values returned"})    
+    returndata={"details":"multiple values returned"}
   except Profile.DoesNotExist:
-    return Response({"details":"invalid user id"})    
+    returndata={"details":"invalid user id"}
   except KeyError:
-    return Response({"details":"invalid inputs"})    
+    returndata={"details":"invalid inputs"}
+  return Response(returndata)  
 
 
 # ABOUT MODEL API
 
 @api_view(["GET"])
-def getaboutobjects(req):
+def getaboutobjects(req)->Response:
   dbobj= aboutModel.objects.all()
   serialised= AboutModelSerialiser(dbobj,many=True)
   return Response({"details":serialised.data})
@@ -237,7 +251,8 @@ def getaboutobjects(req):
 # POST MODEL APIS
 
 @api_view(['POST']) 
-def createpostobject(req):
+def createpostobject(req)->Response:
+  returndata={}
   try:
     username= req.data["user"]
     user_obj= get_user_model().objects.get(username=username)
@@ -246,27 +261,147 @@ def createpostobject(req):
       if serialised.is_valid():
         serialised.save()
         post_id= serialised.data["id"]
-        return Response({"details":"post saved","post_id":post_id})
+        returndata={"details":"post saved","post_id":post_id}
       else:
-        return Response({"details":"post not saved"}) 
+        returndata={"details":"post not saved"}
   except get_user_model().DoesNotExist:
-    return Response({"details":"invalid user"})
+    returndata={"details":"invalid user"}
   except KeyError:
-    return Response({"details":"invalid request keys"})  
-   
+    returndata={"details":"invalid request keys"}
+  return Response(returndata)  
 
-  
+
 @api_view(['GET'])
-def getpostbyid(req,post_id):
+def getpostbyid(req,post_id)->Response:
+  returndata={}
   try:
     postid= post_id
     postobj= Post.objects.get(id=postid)
     if postobj is not None:
       serialised= PostModelSerialiser(postobj,many=False)
-      return Response({"details":serialised.data})
+      returndata={"details":serialised.data}
   except Post.DoesNotExist:
-    return Response({"details":"invalid post id"})    
+    returndata={"details":"invalid post id"}  
   except KeyError:
-    return Response({"details":"invalid request query"})
+    returndata={"details":"invalid request query"}
+  return Response(returndata)
 
+# LIKE MODEL APIS 
+
+@api_view(['POST'])
+def createordeletelike(req,postid,userid)->Response:
+  returndata={}
+  reqdata={"post_id":postid,"user":userid}
+  try:
+    user_obj= get_user_model().objects.get(id=userid)
+    try:
+      post_obj=Post.objects.get(id= postid)
+      try:
+        likeobject= LikePost.objects.get(user=userid,post_id=postid)
+        if likeobject is not None:
+          likeobject.delete()
+          updatepostlike_count_res= updatepostlike_count(postid,increase=False)
+          returndata={"details":"object deleted","like_count":updatepostlike_count_res["no_of_likes"]}
+      except LikePost.DoesNotExist:
+        likepostsiri= LikePostModelSerializer(data=reqdata)
+        if likepostsiri.is_valid():
+          likepostsiri.save()
+          updatepostlike_count_res= updatepostlike_count(postid,increase=True)
+          returndata={"details":"object created","like_count":updatepostlike_count_res["no_of_likes"]}
+        else:
+          returndata = {"details":"objcted not created"} 
+    except Post.DoesNotExist:
+      returndata={"details":"invalid post id"}  
+  except get_user_model().DoesNotExist:
+    returndata={"details":"invalid user id"}
+  except ValidationError:
+    returndata={"details":"invalid post id"}
+  return Response(returndata)  
+
+@api_view(["GET"])
+def checkuserlikepoststatus(req,postid,userid):
+  returndata={}
+  try:
+    userid=userid
+    postid=postid
+    userobj= get_user_model().objects.get(id=userid)
+    if userobj is not None:
+      try:
+        likepostobj= LikePost.objects.get(user=userid,post_id=postid)
+        returndata={"has_liked":True}  
+      except LikePost.DoesNotExist:
+        returndata={"has_liked":False}
+  except get_user_model().DoesNotExist:
+    returndata={"details":"invalid user id"}      
+  return Response(returndata)  
+    
+
+# COMMENT MODEL APIS
+ 
+@api_view(['POST'])
+def createcomment(req,postid,userid)->Response:
+  returndata={}
+  commenttext=req.data["comment_text"]
+  reqdata={"post_id":postid,"user":userid,"text":commenttext}
+  try:
+    user_obj= get_user_model().objects.get(id=userid)
+    try:
+      post_obj=Post.objects.get(id= postid)
+      try:
+        commentobject= CommentPost.objects.get(user=userid,post_id=postid)
+        if commentobject is not None:
+          commentsiri=CommentPostSerializer(commentobject,many=False)
+          returndata={"details":"object exists","data":commentsiri.data}
+      except CommentPost.DoesNotExist:
+        commentsiri= CommentPostSerializer(data=reqdata)
+        if commentsiri.is_valid():
+          commentsiri.save()
+          updatepostcomment_count_res= updatecommentcount(postid,increase=True)
+          returndata={"details":"object created","comment_count":updatepostcomment_count_res["no_of_comments"]}
+        else:
+          returndata = {"details":"objcted not created"} 
+    except Post.DoesNotExist:
+      returndata={"details":"invalid post id"}  
+  except get_user_model().DoesNotExist:
+    returndata={"details":"invalid user id"}
+  except ArithmeticError:
+    returndata={"details":"invalid post id"}
+  return Response(returndata)  
+
+
+@api_view(["GET"])
+def getallcomments(req,postid)-> Response:
+  returndata={}
+  try:
+    postobj= Post.objects.get(id=postid)
+    returndata={"details":postobj}
+    if postobj is not None and postobj is not {}:
+      try:
+        commentobj=CommentPost.objects.get_queryset()
+        lent=len(commentobj)
+        if commentobj is not None and postobj is not {}:
+          comments_siri= CommentPostSerializer(commentobj,many=True)
+          returndata={"details":comments_siri.data}
+      except CommentPost.DoesNotExist:
+        returndata={"details":"no comments"}  
+  except Post.DoesNotExist:
+    returndata={"details":"invalid post id"}  
+  return Response(returndata)
+
+
+@api_view(["GET"])
+def checkusercommentpoststatus(req,postid,userid) -> Response:
+  returndata={}
+  try:
+    userobj= get_user_model().objects.get(id=userid)
+    if userobj is not None:
+      try:
+        commentobj= CommentPost.objects.get(user=userid,post_id=postid)
+        returndata={"has_commented":True}  
+      except CommentPost.DoesNotExist:
+        returndata={"has_commented":False}
+  except get_user_model().DoesNotExist:
+    returndata={"details":"invalid user id"}      
+  return Response(returndata) 
+  
 

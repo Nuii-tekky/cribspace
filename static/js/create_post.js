@@ -14,11 +14,12 @@ const mainpostbtn = document.querySelector("#submit-post");
 const logoutoverlaycontainer = document.querySelector("#confirm-logout-overlay")
 const logoutconfirmdiv = document.querySelector("#confirm-logout-div")
 const logoutaffirmbtn = document.querySelector("#log-affirm")
+
 const redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 const authendpoint = "http://127.0.0.1:8000/auth/authuser"
-const getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
+const getuserendpoint = "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
-// window.onload = checkUserAuthenticity
+window.onload = checkUserAuthenticity
 
 // Toggle effect when user image on navbar is clicked
 
@@ -33,11 +34,7 @@ function settingsMenuToggle() {
 
 DarkBtn.onclick = ()=> {
   DarkBtn.classList.toggle("btn-on")
-
-  // adding the dark mode feature
   document.body.classList.toggle('dark-theme')
-
-  // saving the theme to local storage
   if (localStorage.getItem('theme') === 'light') { localStorage.setItem("theme", "dark") }
   else { localStorage.setItem("theme", "light") }
 }
@@ -72,7 +69,6 @@ function showInfoToggle(id) {
   if (value === null || value === '' || value === undefined) {
     small_info.classList.remove("small-info-javascripted");
     small_info.classList.add("small-info");
-    console.log("console is working");
   }
   else if (value.length >= 2) {
     small_info.classList.remove("info");
@@ -97,8 +93,7 @@ file.addEventListener("change", (e) => {
   const Filesize = (size / 100).toFixed(2)
 
   // get the ex, tension of the file
-  const regex =/[^.]+$/
-  console.log(regex)
+  const regex = /[^.]+$/
   const extension = Filename.match(regex)
 
   // write complete file name to the div for such
@@ -118,3 +113,137 @@ file.addEventListener("change", (e) => {
   return true
 })
 
+
+function logoutOverlay() {
+  window.scroll(0, 0)
+  logoutoverlaycontainer.classList.replace("confirm-overlay-js", "confirm-overlay")
+  logoutconfirmdiv.classList.replace("confirm-div-js", "confirm-div")
+  body.style.overflow = "hidden"
+}
+
+function removeLogoutOverlay() {
+  logoutoverlaycontainer.classList.replace("confirm-overlay", "confirm-overlay-js")
+  logoutconfirmdiv.classList.replace("confirm-div", "confirm-div-js")
+  body.style.overflow = ""
+}
+
+// Page onload workings 
+
+async function checkUserAuthenticity() {
+  if (!sessionStorage.getItem("token") || !sessionStorage.getItem("id_user")) {
+    renderRedirector()
+  }
+  else {
+    updateDom()
+  }
+}
+
+async function fetchPage(pagename, is_logout) {
+  let redirect = pagename
+  let access = userToken()
+  const request_params = {
+    method: "GET",
+    headers: {
+      "Authorization": `Token ${access}`,
+      "Requestredirect": `${redirect}`
+    }
+  }
+  const response = await fetch(authendpoint, request_params)
+  if (response.redirected) {
+    let url = response.url
+    loadUrl(url)
+  }
+  else {
+    let data = await response.json()
+  }
+}
+
+function removeToken() {
+  sessionStorage.removeItem("token")
+  window.location.reload()
+}
+
+function renderRedirector() {
+  window.location.replace(redirectendpoint)
+}
+
+function loadUrl(url) {
+  let endpoint = url
+  window.location.href = `${endpoint}`
+}
+
+const userToken = () => {
+  const token = sessionStorage.getItem("token")
+  return token
+}
+
+const userId = () => {
+  const userid = sessionStorage.getItem("id_user")
+  return userid
+}
+
+const userData = async () => {
+  let token = userToken()
+  let response = await fetch(getuserendpoint, {
+    method: "GET",
+    headers: {
+      "Authorization": token
+    }
+  })
+  let responsedata = await response.json()
+  return responsedata
+}
+
+const userProfileData = async () => {
+  let id_access = userId()
+  let endpoint = "http://127.0.0.1:8000/api/profiles/getprofiledata"
+  let request_params = {
+    method: "GET",
+    headers: {
+      "Accept": "application/json",
+      "iduser": `${id_access}`
+    }
+  }
+  let res = await fetch(endpoint, request_params)
+  let res_data = await res.json()
+  return res_data
+}
+
+
+async function updateDom(hardfetch = true) {
+  if (hardfetch === true) {
+    const profiledata = await userProfileData()
+    const userdata = await userData()
+    writeContentsToDom(profiledata,userdata)
+  }
+  else{
+    // call on the cached response
+  }
+}
+
+async function writeContentsToDom(profiledata,userdata) {
+  const profileimgs = document.querySelectorAll(".profile-img")
+  const usernamespots = document.querySelectorAll(".username")
+  const domtitle = document.querySelector("#domtitle")
+
+  const username = await userdata["details"]["username"]
+  const profileimgurl = await profiledata["details"]["profileimage"]
+
+  profileimgs.forEach((profileimg) => {
+    profileimg.src = profileimgurl
+  })
+  usernamespots.forEach((usernameitem) => {
+    usernameitem.textContent = `${username}`
+  })
+  domtitle.textContent = `${username} | createpost`
+}
+
+// logging out
+
+function logoutHandler() {
+  logoutOverlay()
+  logoutaffirmbtn.addEventListener("click", () => {
+    removeToken()
+    window.location.reload()
+  })
+}

@@ -16,3 +16,8 @@ class Profile(models.Model):
   def __str__(self):
     return self.user.get_username()
     
+
+
+class FollowerUser(models.Model):
+  follower= models.IntegerField(null=False,blank=False)
+  user_followed=models.CharField(null=False,blank=False,max_length=100)    

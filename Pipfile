@@ -12,6 +12,7 @@ tzdata = "==2023.3"
 aiohttp = "*"
 requests = "*"
 python-memcached = "*"
+asgiref = "*"
 
 [dev-packages]
 

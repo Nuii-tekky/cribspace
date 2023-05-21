@@ -6,7 +6,7 @@ const profilebtn= document.getElementById('createprofile')
 
 let redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 let authendpoint = "http://127.0.0.1:8000/auth/authuser"
-let getuserendpoint= "http://127.0.0.1:8000/api/getbasicuserdata"
+let getuserendpoint= "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
 function renderredirector() {
   window.location.replace(redirectendpoint)

@@ -20,7 +20,7 @@ const settingmenu = document.querySelector("#settings-menu");
 
 const redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 const authendpoint = "http://127.0.0.1:8000/auth/authuser"
-const getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
+const getuserendpoint = "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
 window.onload = checkUserAuthenticity
 
@@ -209,7 +209,6 @@ const userId = () => {
 
 const userData = async () => {
   let token = userToken()
-  let getuserendpoint = "http://127.0.0.1:8000/api/getbasicuserdata"
   let response = await fetch(getuserendpoint, {
     method: "GET",
     headers: {
@@ -222,7 +221,7 @@ const userData = async () => {
 
 const userProfileData = async () => {
   let id_access = userId()
-  let endpoint = "http://127.0.0.1:8000/api/getprofiledata"
+  let endpoint = "http://127.0.0.1:8000/api/profiles/getprofiledata"
   let request_params = {
     method: "GET",
     headers: {
@@ -394,7 +393,7 @@ async function submitUserData(a1, a2) {
 
   let fieldname = obj_key
 
-  let updateendpoint = `http://127.0.0.1:8000/api/updateuserdata/${userid}`
+  let updateendpoint =`http://127.0.0.1:8000/api/users/updateuserdata/${userid}`
   let req_config = {
     method: "PUT",
     headers: {
@@ -453,7 +452,7 @@ async function submitProfileData(a1, a2) {
     [obj_key]: value
   }
 
-  let updateendpoint = `http://127.0.0.1:8000/api/updateprofile/${userid}`
+  let updateendpoint = `http://127.0.0.1:8000/api/profiles/updateprofile/${userid}`
   let req_config = {
     method: "PUT",
     headers: {
@@ -491,7 +490,7 @@ async function submitProfileImage(inp) {
     body: databody
   }
 
-  let updateendpoint = `http://127.0.0.1:8000/api/updateprofile/${userid}`
+  let updateendpoint = `http://127.0.0.1:8000/api/profiles/updateprofile/${userid}`
   const res = await fetch(updateendpoint, config)
   const res_data = await res.json()
   if (res_data["details"] === "profile updated") {

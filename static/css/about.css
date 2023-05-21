@@ -83,24 +83,6 @@
   font-size: smaller;
 }
 
-.yes-js {
-  color: var(--comment-color);
-  text-align: center;
-  cursor: auto;
-  border-radius: 0.1875rem;
-  background: var(--input-color);
-  transition: 0.4s ease-out;
-  padding: 2px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.yes-js:active {
-  transition: transform 0.06s ease;
-  transform: scale(0.96);
-  font-size: smaller;
-}
-
 .no {
   background: var(--input-color);
   text-align: center;
@@ -120,24 +102,6 @@
 }
 
 .no:active {
-  transition: transform 0.06s ease;
-  transform: scale(0.96);
-  font-size: smaller;
-}
-
-.no-js {
-  color: var(--input-color);
-  text-align: center;
-  cursor: auto;
-  border-radius: 0.1875rem;
-  background: var(--comment-color);
-  transition: 0.4s ease-out;
-  padding: 2px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.no-js:active {
   transition: transform 0.06s ease;
   transform: scale(0.96);
   font-size: smaller;

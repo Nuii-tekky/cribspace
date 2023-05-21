@@ -3,9 +3,9 @@
 console.log("initiating......")
 console.log("templated loaded")
 
-const submitbtn = document.getElementById("signup-btn")
-const p1 = document.getElementById("pass1")
-const p2 = document.getElementById("pass2")
+const submitbtn = document.querySelector("#signup-btn")
+const p1 = document.querySelector("#pass1")
+const p2 = document.querySelector("#pass2")
 const cautioncolor = "#f41212" || "#bd1e24"
 const okcolor = "#ea9b1b"
 
@@ -29,7 +29,6 @@ function addborder(elementt, color) {
 function addmultipleborder(...args) {
   let elements = args
   elements.forEach(item => {
-    console.log("working fine.....")
     addborder(item, "none")
   })
 }
@@ -77,7 +76,7 @@ function renderloginpage() {
 function updatemessage(message, color, tmargin) {
   if (tmargin) {
     let value = tmargin
-    const msg = document.getElementById("message")
+    const msg = document.querySelector("#message")
     msg.textContent = `${message}`
     msg.style.color = `${color}`
     if (value === "normal") {
@@ -94,7 +93,7 @@ function updatemessage(message, color, tmargin) {
     }
   }
   else {
-    const msg = document.getElementById("message")
+    const msg = document.querySelector("#message")
     msg.textContent = `${message}`
     msg.style.color = `${color}`
   }
@@ -170,7 +169,7 @@ const submitform = async (a1, a2, a3, a4, a5, a6, a7) => {
     username: Title(usernamee),
     password: passwordd
   }
-  const endpoint = "http://127.0.0.1:8000/api/createnewuser"
+  const endpoint = "http://127.0.0.1:8000/api/users/createnewuser"
   const request_params = {
     method: "POST",
     headers: {
@@ -186,13 +185,13 @@ const submitform = async (a1, a2, a3, a4, a5, a6, a7) => {
 }
 
 function validateformdata() {
-  const fn = document.getElementById("fname")
-  const ln = document.getElementById("lname")
-  const em = document.getElementById("email")
-  const us = document.getElementById("uname")
-  const p1 = document.getElementById("pass1")
-  const p2 = document.getElementById("pass2")
-  const tk = document.getElementById("token")
+  const fn = document.querySelector("#fname")
+  const ln = document.querySelector("#lname")
+  const em = document.querySelector("#email")
+  const us = document.querySelector("#uname")
+  const p1 = document.querySelector("#pass1")
+  const p2 = document.querySelector("#pass2")
+  const tk = document.querySelector("#token")
   if (p1.value.length >= 6) {
     if (p1.value == p2.value) {
       addborder(p1)

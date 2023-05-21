@@ -2,10 +2,8 @@
 
 
 .comments{
-  display: grid;
-  grid-template-columns: repeat(2,18.125rem);
-  grid-gap: 1.25rem;
-  margin: 1.875rem 15%;
+  display: block;
+  margin: 0.075rem 24%;
   padding: 0.625rem;
   background: var(--hover-x-color);
   border-radius: 0.25rem;
@@ -13,37 +11,41 @@
 
 .comment{
   display: block;
-  padding: 0.625rem;
+  padding: 0.825rem;
   box-shadow: 0 0.25rem 0.4375rem rgba(0,0,0,0.4);
-  border-radius: 0.1875rem;
-  max-height: 100% !important;
+  border-radius: 0.2875rem;
+  margin-bottom: 30px;
+  max-width: 25rem;
 }
 
 .id{
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 8fr;
 }
 
 .id a img{
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   object-fit: cover;
   border-radius: 50%;
-  margin-right: 0.345rem;
+  margin-left: 8px;
+  margin-right: 10px;
 }
 
-.username{
+.c-username{
   font-weight: 500;
-  padding-top: 3%;
+  padding-top: 7px;
+  font-size: 13px;
   color: var(--input-color);
 }
 
 .text{
-  margin: 0 16%;
+  margin: 0 10%;
   font-weight: 500;
   font-size: 0.875rem;
   color: var(--s-color);
 }
+
 /* cmments end */
 
 .commentheading{
@@ -169,24 +171,6 @@
   font-size: smaller;
 }
 
-.yes-js {
-  color: var(--comment-color);
-  text-align: center;
-  cursor: auto;
-  border-radius: 0.1875rem;
-  background: var(--input-color);
-  transition: 0.4s ease-out;
-  padding: 2px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.yes-js:active {
-  transition: transform 0.06s ease;
-  transform: scale(0.96);
-  font-size: smaller;
-}
-
 .no {
   background: var(--input-color);
   text-align: center;
@@ -206,24 +190,6 @@
 }
 
 .no:active {
-  transition: transform 0.06s ease;
-  transform: scale(0.96);
-  font-size: smaller;
-}
-
-.no-js {
-  color: var(--input-color);
-  text-align: center;
-  cursor: auto;
-  border-radius: 0.1875rem;
-  background: var(--comment-color);
-  transition: 0.4s ease-out;
-  padding: 2px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.no-js:active {
   transition: transform 0.06s ease;
   transform: scale(0.96);
   font-size: smaller;
@@ -257,8 +223,6 @@
   left: 0;
   transition: all 10s ease;
 }
-
-
 
 .recom-list {
   display: grid;
@@ -326,6 +290,8 @@
 
 .write-post-user-profile img {
   width: 2.8125rem;
+  height: 2.8125rem;
+  object-fit: cover;
   border-radius: 50%;
   margin-right: 0.625rem;
 }
@@ -388,13 +354,11 @@
 .post-container div p{color: var(--p-color);}
 
 .post-container .post-img{
-  width: 90%;
+  width: 100%;
   object-fit: cover;
-  border-top-left-radius: 0.625rem;
-  border-top-right-radius: 0.625rem;
+  border-top-left-radius: 0.425rem;
+  border-top-right-radius: 0.425rem;
 }
-
-/* .post-container p{color: ;} */
 
 
 .activity-icons{
@@ -431,6 +395,8 @@
 .activity-icons .add-comment img{
   border-radius: 50%;
   width: 1.213rem;
+  height: 1.213rem;
+  object-fit: cover;
   border: none;
   cursor: pointer;
 }
@@ -663,8 +629,10 @@ nav {
 
 .nav-user-icon img {
   width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   cursor: pointer;
+  object-fit: cover;
 }
 
 .nav-user-icon img:active{

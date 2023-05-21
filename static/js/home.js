@@ -1,15 +1,15 @@
  
-const post_container = document.getElementById("post-container");
-const body_container = document.getElementById("body-container");
-const navbar         = document.getElementById("nav-bar"       );
-const settingmenu    = document.getElementById("settings-menu" );
-const DarkBtn        = document.getElementById("dark-btn"      );
+const post_container = document.querySelector("#post-container");
+const body_container = document.querySelector("#body-container");
+const navbar         = document.querySelector("#nav-bar"       );
+const settingmenu    = document.querySelector("#settings-menu" );
+const DarkBtn        = document.querySelector("#dark-btn"      );
 const commentList    = document.querySelector (".comments-div" );
-const QueryList      = document.getElementById("query-listing" );
-const small_info     = document.getElementById("info"          );
+const QueryList      = document.querySelector("#query-listing" );
+const small_info     = document.querySelector("#info"          );
 const caution        = document.querySelector ("#caution-text" );
 const mainpostbtn    = document.querySelector ("#submit-post"  );
-const lovebtn        = document.getElementById("love"          );
+const lovebtn        = document.querySelector("#love"          );
 
 
 

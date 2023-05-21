@@ -153,53 +153,53 @@
       </div>
       <div class="activity-icons">
         <div class="react">
-          <div class="love" id="love"></div>
-          <p id="no-likes">55</p>
+          <div id="love"></div>
+          <p id="no-likes"></p>
         </div>
         <div class="react"><img src="{%static 'images/images/icons8-topic-48.png'%}">
-          <p id="no-comments">39</p>
+          <p id="no-comments"></p>
         </div>
         <div class="add-comment">
           <img class="profile-img">
-          <input type="text" placeholder="comment here...">
+          <input type="text" id="comment-input" readonly>
         </div>
-        <a class="submit-comment">send</a>
+        <a class="submit-comment" onclick="sendComment()">send</a>
       </div>
       <div class="comments-section">
         <h3 class="commentheading">Comments</h3>
         <div class="no-comments">
-          <h5 id="toshowcomment" class="showtext">...Be the first to comment</h5>
+          <h5 id="toshowcomment" class="hidetext">...Be the first to comment</h5>
         </div>
-        <div class="comments" id="comments">
-          <!-- <div class="comment">
+        <!-- <div class="comments" id="comments">
+          <div class="comment">
             <div class="id">
               <a><img src="./images/default_profile_pic.jpg"></a>
-              <p class="username">Anthony Jobber</p>
+              <p class="c-username">Anthony Jobber</p>
             </div>
             <p class="text">Hahahaha really funny</p>
           </div>
           <div class="comment">
             <div class="id">
               <a><img src="./images/feed-image-3.png"></a>
-              <p class="username">Anthony Jobber</p>
+              <p class="c-username">Anthony Jobber</p>
             </div>
             <p class="text">Hahahaha really funny</p>
           </div>
           <div class="comment">
             <div class="id">
               <a><img src="./images/feed-image-4.png"></a>
-              <p class="username">Anthony Jobber</p>
+              <p class="c-username">Anthony Jobber</p>
             </div>
             <p class="text">Hahahaha really funny</p>
           </div>
           <div class="comment">
             <div class="id">
               <a><img src="./images/feed-image-5.png"></a>
-              <p class="username">Anthony Jobber</p>
+              <p class="c-username">Anthony Jobber</p>
             </div>
             <p class="text">Hahahaha really funny</p>
-          </div> -->
-        </div>
+          </div> 
+        </div>-->
       </div>
     </div>
     <div class="confirm-overlay-js" id="confirm-logout-overlay">

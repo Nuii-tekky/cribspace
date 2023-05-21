@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 from account.models import Profile
 from home.models import aboutModel
-from posts.models import Post
+from posts.models import (Post,LikePost,CommentPost)
 
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
@@ -28,4 +28,16 @@ class AboutModelSerialiser(serializers.ModelSerializer):
 class PostModelSerialiser(serializers.ModelSerializer):
   class Meta:
     model=Post
+    fields='__all__'
+
+
+class LikePostModelSerializer(serializers.ModelSerializer):
+  class Meta:
+    model=LikePost
+    fields='__all__'
+
+
+class CommentPostSerializer(serializers.ModelSerializer):
+  class Meta:
+    model= CommentPost
     fields='__all__'

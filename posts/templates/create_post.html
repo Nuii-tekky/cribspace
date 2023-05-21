@@ -71,7 +71,7 @@
           </div>
           <div class="settings-links">
             <img src="{%static 'images/images/setting.png'%}" class="settings-icon">
-            <a>custom profile settings</a>
+            <a onclick="fetchPage('accountsettingpage')">custom profile settings</a>
           </div>
           <div class="settings-links">
             <img src="{%static 'images/images/logout.png'%}" class="settings-icon">
@@ -127,7 +127,7 @@
         <a onclick="fetchPage('createpostpage')">
           <h2 id="addpost-icon">+</h2>New Post
         </a>
-        <a onclick="fetchPage('userprofilepage')"><img id="account-image"
+        <a onclick="fetchPage('profilepage')"><img id="account-image"
             src="{%static 'images/images/icons8-user-32.png'%}">Your Crib</a>
         <a onclick="fetchPage('notificationspage')"><img id="short-notif-icon"
             src="{%static 'images/images/profile-job.png'%}">Notifications</a>
@@ -146,7 +146,7 @@
     </div>
     <div class="main-content">
       <div class="write-post-container">
-        <h4>Hi <span class="username"></span>| Create your Lovely captions | Post your fun memories and memes here </h4>
+        <h4>Hi <span class="username"></span> | Create your Lovely captions | Post your fun memories and memes here </h4>
       </div>
       <div class="write-post-container">
         <h4>Type your cool caption here</h4>
@@ -172,6 +172,15 @@
         <p id="caution-text" class="caution">please make sure the file size is less than 10mb</p>
       </div>
       <button type="submit" class="post-send" id="submit-post">create post</button>
+    </div>
+    <div class="confirm-overlay-js" id="confirm-logout-overlay">
+      <div class="confirm-div-js" id="confirm-logout-div">
+        <h4>Are you sure you want to logout</h4>
+        <div class="options">
+          <a id="log-affirm" class="yes">logout</a>
+          <a id="no" class="no" onclick="removeLogoutOverlay()">cancel</a>
+        </div>
+      </div>
     </div>
   </div>
   <script src="{%static 'js/create_post.js'%}"></script>

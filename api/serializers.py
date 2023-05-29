@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -26,18 +25,23 @@ class AboutModelSerialiser(serializers.ModelSerializer):
 
 
 class PostModelSerialiser(serializers.ModelSerializer):
+  user= serializers.PrimaryKeyRelatedField(queryset= get_user_model().objects.all())
   class Meta:
     model=Post
     fields='__all__'
 
 
 class LikePostModelSerializer(serializers.ModelSerializer):
+  user= serializers.PrimaryKeyRelatedField(queryset= get_user_model().objects.all())
+  post_id=serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
   class Meta:
     model=LikePost
     fields='__all__'
 
 
 class CommentPostSerializer(serializers.ModelSerializer):
+  user= serializers.PrimaryKeyRelatedField(queryset= get_user_model().objects.all())
+  post_id=serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
   class Meta:
     model= CommentPost
     fields='__all__'

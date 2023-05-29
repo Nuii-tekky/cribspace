@@ -19,5 +19,5 @@ class Profile(models.Model):
 
 
 class FollowerUser(models.Model):
-  follower= models.IntegerField(null=False,blank=False)
+  follower= models.ForeignKey(user,on_delete=models.CASCADE)
   user_followed=models.CharField(null=False,blank=False,max_length=100)    

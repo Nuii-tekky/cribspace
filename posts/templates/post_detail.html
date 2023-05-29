@@ -15,7 +15,7 @@
   <title>post detail</title>
 </head>
 
-<body>
+<body id="body">
 
   <nav id="nav-bar">
 
@@ -25,18 +25,12 @@
 
     </div>
     <div class="nav-right">
-
       <div class="search-box">
-
         <a><img src="{%static 'images/images/search.png'%}" onclick="queryListToggle()"></a>
-
         <input type="text" placeholder=" search for a user... " id="search-inp" oninput="showInfoToggle(this.id)">
-
       </div>
       <div class="nav-user-icon is_online" onclick="settingsMenuToggle()">
-
         <img class="profile-img">
-
       </div>
 
       <!-- ---------------Small info ----------------------------- -->
@@ -170,36 +164,8 @@
         <div class="no-comments">
           <h5 id="toshowcomment" class="hidetext">...Be the first to comment</h5>
         </div>
-        <!-- <div class="comments" id="comments">
-          <div class="comment">
-            <div class="id">
-              <a><img src="./images/default_profile_pic.jpg"></a>
-              <p class="c-username">Anthony Jobber</p>
-            </div>
-            <p class="text">Hahahaha really funny</p>
-          </div>
-          <div class="comment">
-            <div class="id">
-              <a><img src="./images/feed-image-3.png"></a>
-              <p class="c-username">Anthony Jobber</p>
-            </div>
-            <p class="text">Hahahaha really funny</p>
-          </div>
-          <div class="comment">
-            <div class="id">
-              <a><img src="./images/feed-image-4.png"></a>
-              <p class="c-username">Anthony Jobber</p>
-            </div>
-            <p class="text">Hahahaha really funny</p>
-          </div>
-          <div class="comment">
-            <div class="id">
-              <a><img src="./images/feed-image-5.png"></a>
-              <p class="c-username">Anthony Jobber</p>
-            </div>
-            <p class="text">Hahahaha really funny</p>
-          </div> 
-        </div>-->
+        <div class="comments" id="comments">
+        </div>
       </div>
     </div>
     <div class="confirm-overlay-js" id="confirm-logout-overlay">

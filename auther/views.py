@@ -29,9 +29,10 @@ def authuser(req):
     if requestedredirect == "postdetailpage":
       postid= req.headers["postid"]
       return redirect(reverse(f"{requestedredirect}",args=(postid,)))
-    if requestedredirect == "userprofilepage":
+    if requestedredirect == "profilepage":
       username= req.headers["username"]
-      return redirect(reverse(f"{requestedredirect}",args=(username,)))
+      userid=req.headers["userid"]
+      return redirect(reverse(f"{requestedredirect}",args=(userid,username,)))
     return redirect(f"{requestedredirect}") 
   except NoReverseMatch:
     return Response({"details":"no such page"})

@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns=[
   path('settings',views.renderaccountsettingpage,name="accountsettingpage"),
-  path('viewprofile',views.renderprofilepage,name="profilepage")
+  path('viewprofile/<int:userid>/username=<str:username>',views.renderprofilepage,name="profilepage")
 ]

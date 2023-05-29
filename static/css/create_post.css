@@ -892,6 +892,15 @@ nav {
   padding-bottom: 0.3125rem;
 }
 
+#short-notif-icon {
+  width: 2.3rem;
+  height: 2.3rem;
+  background: var(--write-post-container-color);
+  border-radius: 50%;
+  padding: 0.5rem;
+  margin-right: 0.8rem;
+}
+
 
 /* about div */
 

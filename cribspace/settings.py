@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'cribspace.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'  : 'django.db.backends.postgresql',
-        'NAME'    : 'cribspacedb',
+        'NAME'    : 'cribspacedatabase',
         'USER'    : 'postgres',
         'PASSWORD': 'ekomobong',
         'HOST'    : 'localhost',

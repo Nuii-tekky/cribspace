@@ -99,5 +99,5 @@ def updatecommentcount(id,increase=False)->dict:
     postobj= Post.objects.get(id=id)
     postobj.no_of_comments += 1
     postobj.save()
-    returndata={"no_of_comments":postobj.no_of_likes}
+    returndata={"no_of_comments":postobj.no_of_comments}
   return returndata

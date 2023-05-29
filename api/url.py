@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 """
 patterns for my api endpoints with their respective views
 
@@ -21,6 +22,7 @@ urlpatterns= [
 
   path('posts/addpost',views.createpostobject,name="createpost"),
   path('posts/getpost/post-id=<str:post_id>',views.getpostbyid,name="getpostbyid"),
+  path('posts/getpost/user=<int:userid>',views.getpostsbyuserid,name="getpostbyuserid"),
 
   path('posts/likepost/post-id=<str:postid>&user=<int:userid>',views.createordeletelike,name="likepost"),
   path('posts/has_liked/post-id=<str:postid>&user=<int:userid>',views.checkuserlikepoststatus,name="hasuserliked"),

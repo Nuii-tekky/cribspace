@@ -7,6 +7,11 @@ from .models import Post,LikePost,CommentPost
 class ShowId(admin.ModelAdmin):
   readonly_fields= (["id"])
 
-admin.site.register(Post,ShowId)  
+class showwidModified(ShowId):
+  readonly_fields=(["id","imagesize"])
+
+
+admin.site.register(Post,showwidModified
+)  
 admin.site.register(LikePost,ShowId)  
 admin.site.register(CommentPost,ShowId)  

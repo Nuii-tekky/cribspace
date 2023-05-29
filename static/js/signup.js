@@ -9,7 +9,7 @@ const p2 = document.querySelector("#pass2")
 const cautioncolor = "#f41212" || "#bd1e24"
 const okcolor = "#ea9b1b"
 
-function addborder(elementt, color) {
+function addBorder(elementt, color) {
   const green = "#0fd945"
   const red = cautioncolor
   if (color == "red") {
@@ -26,24 +26,24 @@ function addborder(elementt, color) {
   }
 }
 
-function addmultipleborder(...args) {
+function addMultipleBorder(...args) {
   let elements = args
   elements.forEach(item => {
-    addborder(item, "none")
+    addBorder(item, "none")
   })
 }
 
 p1.addEventListener("input", () => {
   let message = "please pick a strong password"
-  updatemessage(message, cautioncolor, "normal")
+  updateMessage(message, cautioncolor, "normal")
   p1.style.border = "1px solid #0fd945"
   if (p1.value === "") {
     let message = "...Discover your space"
-    updatemessage(message, okcolor, "normal")
-    addborder(p1, "")
+    updateMessage(message, okcolor, "normal")
+    addBorder(p1, "")
     p2.setAttribute("readonly", true)
     p2.value = ""
-    addborder(p2, "none")
+    addBorder(p2, "none")
   }
   else {
     p2.removeAttribute("readonly")
@@ -63,17 +63,17 @@ const Title = input => {
   }
 }
 
-function renderredirector() {
+function renderRedirector() {
   let endpoint = "http://127.0.0.1:8000/auth/redirector"
   window.location.replace(endpoint)
 }
 
-function renderloginpage() {
+function renderLoginpage() {
   let endpoint = "http://127.0.0.1:8000/auth/login"
   window.location.replace(endpoint)
 }
 
-function updatemessage(message, color, tmargin) {
+function updateMessage(message, color, tmargin) {
   if (tmargin) {
     let value = tmargin
     const msg = document.querySelector("#message")
@@ -99,7 +99,7 @@ function updatemessage(message, color, tmargin) {
   }
 }
 
-async function fetchpromptpage(a1) {
+async function fetchPromptpage(a1) {
   const token = a1
   let authendpoint = `http://127.0.0.1:8000/auth/authuser`
   const response = await fetch(authendpoint, {
@@ -117,29 +117,29 @@ async function fetchpromptpage(a1) {
     const response_data = await response.json()
     console.log(response_data)
     if (response_data['detail'] === "Authentication credentials were not provided.") {
-      renderredirector()
+      renderRedirector()
     }
     else if (response_data['detail'] === "Invalid token.") {
-      renderredirector()
+      renderRedirector()
     }
   }
 }
 
-async function updatedom(a1, a2, a3, a4, a5, a6, a7) {
-  const responsedata = await submitform(a1, a2, a3, a4, a5, a6)
+async function updateDom(a1, a2, a3, a4, a5, a6, a7) {
+  const responsedata = await submitForm(a1, a2, a3, a4, a5, a6)
   if (responsedata["details"] === "username exists") {
-    updatemessage("username already exists", "red", "normal")
+    updateMessage("username already exists", "red", "normal")
     a4.value = ""
-    addborder(a4, "red")
+    addBorder(a4, "red")
   }
   else if (responsedata["details"] === "email exists") {
-    updatemessage("email already exists", "red", "step4")
+    updateMessage("email already exists", "red", "step4")
     a3.value = ""
-    addborder(a3, "red")
+    addBorder(a3, "red")
   }
   else if (responsedata["reason"] === "invalid inputs") {
-    updatemessage("please dont use special characters", "red", "step3")
-    addborder(a4, "red")
+    updateMessage("please dont use special characters", "red", "step3")
+    addBorder(a4, "red")
     a5.value = ""
     a7.value = ""
   }
@@ -149,18 +149,18 @@ async function updatedom(a1, a2, a3, a4, a5, a6, a7) {
     sessionStorage.setItem("token", usertoken)
     sessionStorage.setItem("id_user",userid)
     sessionStorage.setItem("isthisfirsttime", true)
-    fetchpromptpage(usertoken)
+    fetchPromptpage(usertoken)
   }
   console.log(responsedata)
 }
 
-const submitform = async (a1, a2, a3, a4, a5, a6, a7) => {
-  const firstnamee = a1.value;
-  const lastnamee = a2.value;
-  const emaill = a3.value;
-  const usernamee = a4.value;
-  const passwordd = a5.value;
-  const token = a6.value;
+async function submitForm(a1, a2, a3, a4, a5, a6, a7) {
+  const firstnamee = a1.value
+  const lastnamee = a2.value
+  const emaill = a3.value
+  const usernamee = a4.value
+  const passwordd = a5.value
+  const token = a6.value
 
   const data = {
     first_name: Title(firstnamee),
@@ -184,7 +184,7 @@ const submitform = async (a1, a2, a3, a4, a5, a6, a7) => {
   return details
 }
 
-function validateformdata() {
+function validateFormData() {
   const fn = document.querySelector("#fname")
   const ln = document.querySelector("#lname")
   const em = document.querySelector("#email")
@@ -194,73 +194,73 @@ function validateformdata() {
   const tk = document.querySelector("#token")
   if (p1.value.length >= 6) {
     if (p1.value == p2.value) {
-      addborder(p1)
-      addborder(p2)
+      addBorder(p1)
+      addBorder(p2)
       let em_val = em.value
       if (em_val.endsWith(".com") && em_val.search("@") !== -1 && em_val !== "") {
         em.style.border = ""
         if (fn.value !== "") {
           if (ln.value !== "") {
             if (us.value !== "") {
-              addmultipleborder(fn, ln, em, us, p1, p2)
-              updatemessage("You are all set to go...", okcolor)
-              updatedom(fn, ln, em, us, p1, tk, p2)
+              addMultipleBorder(fn, ln, em, us, p1, p2)
+              updateMessage("You are all set to go...", okcolor)
+              updateDom(fn, ln, em, us, p1, tk, p2)
               return true
             }
             else {
-              addborder(us, "red")
+              addBorder(us, "red")
               let message = "please fill the entire form"
-              updatemessage(message, cautioncolor)
+              updateMessage(message, cautioncolor)
               p1.value = ""
               p2.value = ""
-              addmultipleborder(fn, ln, em, p1, p2)
+              addMultipleBorder(fn, ln, em, p1, p2)
             }
           }
           else {
-            addborder(ln, "red")
+            addBorder(ln, "red")
             let message = "please fill the entire form"
-            updatemessage(message, cautioncolor)
+            updateMessage(message, cautioncolor)
             p1.value = ""
             p2.value = ""
-            addmultipleborder(fn, em, us, p1, p2)
+            addMultipleBorder(fn, em, us, p1, p2)
           }
         }
         else {
-          addborder(fn, "red")
+          addBorder(fn, "red")
           let message = "please fill the entire form"
-          updatemessage(message, cautioncolor)
+          updateMessage(message, cautioncolor)
           p1.value = ""
           p2.value = ""
-          addmultipleborder(ln, em, us, p1, p2)
+          addMultipleBorder(ln, em, us, p1, p2)
         }
       }
       else {
         let message = "invalid email address"
-        updatemessage(message, cautioncolor)
-        addborder(em, "red")
+        updateMessage(message, cautioncolor)
+        addBorder(em, "red")
         p1.value = ""
         p2.value = ""
-        addmultipleborder(fn, ln, us, p1, p2)
+        addMultipleBorder(fn, ln, us, p1, p2)
       }
     }
     else {
       let message = "passwords dont match"
-      updatemessage(message, cautioncolor)
-      addborder(p1, "red")
-      addborder(p2, "red")
-      addmultipleborder(fn, ln, em, us)
+      updateMessage(message, cautioncolor)
+      addBorder(p1, "red")
+      addBorder(p2, "red")
+      addMultipleBorder(fn, ln, em, us)
     }
   }
   else {
     let message = "passwords must be more than 6 characters"
-    updatemessage(message, cautioncolor, "step2")
-    addborder(p1, "red")
-    addmultipleborder(fn, ln, em, us, p2)
+    updateMessage(message, cautioncolor, "step2")
+    addBorder(p1, "red")
+    addMultipleBorder(fn, ln, em, us, p2)
     p2.value = ""
   }
 }
 
 submitbtn.addEventListener("click", (e) => {
   e.preventDefault()
-  validateformdata()
+  validateFormData()
 })

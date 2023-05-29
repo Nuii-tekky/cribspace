@@ -1,23 +1,31 @@
-window.onload = checkuserauthenticity
+window.onload = checkUserAuthenticity
 
-const header= document.getElementById("heading")
-const homebtn= document.getElementById('gohome')
-const profilebtn= document.getElementById('createprofile')
+const header= document.querySelector("#heading")
+const homebtn= document.querySelector("#gohome")
+const profilebtn= document.querySelector("#createprofile")
 
 let redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 let authendpoint = "http://127.0.0.1:8000/auth/authuser"
 let getuserendpoint= "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
-function renderredirector() {
+function renderRedirector() {
   window.location.replace(redirectendpoint)
 }
 
-async function fetchuserdata(a1){
+const userId=()=>{
+  const userid=sessionStorage.getItem("id_user")
+  return userid
+}
+
+async function fetchUserData(a1){
   let token= a1
+  const userid= userId()
   let response= await fetch(getuserendpoint,{
     method:"GET",
-    headers:{
-      "Authorization": token
+    headers: {
+      "Authorization": token,
+      "userid":userid,
+      "Accept":"application/json"
     }
   })
   let responsedata=await response.json()
@@ -25,19 +33,19 @@ async function fetchuserdata(a1){
   header.textContent= `Hi ${username}`
 }
 
-const usertoken=()=>{
+const userToken=()=>{
  const token= sessionStorage.getItem("token")
  return token
 }
 
-function loadurl(url){
+function loadUrl(url){
   let endpoint= url
   window.location.replace(endpoint)
 }
 
-async function fetchpage(pagename){
+async function fetchPage(pagename){
   let redirect= pagename
-  let access= usertoken()
+  let access= userToken()
   const request_params= {
     method: "GET",
     headers:{
@@ -48,33 +56,33 @@ async function fetchpage(pagename){
   const response= await fetch(authendpoint,request_params)
   if(response.redirected){
     let url = response.url
-    loadurl(url)
+    loadUrl(url)
   }
   else{
     let data=await response.json()
     console.log(data)
-    renderredirector()
+    renderRedirector()
   }
 }
 
-async function checkuserauthenticity() {
+async function checkUserAuthenticity() {
   if (!sessionStorage.getItem("token") || !sessionStorage.getItem("id_user")) {
-    renderredirector()
+    renderRedirector()
   }
   else if (!sessionStorage.getItem("isthisfirsttime")) {
-    fetchpage("homepage")
+    fetchPage("homepage")
   }
   else{
-    let access= usertoken()
-    fetchuserdata(access)
+    let access= userToken()
+    fetchUserData(access)
   }
 }
 
 homebtn.addEventListener("click",()=>{
-  fetchpage("homepage")
+  fetchPage("homepage")
 })
 
 profilebtn.addEventListener("click",()=>{
-  fetchpage("accountsettingpage")
+  fetchPage("accountsettingpage")
 })
 

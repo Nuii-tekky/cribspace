@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" href="./user-profile.css">
 
-  <title>CribSpace | Anthony Jobber</title>
+  <title id="domtitle"></title>
 </head>
 
 <body>
@@ -50,6 +50,8 @@
           <span></span>
         </div>
         <div class="settings-menu-inner">
+          <p class="hidetext" id="foreignusername">{{ username }}</p>
+          <p class="hidetext" id="foreignuserid">{{ userid }}</p>
           <div class="write-post-user-profile">
             <a href=""><img src="./images/profile-pic.png"></a>
             <div>
@@ -168,8 +170,7 @@
       </div>
       <div class="write-post-container bio">
         <h3>Your Bio</h3>
-          <p>Hi everyone,i am a fun and loving gentleman,i love sports,tech and dancing.I am a senior IT consultant at
-            BVR Auto</p>
+          <p class="biocard">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa molestiae sit eaque eius eveniet reprehenderit pariatur nemo nisi cum consequatur esse placeat dolores, suscipit velit ipsa numquam deserunt sunt adipisci sequi animi eos id reiciendis! Vel alias exercitationem placeat nostrum laborum eveniet, iusto veritatis voluptatem. Nobis animi commodi sit? Facilis.</p>
         <a href="./custom_settings.html" id="edit-bio">edit your bio</a>
       </div>
       <div class="write-post-container followers">

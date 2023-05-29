@@ -99,16 +99,18 @@
   border-bottom: 0.0625rem dotted var(--comment-color);
 }
 
-.bio div{
-  margin: auto;
-  max-width: 18.75rem;
+
+.biocard{
+ padding: 10px;
+ border-radius: 10px;
+ max-width: 40%;
+ margin: auto;
+ font-weight: 500;
+ font-size: 14px;
+ background: var(--right-sidebar-color);
+ color: var(--s-color);
 }
 
-.bio p{
-  font-weight: 500;
-  font-size: 0.9375rem;
-  color: var(--s-color);
-}
 
 .bio h3{
   font-size: 1.25rem;
@@ -328,12 +330,10 @@
   align-items: center;
 }
 
-.write-post-user-profile img {
+.write-post-user-profile img{
   width: 2.8125rem;
-  height: 2.8125rem;
   border-radius: 50%;
   margin-right: 0.625rem;
-  object-fit: cover;
 }
 
 .write-post-user-profile p{
@@ -780,10 +780,8 @@ nav {
 
 .nav-user-icon img {
   width: 2.5rem;
-  height: 2.5rem;
   border-radius: 50%;
   cursor: pointer;
-  object-fit: cover;
 }
 
 .nav-user-icon img:active{
@@ -1101,7 +1099,6 @@ nav {
 }
 
 .current {
-  /* border-bottom: 0.125rem solid var(--primary-color); */
   border-left: 0.225rem solid var(--primary-color);
   border-radius: 4px;
   padding-bottom: 0.3125rem;

@@ -18,7 +18,7 @@ from posts.models import (Post,LikePost,CommentPost)
 # USER MODEL APIS
 
 @api_view(['POST'])
-def createnewuser(req,format=None)->Response:
+def createnewuser(req,format=None):
   try:
     requsername= req.data["username"]
     reqemail= req.data["email"]
@@ -48,7 +48,8 @@ def createnewuser(req,format=None)->Response:
       return Response({"details":"email exists"})  
     return Response({"details":"username exists"})  
   except KeyError:
-    return Response({"details":"key errror"})   
+    return Response({"details":"key errror"}) 
+    
 
 
 @api_view(['POST'])
@@ -122,22 +123,27 @@ def updateuserinfo(req,req_id)->Response:
   return Response(returndata)  
 
 
-
 @api_view(["GET"])
 def getuserinfo(req)->Response:
   returndata={}
   try:
     token= req.headers["Authorization"]
-    attempted_user= get_user_model().objects.get(auth_token= token)
-    if attempted_user is not None and attempted_user != {}:
-      serialised= UserSerializer(attempted_user,many=False)  
-      init_return_data= serialised.data
-      return_data_copy= init_return_data.copy()
-      return_data_copy.pop("password")
-      final_data= return_data_copy.copy()
-      returndata={"details":final_data}
+    userid=req.headers["userid"]
+    loggeduser= get_user_model().objects.get(auth_token= token)
+    if loggeduser is not None and loggeduser != {}:
+      try:
+        userinstance=get_user_model().objects.get(id=userid)
+        if userinstance is not None and userinstance != {}:
+          serialised= UserSerializer(userinstance,many=False)  
+          init_return_data= serialised.data
+          return_data_copy= init_return_data.copy()
+          return_data_copy.pop("password")
+          final_data= return_data_copy.copy()
+          returndata={"details":final_data}
+      except get_user_model().DoesNotExist:
+        returndata={"details":"user not found"}
   except get_user_model().DoesNotExist:
-      returndata={"details":"user not found"}
+      returndata={"details":"invalid log token"}
   except KeyError:
     returndata={"details":"key error"}  
   return Response(returndata)  
@@ -254,18 +260,13 @@ def getaboutobjects(req)->Response:
 def createpostobject(req)->Response:
   returndata={}
   try:
-    username= req.data["user"]
-    user_obj= get_user_model().objects.get(username=username)
-    if user_obj is not None or user_obj is not {}:
-      serialised= PostModelSerialiser(data= req.data)
-      if serialised.is_valid():
-        serialised.save()
-        post_id= serialised.data["id"]
-        returndata={"details":"post saved","post_id":post_id}
-      else:
-        returndata={"details":"post not saved"}
-  except get_user_model().DoesNotExist:
-    returndata={"details":"invalid user"}
+    serialised= PostModelSerialiser(data= req.data)
+    if serialised.is_valid():
+      serialised.save()
+      post_id= serialised.data["id"]
+      returndata={"details":"post saved","post_id":post_id}
+    else:
+      returndata={"details":"post not saved"}
   except KeyError:
     returndata={"details":"invalid request keys"}
   return Response(returndata)  
@@ -286,6 +287,21 @@ def getpostbyid(req,post_id)->Response:
     returndata={"details":"invalid request query"}
   return Response(returndata)
 
+@api_view(["GET"])
+def getpostsbyuserid(req,userid):
+  returndata={}
+  try:
+    userid= userid
+    postobject= Post.objects.filter(user=userid).order_by("-created_at")
+    if postobject is not None and len(postobject) != 0:
+      serialised= PostModelSerialiser(postobject,many=True)
+      returndata= {"details":serialised.data}
+    else:
+      returndata={"details":"no posts"}
+  except KeyError:
+    returndata={"details":"invalid request query"}
+  return Response(returndata)
+
 # LIKE MODEL APIS 
 
 @api_view(['POST'])
@@ -293,27 +309,19 @@ def createordeletelike(req,postid,userid)->Response:
   returndata={}
   reqdata={"post_id":postid,"user":userid}
   try:
-    user_obj= get_user_model().objects.get(id=userid)
-    try:
-      post_obj=Post.objects.get(id= postid)
-      try:
-        likeobject= LikePost.objects.get(user=userid,post_id=postid)
-        if likeobject is not None:
-          likeobject.delete()
-          updatepostlike_count_res= updatepostlike_count(postid,increase=False)
-          returndata={"details":"object deleted","like_count":updatepostlike_count_res["no_of_likes"]}
-      except LikePost.DoesNotExist:
-        likepostsiri= LikePostModelSerializer(data=reqdata)
-        if likepostsiri.is_valid():
-          likepostsiri.save()
-          updatepostlike_count_res= updatepostlike_count(postid,increase=True)
-          returndata={"details":"object created","like_count":updatepostlike_count_res["no_of_likes"]}
-        else:
-          returndata = {"details":"objcted not created"} 
-    except Post.DoesNotExist:
-      returndata={"details":"invalid post id"}  
-  except get_user_model().DoesNotExist:
-    returndata={"details":"invalid user id"}
+    likeobject= LikePost.objects.get(user=userid,post_id=postid)
+    if likeobject is not None:
+      likeobject.delete()
+      updatepostlike_count_res= updatepostlike_count(postid,increase=False)
+      returndata={"details":"object deleted","like_count":updatepostlike_count_res["no_of_likes"]}
+  except LikePost.DoesNotExist:
+    likepostsiri= LikePostModelSerializer(data=reqdata)
+    if likepostsiri.is_valid():
+      likepostsiri.save()
+      updatepostlike_count_res= updatepostlike_count(postid,increase=True)
+      returndata={"details":"object created","like_count":updatepostlike_count_res["no_of_likes"]}
+    else:
+      returndata = {"details":"objcted not created"} 
   except ValidationError:
     returndata={"details":"invalid post id"}
   return Response(returndata)  
@@ -324,15 +332,10 @@ def checkuserlikepoststatus(req,postid,userid):
   try:
     userid=userid
     postid=postid
-    userobj= get_user_model().objects.get(id=userid)
-    if userobj is not None:
-      try:
-        likepostobj= LikePost.objects.get(user=userid,post_id=postid)
-        returndata={"has_liked":True}  
-      except LikePost.DoesNotExist:
-        returndata={"has_liked":False}
-  except get_user_model().DoesNotExist:
-    returndata={"details":"invalid user id"}      
+    likepostobj= LikePost.objects.get(user=userid,post_id=postid)
+    returndata={"has_liked":True}  
+  except LikePost.DoesNotExist:
+    returndata={"has_liked":False}     
   return Response(returndata)  
     
 
@@ -344,28 +347,20 @@ def createcomment(req,postid,userid)->Response:
   commenttext=req.data["comment_text"]
   reqdata={"post_id":postid,"user":userid,"text":commenttext}
   try:
-    user_obj= get_user_model().objects.get(id=userid)
-    try:
-      post_obj=Post.objects.get(id= postid)
-      try:
-        commentobject= CommentPost.objects.get(user=userid,post_id=postid)
-        if commentobject is not None:
-          commentsiri=CommentPostSerializer(commentobject,many=False)
-          returndata={"details":"object exists","data":commentsiri.data}
-      except CommentPost.DoesNotExist:
-        commentsiri= CommentPostSerializer(data=reqdata)
-        if commentsiri.is_valid():
-          commentsiri.save()
-          updatepostcomment_count_res= updatecommentcount(postid,increase=True)
-          returndata={"details":"object created","comment_count":updatepostcomment_count_res["no_of_comments"]}
-        else:
-          returndata = {"details":"objcted not created"} 
-    except Post.DoesNotExist:
-      returndata={"details":"invalid post id"}  
-  except get_user_model().DoesNotExist:
-    returndata={"details":"invalid user id"}
-  except ArithmeticError:
-    returndata={"details":"invalid post id"}
+    commentobject= CommentPost.objects.get(user=userid,post_id=postid)
+    if commentobject is not None:
+      commentsiri=CommentPostSerializer(commentobject,many=False)
+      returndata={"details":"object exists","data":commentsiri.data}
+  except CommentPost.DoesNotExist:
+    commentsiri= CommentPostSerializer(data=reqdata)
+    if commentsiri.is_valid():
+      commentsiri.save()
+      updatepostcomment_count_res= updatecommentcount(postid,increase=True)
+      returndata={"details":"object created","comment_count":updatepostcomment_count_res["no_of_comments"]}
+    else:
+      returndata = {"details":"objcted not created"} 
+  except KeyError:
+    returndata={"details":"invalid query params"}
   return Response(returndata)  
 
 
@@ -373,18 +368,13 @@ def createcomment(req,postid,userid)->Response:
 def getallcomments(req,postid)-> Response:
   returndata={}
   try:
-    postobj= Post.objects.get(id=postid)
-    returndata={"details":postobj}
-    if postobj is not None and postobj is not {}:
-      try:
-        commentobj=CommentPost.objects.get_queryset()
-        lent=len(commentobj)
-        if commentobj is not None and postobj is not {}:
-          comments_siri= CommentPostSerializer(commentobj,many=True)
-          returndata={"details":comments_siri.data}
-      except CommentPost.DoesNotExist:
-        returndata={"details":"no comments"}  
-  except Post.DoesNotExist:
+    commentobj=CommentPost.objects.filter(post_id=postid).order_by('-created_at')
+    if commentobj is not None and len(commentobj) != 0:
+      comments_siri= CommentPostSerializer(commentobj,many=True)
+      returndata={"details":comments_siri.data}
+    else:
+      returndata={"details":"no comments"}
+  except ValidationError:
     returndata={"details":"invalid post id"}  
   return Response(returndata)
 
@@ -393,15 +383,10 @@ def getallcomments(req,postid)-> Response:
 def checkusercommentpoststatus(req,postid,userid) -> Response:
   returndata={}
   try:
-    userobj= get_user_model().objects.get(id=userid)
-    if userobj is not None:
-      try:
-        commentobj= CommentPost.objects.get(user=userid,post_id=postid)
-        returndata={"has_commented":True}  
-      except CommentPost.DoesNotExist:
-        returndata={"has_commented":False}
-  except get_user_model().DoesNotExist:
-    returndata={"details":"invalid user id"}      
+    commentobj= CommentPost.objects.get(user=userid,post_id=postid)
+    returndata={"has_commented":True}  
+  except CommentPost.DoesNotExist:
+    returndata={"has_commented":False}    
   return Response(returndata) 
   
 

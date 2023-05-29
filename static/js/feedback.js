@@ -132,10 +132,13 @@ const userId = () => {
 
 const userData = async () => {
   let token = userToken()
+  let userid=userId()
   let response = await fetch(getuserendpoint, {
     method: "GET",
     headers: {
-      "Authorization": token
+      "Authorization": token,
+      "userid":userid,
+      "Accept":"application/json"
     }
   })
   let responsedata = await response.json()

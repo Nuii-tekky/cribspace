@@ -111,33 +111,6 @@ const userId = () => {
   return userid
 }
 
-const userData = async () => {
-  let token = userToken()
-  let response = await fetch(getuserendpoint, {
-    method: "GET",
-    headers: {
-      "Authorization": token
-    }
-  })
-  let responsedata = await response.json()
-  return responsedata
-}
-
-const userProfileData = async () => {
-  let id_access = userId()
-  let endpoint = "http://127.0.0.1:8000/api/profiles/getprofiledata"
-  let request_params = {
-    method: "GET",
-    headers: {
-      "Accept": "application/json",
-      "iduser": `${id_access}`
-    }
-  }
-  let res = await fetch(endpoint, request_params)
-  let res_data = await res.json()
-  return res_data
-}
-
 const postId = () => {
   let postid = document.querySelector("#postid").textContent
   return postid
@@ -189,7 +162,7 @@ const getProfileImage = async userid => {
   return image
 }
 
-function commentInputState(allow){
+function commentInputState(allow) {
   if (allow == true) {
     commentinput.placeholder = "comment here...."
     commentinput.removeAttribute("readonly")
@@ -224,30 +197,98 @@ async function checkUserCommentStatus() {
   return data
 }
 
+function updateCommentDOM(comments) {
+  const container = document.querySelector('#comments');
+  container.innerHTML = '';
+
+  comments.forEach(comment => {
+    const username = comment.username
+    const image = comment.profileimage
+    const text = comment.text
+    const userid= comment.userid
+
+    const commentdiv = document.createElement('div');
+    commentdiv.classList.add("comment")
+    commentdiv.innerHTML = `
+    <div class="id">
+      <a data-userid=${userid} onclick="getUserProfile(this,'comment-user')"><img src=${image}></a>
+      <p class="c-username" id="comment-user">${username}</p>
+    </div>
+    <p class="text">${text}</p>
+    `
+    container.appendChild(commentdiv);
+  });
+}
+
+async function getComments() {
+  try {
+    const postid = postId()
+    const endpoint = `http://127.0.0.1:8000/api/posts/allcomments/post-id=${postid}`
+
+    const req_config = {
+      method: "GET",
+      headers: {
+        "Accept": "application/json"
+      }
+    }
+    const res = await fetch(endpoint, req_config)
+    const data = await res.json();
+    const comments = await data["details"]
+
+    const processedComments = [];
+
+    async function processComment(comment) {
+      const user_id = comment.user;
+
+      const username = await getUsername(user_id);
+
+      const profilePhoto = await getProfileImage(user_id);
+
+      const newComment = {
+        username: username,
+        profileimage: profilePhoto,
+        text: comment.text,
+        userid: comment.user
+      };
+
+      processedComments.push(newComment);
+    }
+
+    await Promise.all(comments.map(processComment));
+    updateCommentDOM(processedComments);
+
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+}
+
+
 async function updateDom() {
-  const profiledata = await userProfileData()
-  const userdata = await userData()
+  const userid = userId()
+  const profiledata = await getProfileImage(userid)
+  const userdata = await getUsername(userid)
   const postdata = await postData()
   const commentstatus_res = await checkUserCommentStatus()
-  checkUserLikeStatus()
+  await checkUserLikeStatus()
   writeContentsToDom(profiledata, userdata, postdata, commentstatus_res)
 }
 
 async function writeContentsToDom(profiledata, userdata, postdata, commentstatus_res) {
-  const username = await userdata["details"]["username"]
-  const profileimgurl = await profiledata["details"]["profileimage"]
+  const username = userdata
+  const profileimgurl = profiledata
 
   const postownerid = await postdata["details"]["user"]
 
   const postowner = await getUsername(postownerid)
   const postownerprofile = await getProfileImage(postownerid)
-  const postdate = await postdata["details"]["created_at"]
-  const posttext = await postdata["details"]["caption"]
-  const postimage = await postdata["details"]["image"]
-  const no_of_likes = await postdata["details"]["no_of_likes"]
-  const no_of_comments = await postdata["details"]["no_of_comments"]
+  const postdate = postdata["details"]["created_at"]
+  const posttext = postdata["details"]["caption"]
+  const postimage = postdata["details"]["image"]
+  const postimagesize = postdata["details"]["imagesize"]
+  const no_of_likes = postdata["details"]["no_of_likes"]
+  const no_of_comments = postdata["details"]["no_of_comments"]
 
-  const user_commented = await commentstatus_res["has_commented"]
+  const user_commented = commentstatus_res["has_commented"]
 
   // logged user config
   const profileimgs = document.querySelectorAll(".profile-img")
@@ -267,10 +308,18 @@ async function writeContentsToDom(profiledata, userdata, postdata, commentstatus
   const postdateobject = new PostDate(postdate)
   const postdateliteral = postdateobject.postdateliteral()
 
+  const divideNum = (a, b) => { return a / b }
+  const isNumInRange = num => {
+    if (num >= 1.5 && num <= 6.7) {
+      return true
+    }
+    else { return false }
+  }
+
   if (postimage === null) {
     postcontainer.innerHTML = `
     <div class="write-post-user-profile">
-      <a ><img src=${postownerprofile}></a>
+      <a data-userid=${postownerid} onclick="getUserProfile(this)"><img src=${postownerprofile}></a>
       <div>
         <p id="postuser">${postowner}</p>
         <span >${postdateliteral}</span>
@@ -279,17 +328,49 @@ async function writeContentsToDom(profiledata, userdata, postdata, commentstatus
     <p class="post-text">${posttext}</p>`
   }
   else {
-    postcontainer.innerHTML = `
-    <div class="write-post-user-profile">
-      <a ><img src=${postownerprofile}></a>
-      <div>
-        <p id="postuser">${postowner}</p>
-        <span >${postdateliteral}</span>
+    const imagesize = JSON.parse(postimagesize)
+    const imagewidth = imagesize[0]
+    const imageheight = imagesize[1]
+    const sizequotient = divideNum(imagewidth, imageheight)
+    if (imagewidth >= 1000 && isNumInRange(sizequotient)) {
+      postcontainer.innerHTML = `
+      <div class="write-post-user-profile">
+        <a data-userid=${postownerid} onclick="getUserProfile(this,'postuser')"><img src=${postownerprofile}></a>
+        <div>
+          <p id="postuser">${postowner}</p>
+          <span >${postdateliteral}</span>
+        </div>
       </div>
-    </div>
-    <p class="post-text">${posttext}</p>
-    <a href=${postimage} target="_blank"><img src=${postimage} class="post-img"></a>
+      <p class="post-text-p1">${posttext}</p>
+      <a href=${postimage} target="_blank"><img src=${postimage} class="post-img-p1"></a>
     `
+    }
+    else if (imagewidth >= 1000 && isNumInRange(sizequotient) == false) {
+      postcontainer.innerHTML = `
+      <div class="write-post-user-profile">
+          <a data-userid=${postownerid} onclick="getUserProfile(this,'postuser')"><img src=${postownerprofile}></a>
+        <div>
+          <p id="postuser">${postowner}</p>
+          <span >${postdateliteral}</span>
+        </div>
+      </div>
+      <p class="post-text-p2">${posttext}</p>
+      <a href=${postimage} target="_blank"><img src=${postimage} class="post-img-p2"></a>
+      `
+    }
+    else {
+      postcontainer.innerHTML = `
+      <div class="write-post-user-profile">
+          <a data-userid=${postownerid} onclick="getUserProfile(this,'postuser')"><img src=${postownerprofile}></a>
+        <div>
+          <p id="postuser">${postowner}</p>
+          <span >${postdateliteral}</span>
+        </div>
+      </div>
+      <p class="post-text-p2">${posttext}</p>
+      <a href=${postimage} target="_blank"><img src=${postimage} class="post-img-p2"></a>
+      `
+    }
 
   }
 
@@ -304,22 +385,24 @@ async function writeContentsToDom(profiledata, userdata, postdata, commentstatus
   const tocomment = document.querySelector("#toshowcomment")
   if (user_commented == false && no_of_comments == 0) {
     tocomment.classList.replace("hidetext", "showtext")
-    commentInputState(false)
+    commentInputState(true)
   }
-  else if(user_commented == false && no_of_comments > 0) {
-    tocomment.classList.replace("showtext", "hidetext")
-    commentInputState(false)
-  }
-  else{
+  else if (user_commented == false && no_of_comments > 0) {
     tocomment.classList.replace("showtext", "hidetext")
     commentInputState(true)
+    getComments()
+  }
+  else {
+    tocomment.classList.replace("showtext", "hidetext")
+    commentInputState(false)
+    getComments()
   }
 
 }
 
 class PostDate {
-  constructor(backendtime){
-    this.backendtime=backendtime
+  constructor(backendtime) {
+    this.backendtime = backendtime
   }
 
   months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -362,8 +445,20 @@ class PostDate {
   }
 }
 
+function getUserProfile(ele, username_ele_id) {
+  console.log(username_ele_id)
+  const userid = ele.getAttribute("data-userid")
+  const username = document.querySelector(`#${username_ele_id}`).textContent
+  const header_append = {
+    "userid": userid,
+    "username": username
+  }
+  fetchPage("profilepage", header_append)
+}
+
+
 // react btn functionality
-lovebtn.onclick =  () => {
+lovebtn.onclick = () => {
   let classslist = lovebtn.classList
   if (classslist[0] == "love") {
     lovebtn.classList.replace("love", "hate")
@@ -399,10 +494,6 @@ function updateLikeCountPhase2(num) {
   likepara.textContent = number
 }
 
-async function loadComments() {
-  null
-}
-
 async function sendComment() {
   const value = commentinput.value;
 
@@ -424,9 +515,17 @@ async function sendComment() {
     const res = await fetch(endpoint, req_config)
     const res_data = await res.json()
     if (res_data["details"] == "object created") {
-      loadComments()
+      const comment_count = res_data["comment_count"]
+      updateCommentCountPhase2(comment_count)
+      getComments()
+      commentInputState(false)
     }
   }
+}
+
+function updateCommentCountPhase2(num) {
+  let commentpara = document.querySelector("#no-comments")
+  commentpara.textContent = num
 }
 
 async function checkUserAuthenticity() {
@@ -438,15 +537,19 @@ async function checkUserAuthenticity() {
   }
 }
 
-async function fetchPage(pagename, is_logout) {
+async function fetchPage(pagename, object) {
   let redirect = pagename
   let access = userToken()
+  const pseudo_headers = {
+    "Authorization": `Token ${access}`,
+    "Requestredirect": `${redirect}`
+  }
+  if (redirect === "profilepage") {
+    Object.assign(pseudo_headers, object)
+  }
   const request_params = {
     method: "GET",
-    headers: {
-      "Authorization": `Token ${access}`,
-      "Requestredirect": `${redirect}`
-    }
+    headers: pseudo_headers
   }
   const response = await fetch(authendpoint, request_params)
   if (response.redirected) {

@@ -209,10 +209,13 @@ const userId = () => {
 
 const userData = async () => {
   let token = userToken()
+  let userid=userId()
   let response = await fetch(getuserendpoint, {
     method: "GET",
     headers: {
-      "Authorization": token
+      "Authorization": token,
+      "userid":userid,
+      "Accept":"application/json"
     }
   })
   let responsedata = await response.json()
@@ -406,7 +409,6 @@ async function submitUserData(a1, a2) {
 
   const res = await fetch(updateendpoint, req_config)
   const res_data = await res.json()
-  console.log(res_data)
   if (res_data["details"] === "info updated" && res_data["affectedfield"] === "") {
     removeUpdateOverlay()
     updateDom()

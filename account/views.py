@@ -6,8 +6,8 @@ def renderaccountsettingpage(req):
 
 def renderprofilepage(req,userid,username):
   obj={
-    "userid":userid,
-    "username":username
+    "f_userid":userid,
+    "f_username":username
   }
   return render(req,"user-profile.html",obj)
    

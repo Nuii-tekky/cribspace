@@ -9,14 +9,13 @@ patterns for my api endpoints with their respective views
 
 urlpatterns= [
   path('users/createnewuser',views.createnewuser,name="createnewuser"),
-  path('users/verifyuser',views.verifyuserexistence,name="checkuserexists"),
   path('users/updateuserdata/<int:req_id>',views.updateuserinfo,name="updateuserinfo"),
+  path('users/verifyuser',views.verifyuserexistence,name="checkuserexists"),
   path('users/getbasicuserdata',views.getuserinfo,name="basicdata"),
   path('users/getusername',views.getusername,name="getusername"),
 
-  path('profiles/addprofile',views.createnewprofile,name="createprofile"),
-  path('profiles/getprofiledata',views.getuserprofiledata,name='getprofile'),
   path('profiles/updateprofile/<int:userid>',views.updateuserprofiledata,name="updateuserprofile"),
+  path('profiles/getprofiledata',views.getuserprofiledata,name='getprofile'),
 
   path('home/getaboutobjects',views.getaboutobjects,name="aboutobjects"),
 

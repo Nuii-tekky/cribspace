@@ -151,7 +151,6 @@ async function updateDom(a1, a2, a3, a4, a5, a6, a7) {
     sessionStorage.setItem("isthisfirsttime", true)
     fetchPromptpage(usertoken)
   }
-  console.log(responsedata)
 }
 
 async function submitForm(a1, a2, a3, a4, a5, a6, a7) {
@@ -211,8 +210,7 @@ function validateFormData() {
               addBorder(us, "red")
               let message = "please fill the entire form"
               updateMessage(message, cautioncolor)
-              p1.value = ""
-              p2.value = ""
+              p1.value= p2.value = ""
               addMultipleBorder(fn, ln, em, p1, p2)
             }
           }
@@ -220,8 +218,7 @@ function validateFormData() {
             addBorder(ln, "red")
             let message = "please fill the entire form"
             updateMessage(message, cautioncolor)
-            p1.value = ""
-            p2.value = ""
+            p1.value= p2.value = ""
             addMultipleBorder(fn, em, us, p1, p2)
           }
         }
@@ -229,8 +226,7 @@ function validateFormData() {
           addBorder(fn, "red")
           let message = "please fill the entire form"
           updateMessage(message, cautioncolor)
-          p1.value = ""
-          p2.value = ""
+          p1.value= p2.value = ""
           addMultipleBorder(ln, em, us, p1, p2)
         }
       }
@@ -238,8 +234,7 @@ function validateFormData() {
         let message = "invalid email address"
         updateMessage(message, cautioncolor)
         addBorder(em, "red")
-        p1.value = ""
-        p2.value = ""
+        p1.value= p2.value = ""
         addMultipleBorder(fn, ln, us, p1, p2)
       }
     }

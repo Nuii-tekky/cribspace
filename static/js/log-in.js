@@ -6,7 +6,7 @@ const submitbtn = document.querySelector("#login-btn")
 const cautioncolor = "#f41212" || "#bd1e24"
 const okcolor = "#ea9b1b"
 
-function renderSignupPage() {
+function renderSignuppage() {
   let endpoint = "http://127.0.0.1:8000/auth/signup"
   window.location.replace(endpoint)
 }
@@ -17,15 +17,14 @@ function renderRedirector() {
 }
 
 const Title = input => {
+  let returnstring=""
   if (typeof (input) === "string") {
     let first_char = input.charAt(0)
     let updated_first_char = first_char.toUpperCase()
     let newString = input.replace(first_char, updated_first_char)
-    return newString
+    returnstring=newString
   }
-  else {
-    console.log("fuck off")
-  }
+  return returnstring
 }
 
 function addBorder(elementt, color) {

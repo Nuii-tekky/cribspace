@@ -1,40 +1,31 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="stylesheet" href="./user-profile.css">
-
+  <meta http-equiv="X-UA-Compatible" conts="IE=edge">
+  <meta name="viewport" contst="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{%static 'css/user-profile.css'%}">
   <title id="domtitle"></title>
 </head>
 
-<body>
+<body id="body">
 
   <nav id="nav-bar">
 
     <div class="nav-left">
 
-      <h2><a href="./index.html" class="logo"><span class="logo-style">C</span> ribSpace</a></h2>
+      <h2><a onclick="fetchPage('homepage')" class="logo"><span class="logo-style">C</span> ribSpace</a></h2>
 
     </div>
     <div class="nav-right">
-
       <div class="search-box">
-
-        <a><img src="./images/search.png" onclick="QueryListToggle()"></a>
-
-        <input type="text" placeholder=" search for a user... "  id ="search-inp" oninput="ShowInfoToggle(this.id)">
-
+        <a><img src="{%static 'images/images/search.png'%}" onclick="queryListToggle()"></a>
+        <input type="text" placeholder=" search for a user... " id="search-inp" oninput="showInfoToggle(this.id)">
       </div>
-      <div class="nav-user-icon is_online" onclick="SettingsMenuToggle()">
-
-        <img src="./images/profile-pic.png">
-
+      <div class="nav-user-icon is_online" onclick="settingsMenuToggle()">
+        <img class="profile-img">
       </div>
 
       <!-- ---------------Small info ----------------------------- -->
@@ -49,45 +40,45 @@
         <div id="dark-btn">
           <span></span>
         </div>
+        <p class="hidetext" id="fuserid">{{ f_userid }}</p>
+        <p class="hidetext" id="fusername">{{ f_username }}</p>
         <div class="settings-menu-inner">
-          <p class="hidetext" id="foreignusername">{{ username }}</p>
-          <p class="hidetext" id="foreignuserid">{{ userid }}</p>
           <div class="write-post-user-profile">
-            <a href=""><img src="./images/profile-pic.png"></a>
+            <a><img class="profile-img"></a>
             <div>
-              <p>Anthony Jobber</p>
-              <a href="./user-profile.html">see your profile</a>
+              <p class="username"></p>
+              <a onclick="fetchPage('profilepage')">see your profile</a>
             </div>
           </div>
           <hr>
           <div class="write-post-user-profile">
-            <a href=""><img src="./images/feedback.png"></a>
+            <a href=""><img src="{%static 'images/images/feedback.png'%}"></a>
             <div>
               <p>Feedback</p>
-              <a href="">Help us improve our design</a>
+              <a style="cursor: pointer;" onclick="fetchPage('feedbackpage')">Help us improve our design</a>
             </div>
           </div>
           <hr>
           <div class="settings-links">
-            <img src="./images/setting.png" class="settings-icon">
-            <a href="./custom_settings.html">custom profile settings</a>
+            <img src="{%static 'images/images/help.png'%}" class="settings-icon">
+            <a onclick="fetchPage('feedbackpage')">Help & Support</a>
           </div>
           <div class="settings-links">
-            <img src="./images/help.png" class="settings-icon">
-            <a href="">Help & Support</a>
+            <img src="{%static 'images/images/setting.png'%}" class="settings-icon">
+            <a onclick="fetchPage('accountsettingpage')">custom profile settings</a>
           </div>
           <div class="settings-links">
-            <img src="./images/logout.png" class="settings-icon">
-            <a href="./logout.html">Log Out</a>
+            <img src="{%static 'images/images/logout.png'%}" class="settings-icon">
+            <a onclick="logoutHandler()" style="cursor: pointer;">Log Out</a>
           </div>
         </div>
-        <!-- --------------------- Query list------------------------------ -->
       </div>
+      <!-- --------------------- Query list ----------------------------- -->
       <div class="query-list" id="query-listing">
         <p>Search Results</p>
         <div class="listings-container">
           <div class="recom-list">
-            <div class="recom-user-img"><a href=""><img src="./images/member-5.png"></a></div>
+            <div class="recom-user-img"><a><img src="./images/member-5.png"></a></div>
             <div class="recom-user-info">
               <h5>Henry Gibbin</h5>
               <p>react developer</p>
@@ -112,33 +103,34 @@
           </div>
         </div>
       </div>
-
-
     </div>
-
   </nav>
 
   <div class="container" id="body-container">
 
     <div class="left-sidebar">
-
       <div class="important-links">
-        <a href="/index.html"><img id="home-icon" src="/images/profile-home.png">Home</a>
-        <a href="/followers.html"><img id="addfriends-icon" src="./images/icons8-follower-64.png">Your followers</a>
+        <a onclick="fetchPage('homepage')"><img id="home-icon"
+            src="{%static 'images/images/profile-home.png'%}">Home</a>
+        <a onclick="fetchPage('followerspage')"><img id="addfriends-icon"
+            src="{%static 'images/images/icons8-follower-64.png'%}">Your followers</a>
       </div>
 
       <div class="shortcuts-links">
         <h3>Your Space: </h3>
-        <a href="./create_post.html">
+        <a onclick="fetchPage('createpostpage')">
           <h2 id="addpost-icon">+</h2>New Post
         </a>
-        <a href="" class="current"><img id="account-image" src="./images/icons8-user-32.png">Your Crib</a>
-        <a href="./notif.html"><img id="short-notif-icon" src="./images/profile-job.png">Notifications</a>
-        <a href="./logout.html"><img src="./images/logout.png">Log Out</a>
+        <a onclick="fetchPage('userprofilepage')"><img id="account-image"
+            src="{%static 'images/images/icons8-user-32.png'%}">Your Crib</a>
+        <a onclick="fetchPage('notificationspage')"><img id="short-notif-icon"
+            src="{%static 'images/images/profile-job.png'%}">Notifications</a>
+        <a onclick="logoutHandler()"><img src="{%static 'images/images/logout.png'%}">Log Out</a>
       </div>
 
       <div class="about-link">
-        <a href=""><img id="about-img" src="./images/profile-study.png">About CribSpace</a>
+        <a onclick="fetchPage('aboutpage')"><img id="about-img" src="{%static 'images/images/profile-study.png'%}">About
+          CribSpace</a>
       </div>
 
       <div class="footer">
@@ -150,7 +142,7 @@
       <div class="user">
         <div class="write-post-container">
           <div class="profile-image">
-            <a href="./images/profile-pic.png" target="_blank"><img src="./images/profile-pic.png"></a>
+            <a><img src="./images/profile-pic.png"></a>
           </div>
         </div>
         <div class="id-info">
@@ -170,13 +162,13 @@
       </div>
       <div class="write-post-container bio">
         <h3>Your Bio</h3>
-          <p class="biocard">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa molestiae sit eaque eius eveniet reprehenderit pariatur nemo nisi cum consequatur esse placeat dolores, suscipit velit ipsa numquam deserunt sunt adipisci sequi animi eos id reiciendis! Vel alias exercitationem placeat nostrum laborum eveniet, iusto veritatis voluptatem. Nobis animi commodi sit? Facilis.</p>
-        <a href="./custom_settings.html" id="edit-bio">edit your bio</a>
+        <p class="biocard"></p>
+        <a id="edit-bio">edit your bio</a>
       </div>
       <div class="write-post-container followers">
-        <h3>Your Followers (234)</h3>
+        <h3 id="followersheading"></h3>
         <div class="followers-container">
-          <div class="follower">
+          <!-- <div class="follower">
             <a href=""><img src="./images/member-9.png"></a>
             <div class="follower-info">
               <h5>Freddie Chance</h5>
@@ -203,26 +195,30 @@
               <h5>Chris Padro</h5>
               <p>Content Creator</p>
             </div>
-          </div>
+          </div> -->
         </div>
-        <a href="./followers.html" id="see-all-followers">see all followers...</a>
+        <a onclick="fetchPage('followerspage')" id="see-all-followers">see all followers...</a>
       </div>
       <div class="write-post-container user-post-section">
         <h3>Your Posts</h3>
 
         <div class="post-container">
           <div class="write-post-user-profile">
-            <a href=""><img src="./images/profile-pic.png"></a>
+            <a ><img src="./images/profile-pic.png"></a>
             <div>
-              <p>Anthony Jobber</p>
-              <span>September 30,2023 | 10:00am</span>
+              <p id="f-username"></p>
+              <span id="postdatespan"></span>
             </div>
           </div>
-          <p class="post-text">Just preping for halloween</p>
-          <a href="./images/pumpkins.jpg" target="_blank"><img src="./images/pumpkins.jpg" class="post-img"></a>
+          <p class="post-text"></p>
+          <a ><img src="./images/pumpkins.jpg" class="post-img"></a>
           <div class="activity-icons">
-            <div class="react"><img src="./images/heart.png"><p id="no-likes">344</p></div>
-            <div class="react"><img src="./images/icons8-topic-48.png"><p id="no-comments">22</p></div>
+            <div class="react"><img src="./images/heart.png">
+              <p id="no-likes">344</p>
+            </div>
+            <div class="react"><img src="./images/icons8-topic-48.png">
+              <p id="no-comments">22</p>
+            </div>
             <div class="add-comment">
               <img src="./images/profile-pic.png">
               <input type="text" placeholder="comment here...">
@@ -232,11 +228,18 @@
         </div>
       </div>
     </div>
-
-
+    <div class="confirm-overlay-js" id="confirm-logout-overlay">
+      <div class="confirm-div-js" id="confirm-logout-div">
+        <h4>Are you sure you want to logout</h4>
+        <div class="options">
+          <a id="log-affirm" class="yes">logout</a>
+          <a id="no" class="no" onclick="removeLogoutOverlay()">cancel</a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script src="./home.js"></script>
+  <script src="{%static 'js/user-profile.js'%}"></script>
 </body>
 
 </html>

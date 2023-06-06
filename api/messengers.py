@@ -1,34 +1,13 @@
 from itertools import chain
 import random
-import aiohttp
-import json
+
 from rest_framework.response import Response
 from posts.models import Post
 
 """
-these are my messengers,the heavy lifters of my views,they are here cos they are second class functions,not worthy to be among the view functions,they  are kind of the backend of my backend
+these are my messengers,they are here cos they are second class functions,not worthy to be among the view functions,they are kind of the backend of my backend
 
 """
-
-async def createdefaultprofile(id):
-  pk= id
-  returndata={}
-  if pk:
-    endpoint= "http://127.0.0.1:8000/api/profiles/addprofile"
-    form= json.dumps({"user":pk,"id_user":pk})
-    headers={
-      "Content-Type":"application/json"
-    }
-    async with aiohttp.ClientSession() as session:
-      async with session.post(endpoint, data=form,headers=headers) as response:
-        response_data = await response.json()
-    if response_data['details']== "profile saved":
-      returndata={"details":"profile created"}
-    else:
-      returndata={"details":"profile not created"}
-  else:
-    returndata= {"details":"user id not provided"}
-  return Response(returndata)
             
 
 def is_requestkeys_valid(data,model= None)->dict:
@@ -78,26 +57,15 @@ def usernameobject(reqdata)->dict:
   return init_obj     
 
 
-def updatepostlike_count(id,increase=False)->dict:
+def postlike_count(id)->dict:
   returndata={}
-  if increase== True:
-    postobj= Post.objects.get(id=id)
-    postobj.no_of_likes += 1
-    postobj.save()
-    returndata={"no_of_likes":postobj.no_of_likes}
-  else:
-    postobj= Post.objects.get(id=id)
-    postobj.no_of_likes -= 1
-    postobj.save()
-    returndata={"no_of_likes":postobj.no_of_likes}
+  postobj= Post.objects.get(id=id)
+  returndata={"no_of_likes":postobj.no_of_likes}
   return returndata
 
 
-def updatecommentcount(id,increase=False)->dict:
+def commentcount(id,)->dict:
   returndata={}
-  if increase == True:
-    postobj= Post.objects.get(id=id)
-    postobj.no_of_comments += 1
-    postobj.save()
-    returndata={"no_of_comments":postobj.no_of_comments}
+  postobj= Post.objects.get(id=id)
+  returndata={"no_of_comments":postobj.no_of_comments}
   return returndata

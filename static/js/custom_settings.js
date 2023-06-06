@@ -1,4 +1,5 @@
 "use strict";
+window.onload = checkUserAuthenticity
 
 const body = document.querySelector("#body")
 const overlaycontainer = document.querySelector("#confirm-overlay")
@@ -22,7 +23,6 @@ const redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 const authendpoint = "http://127.0.0.1:8000/auth/authuser"
 const getuserendpoint = "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
-window.onload = checkUserAuthenticity
 
 // Toggle effect when user image on navbar is clicked
 
@@ -35,7 +35,7 @@ function settingsMenuToggle() {
 
 // Toggle the dark mode btn
 
-DarkBtn.onclick = ()=> {
+DarkBtn.onclick = () => {
   DarkBtn.classList.toggle("btn-on")
 
   // adding the dark mode feature
@@ -194,7 +194,7 @@ function renderRedirector() {
 
 function loadUrl(url) {
   let endpoint = url
-  window.location.href=`${endpoint}`
+  window.location.href = `${endpoint}`
 }
 
 const userToken = () => {
@@ -209,13 +209,13 @@ const userId = () => {
 
 const userData = async () => {
   let token = userToken()
-  let userid=userId()
+  let userid = userId()
   let response = await fetch(getuserendpoint, {
     method: "GET",
     headers: {
       "Authorization": token,
-      "userid":userid,
-      "Accept":"application/json"
+      "userid": userid,
+      "Accept": "application/json"
     }
   })
   let responsedata = await response.json()
@@ -237,18 +237,14 @@ const userProfileData = async () => {
   return res_data
 }
 
-async function updateDom(hardfetch = true) {
-  if (hardfetch === true) {
-    const profiledata = await userProfileData()
-    const userdata = await userData()
-    writeContentsToDom(profiledata,userdata)
-  }
-  else{
-    // call on the cached response
-  }
+async function updateDom() {
+  const profiledata = await userProfileData()
+  const userdata = await userData()
+  writeContentsToDom(profiledata, userdata)
+
 }
 
-async function writeContentsToDom(profiledata,userdata) {
+async function writeContentsToDom(profiledata, userdata) {
   const profileimgs = document.querySelectorAll(".profile-img")
   const usernamespots = document.querySelectorAll(".username")
   const domtitle = document.querySelector("#domtitle")
@@ -396,7 +392,7 @@ async function submitUserData(a1, a2) {
 
   let fieldname = obj_key
 
-  let updateendpoint =`http://127.0.0.1:8000/api/users/updateuserdata/${userid}`
+  let updateendpoint = `http://127.0.0.1:8000/api/users/updateuserdata/${userid}`
   let req_config = {
     method: "PUT",
     headers: {
@@ -436,7 +432,7 @@ async function showInputError(inp) {
 
 async function tryagain(inp) {
   let field = inp["affectedfield"]
-  let inputel =  document.querySelector(`[name=${field}]`)
+  let inputel = document.querySelector(`[name=${field}]`)
   let inputval = inputel.value
 
   inputel.style.borderBottom = "0.0625rem solid red"

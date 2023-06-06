@@ -4,9 +4,8 @@ from django.core.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from asgiref.sync import async_to_sync
 
-from .messengers import (createdefaultprofile,is_requestkeys_valid,imagerequestkey, updatecommentcount, updatepostlike_count,usernameobject)
+from .messengers import (is_requestkeys_valid,imagerequestkey,usernameobject,postlike_count,commentcount)
 
 from .serializers import (UserSerializer,ProfileSerializer,AboutModelSerialiser,PostModelSerialiser,LikePostModelSerializer,CommentPostSerializer)
 
@@ -19,38 +18,33 @@ from posts.models import (Post,LikePost,CommentPost)
 
 @api_view(['POST'])
 def createnewuser(req,format=None):
+  returndata={}
   try:
     requsername= req.data["username"]
     reqemail= req.data["email"]
     try:
       db_obj= get_user_model().objects.get(username= requsername)
+      if db_obj is not None and db_obj != {}:
+        returndata= {"details":"username exists"}
     except get_user_model().DoesNotExist:
       try:
         db_obj= get_user_model().objects.get(email= reqemail)
+        if db_obj is not None and db_obj != {}:
+          returndata= {"details":"email exists"}
       except get_user_model().DoesNotExist:
         serializer= UserSerializer(data= req.data)
         if serializer.is_valid():
-          serializer.save()
-          profilestate= False
-          user_id= serializer.data["id"]
-          profilecreate_res= async_to_sync(createdefaultprofile)(user_id)
-          details= profilecreate_res.data['details']
-          if details== 'profile created':
-            profilestate= True
-          elif details == 'profile not created':
-            profilestate= False
-          else:
-            profilestate = False   
+          serializer.save() 
           db_obj= get_user_model().objects.get(username= requsername)
+          user_id=db_obj.id
           token,created= Token.objects.get_or_create(user= db_obj)
-          return Response({"details": "user saved","with_profile":profilestate,"token":token.key,"userid":user_id})  
-        return Response({"details":"not saved","reason":"invalid inputs"})
-      return Response({"details":"email exists"})  
-    return Response({"details":"username exists"})  
+          returndata={"details": "user saved","with_profile":True,"token":token.key,"userid":user_id}
+        else:
+          returndata= {"details":"not saved","reason":"invalid inputs"}  
   except KeyError:
-    return Response({"details":"key errror"}) 
+    returndata= {"details":"key errror"}
+  return Response(returndata)
     
-
 
 @api_view(['POST'])
 def verifyuserexistence(req,format= None)->Response:
@@ -166,27 +160,7 @@ def getusername(req)->Response:
     returndata={"details":"key error"}
   return Response(returndata)
 
-# PROFILE MODEL APIS
-
-@api_view(['POST'])
-def createnewprofile(req)->Response:
-  returndata={}
-  try:
-    req.data
-    db_obj= Profile.objects.get(user= req.data["user"])
-    if db_obj is not None:
-      returndata={"details":"profile exists"}
-  except Profile.DoesNotExist:
-    profile_siri= ProfileSerializer(data= req.data)
-    if profile_siri.is_valid():
-      profile_siri.save()
-      returndata={"details":"profile saved"}
-    else:
-      returndata={"details":"profile not saved"}
-  except KeyError:
-    returndata={"details":"invalid request data"}
-  return Response(returndata)    
-
+# PROFILE MODEL APIS 
     
 @api_view(['PUT','POST'])
 def updateuserprofiledata(req,userid)->Response:
@@ -312,13 +286,13 @@ def createordeletelike(req,postid,userid)->Response:
     likeobject= LikePost.objects.get(user=userid,post_id=postid)
     if likeobject is not None:
       likeobject.delete()
-      updatepostlike_count_res= updatepostlike_count(postid,increase=False)
+      updatepostlike_count_res= postlike_count(postid)
       returndata={"details":"object deleted","like_count":updatepostlike_count_res["no_of_likes"]}
   except LikePost.DoesNotExist:
     likepostsiri= LikePostModelSerializer(data=reqdata)
     if likepostsiri.is_valid():
       likepostsiri.save()
-      updatepostlike_count_res= updatepostlike_count(postid,increase=True)
+      updatepostlike_count_res= postlike_count(postid)
       returndata={"details":"object created","like_count":updatepostlike_count_res["no_of_likes"]}
     else:
       returndata = {"details":"objcted not created"} 
@@ -355,7 +329,7 @@ def createcomment(req,postid,userid)->Response:
     commentsiri= CommentPostSerializer(data=reqdata)
     if commentsiri.is_valid():
       commentsiri.save()
-      updatepostcomment_count_res= updatecommentcount(postid,increase=True)
+      updatepostcomment_count_res= commentcount(postid)
       returndata={"details":"object created","comment_count":updatepostcomment_count_res["no_of_comments"]}
     else:
       returndata = {"details":"objcted not created"} 

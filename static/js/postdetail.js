@@ -1,4 +1,5 @@
 "use strict";
+window.onload = checkUserAuthenticity
 
 const post_container = document.querySelector("#post-container");
 const body_container = document.querySelector("#body-container");
@@ -21,7 +22,6 @@ const redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 const authendpoint = "http://127.0.0.1:8000/auth/authuser"
 const getuserendpoint = "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
-window.onload = checkUserAuthenticity
 
 // Toggle effect when user image on navbar is clicked
 
@@ -211,7 +211,7 @@ function updateCommentDOM(comments) {
     commentdiv.classList.add("comment")
     commentdiv.innerHTML = `
     <div class="id">
-      <a data-userid=${userid} onclick="getUserProfile(this,'comment-user')"><img src=${image}></a>
+      <a data-userid=${userid} id=${username} onclick="getUserProfile(this)"><img src=${image}></a>
       <p class="c-username" id="comment-user">${username}</p>
     </div>
     <p class="text">${text}</p>
@@ -319,7 +319,7 @@ async function writeContentsToDom(profiledata, userdata, postdata, commentstatus
   if (postimage === null) {
     postcontainer.innerHTML = `
     <div class="write-post-user-profile">
-      <a data-userid=${postownerid} onclick="getUserProfile(this)"><img src=${postownerprofile}></a>
+      <a data-userid=${postownerid} data-username=${postowner} onclick="getUserProfile(this)"><img src=${postownerprofile}></a>
       <div>
         <p id="postuser">${postowner}</p>
         <span >${postdateliteral}</span>
@@ -335,7 +335,7 @@ async function writeContentsToDom(profiledata, userdata, postdata, commentstatus
     if (imagewidth >= 1000 && isNumInRange(sizequotient)) {
       postcontainer.innerHTML = `
       <div class="write-post-user-profile">
-        <a data-userid=${postownerid} onclick="getUserProfile(this,'postuser')"><img src=${postownerprofile}></a>
+        <a data-userid=${postownerid} data-username=${postowner} onclick="getUserProfile(this)"><img src=${postownerprofile}></a>
         <div>
           <p id="postuser">${postowner}</p>
           <span >${postdateliteral}</span>
@@ -348,7 +348,7 @@ async function writeContentsToDom(profiledata, userdata, postdata, commentstatus
     else if (imagewidth >= 1000 && isNumInRange(sizequotient) == false) {
       postcontainer.innerHTML = `
       <div class="write-post-user-profile">
-          <a data-userid=${postownerid} onclick="getUserProfile(this,'postuser')"><img src=${postownerprofile}></a>
+          <a data-userid=${postownerid} data-username=${postowner} onclick="getUserProfile(this)"><img src=${postownerprofile}></a>
         <div>
           <p id="postuser">${postowner}</p>
           <span >${postdateliteral}</span>
@@ -361,7 +361,7 @@ async function writeContentsToDom(profiledata, userdata, postdata, commentstatus
     else {
       postcontainer.innerHTML = `
       <div class="write-post-user-profile">
-          <a data-userid=${postownerid} onclick="getUserProfile(this,'postuser')"><img src=${postownerprofile}></a>
+          <a data-userid=${postownerid} data-username=${postowner} onclick="getUserProfile(this)"><img src=${postownerprofile}></a>
         <div>
           <p id="postuser">${postowner}</p>
           <span >${postdateliteral}</span>
@@ -445,10 +445,9 @@ class PostDate {
   }
 }
 
-function getUserProfile(ele, username_ele_id) {
-  console.log(username_ele_id)
+function getUserProfile(ele) {
   const userid = ele.getAttribute("data-userid")
-  const username = document.querySelector(`#${username_ele_id}`).textContent
+  const username=ele.getAttribute("data-username")
   const header_append = {
     "userid": userid,
     "username": username

@@ -1,5 +1,12 @@
 
+
+
+a{
+  cursor: pointer;
+}
+
 .user{
+
   display: grid;
   grid-template-columns: 1fr 2.2fr;
   padding: 0.5rem 0;
@@ -162,7 +169,6 @@
   text-align: center;
   
 }
-
 .followers-container{
   display: grid;
   grid-template-columns: repeat(2,18.75rem);
@@ -170,7 +176,19 @@
   margin: 0.9375rem 10%;
 }
 
-.followers-container .follower{
+.follower-p2{
+  display: grid;
+  grid-template-columns: 1fr 3.4fr;
+  padding: 0.625rem;
+  border-radius: 0.1875rem;
+  width: 45%;
+  background: var(--right-sidebar-color);
+  border-radius: 0.3125rem;
+  margin: 0.625rem 20%; 
+}
+
+
+.follower-p1{
   display: grid;
   grid-template-columns: 1fr 3.4fr;
   padding: 0.625rem;
@@ -180,7 +198,6 @@
   border-radius: 0.3125rem;
   margin: 0.625rem;
 }
-
 .followers-container .follower a img{
   width: 2.5rem;
   height: 2.5rem;
@@ -232,6 +249,145 @@
 
 
 /*--------------------dependent classes/styling-------------------------------*/
+
+.confirm-overlay{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  height: 100vh;
+  margin: auto;
+  padding: 1rem 1.5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(35, 35, 35, 0.9);
+  z-index: 4;
+  transition:width 0.4s ease;
+}
+
+.confirm-overlay-js {
+  width: 0;
+  height: 0;
+  display: none;
+  margin: 0;
+  padding: 0;
+  bottom: 0;
+  left: 0;
+  transition: all 0.4s ease;
+}
+
+.confirm-div {
+  padding: 0.4375rem;
+  background: var(--write-post-container-color);
+  border-radius: 0.25rem;
+  width: 85%;
+  max-width: 18.17rem;
+  max-height: 28.15rem;
+  position: sticky;
+  top: 25%;
+}
+
+.confirm-div-js {
+  position: absolute;
+  z-index: -4;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.confirm-div h4 {
+  display: block;
+  color: #515151;
+  font-size: smaller;
+  margin: 1.25rem auto;
+}
+
+.confirm-div .options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.625rem;
+}
+
+.yes {
+  background: var(--comment-color);
+  text-align: center;
+  cursor: pointer;
+  border-radius: 0.1875rem;
+  color: var(--input-color);
+  transition: 0.4s ease-out;
+  padding: 2px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.yes:hover{
+  color: var(--comment-color);
+  background: var(--input-color);
+  transition: color 0.4s ease;
+}
+
+.yes:active {
+  transition: transform 0.06s ease;
+  transform: scale(0.96);
+  font-size: smaller;
+}
+
+.no {
+  background: var(--input-color);
+  text-align: center;
+  cursor: auto;
+  border-radius: 0.1875rem;
+  color: var(--comment-color);
+  transition: 0.4s ease-out;
+  padding: 2px;
+  font-size: 14px;
+  font-weight: 500;
+
+}
+.no:hover{
+  background: var(--comment-color);
+  color: var(--input-color);
+  transition: color 0.4s ease;
+}
+
+.no:active {
+  transition: transform 0.06s ease;
+  transform: scale(0.96);
+  font-size: smaller;
+}
+
+.confirm-logout{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  height: 100vh;
+  margin: auto;
+  padding: 1rem 1.5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(35, 35, 35, 0.9);
+  z-index: 4;
+  transition:all 10s ease-in;
+}
+
+.confirm-logout-js {
+  width: 0;
+  height: 0;
+  display: none;
+  margin: 0;
+  padding: 0;
+  bottom: 0;
+  left: 0;
+  transition: all 10s ease;
+}
+
 
 .recom-list {
   display: grid;

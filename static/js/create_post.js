@@ -1,4 +1,5 @@
 "use strict";
+window.onload = checkUserAuthenticity
 
 const post_container = document.querySelector("#post-container");
 const body_container = document.querySelector("#body-container");
@@ -19,7 +20,6 @@ const redirectendpoint = "http://127.0.0.1:8000/auth/redirector"
 const authendpoint = "http://127.0.0.1:8000/auth/authuser"
 const getuserendpoint = "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
-window.onload = checkUserAuthenticity
 
 // Toggle effect when user image on navbar is clicked
 

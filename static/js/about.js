@@ -30,14 +30,14 @@ const getuserendpoint = "http://127.0.0.1:8000/api/users/getbasicuserdata"
 
 function settingsMenuToggle() {
   settingmenu.classList.toggle("settings-menu-javascripted")
-  settingmenu.onmouseleave = function () {
+  settingmenu.onmouseleave = () => {
     settingmenu.classList.toggle("settings-menu-javascripted")
   }
 }
 
 // Toggle the dark mode btn
 
-DarkBtn.onclick = function () {
+DarkBtn.onclick = ()=> {
   DarkBtn.classList.toggle("btn-on")
 
   // adding the dark mode feature
@@ -66,7 +66,7 @@ function queryListToggle() {
   small_info.classList.remove("small-info-javascripted")
   small_info.classList.add("info")
   QueryList.onmouseleave = () => {
-    return QueryList.classList.toggle("query-list-javascripted")
+   QueryList.classList.toggle("query-list-javascripted")
   }
 }
 
@@ -91,13 +91,13 @@ function showInfoToggle(id) {
 function mouseEnterr(inp1, inp2) {
   inp1.classList.replace("features-left", "features-right")
   inp2.classList.replace("features-right", "features-left")
-  return true
+
 }
 
 function mouseLeavee(inp1, inp2) {
   inp1.classList.replace("features-right", "features-left")
   inp2.classList.replace("features-left", "features-right")
-  return true
+
 }
 function mouseEnterr2() {
   lefty2.classList.replace("features-right", "features-left")
@@ -106,7 +106,7 @@ function mouseEnterr2() {
   lefty2.lastElementChild.classList.replace("info-1", "info-2")
   righty2.firstElementChild.classList.replace("title", "title-2")
   righty2.lastElementChild.classList.replace("info-2", "info-1")
-  return true
+
 }
 
 function mouseLeavee2() {
@@ -116,7 +116,7 @@ function mouseLeavee2() {
   righty2.classList.replace("features-right", "features-left")
   righty2.firstElementChild.classList.replace("title-2", "title")
   righty2.lastElementChild.classList.replace("info-1", "info-2")
-  return true
+
 }
 
 
@@ -131,7 +131,7 @@ function mouseEnterr3() {
   righty3.lastElementChild.previousElementSibling.classList.replace("info-1", "info-2")
   righty3.lastElementChild.classList.replace("btn-d", "btn-w")
 
-  return true
+
 }
 
 function mouseLeavee3() {
@@ -145,7 +145,7 @@ function mouseLeavee3() {
   righty3.firstElementChild.classList.replace("title", "title-2")
   righty3.lastElementChild.previousElementSibling.classList.replace("info-2", "info-1")
   righty3.lastElementChild.classList.replace("btn-w", "btn-d")
-  return true
+
 }
 
 top1.addEventListener("mouseenter", () => {

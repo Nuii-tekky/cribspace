@@ -1,3 +1,4 @@
+"use strict"
 window.onload = checkUserAuthenticity
 
 const header= document.querySelector("#heading")

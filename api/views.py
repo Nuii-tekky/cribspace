@@ -5,11 +5,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 
-from .messengers import (is_requestkeys_valid,imagerequestkey,usernameobject,postlike_count,commentcount)
+from .messengers import (is_requestkeys_valid,filterfollowerobjectfields,imagerequestkey,usernameobject,postlike_count,commentcount,combineposts)
 
-from .serializers import (UserSerializer,ProfileSerializer,AboutModelSerialiser,PostModelSerialiser,LikePostModelSerializer,CommentPostSerializer)
+from .serializers import (UserSerializer,ProfileSerializer,FollowUserSerializer,AboutModelSerialiser,PostModelSerialiser,LikePostModelSerializer,CommentPostSerializer,NotificationSerializer)
 
-from account.models import Profile
+from notifications.models import Notifcations
+from account.models import Profile,FollowerModel
 from home.models import aboutModel
 from posts.models import (Post,LikePost,CommentPost)
 
@@ -87,7 +88,7 @@ def updateuserinfo(req,req_id)->Response:
                 serialised=UserSerializer(db_obj,data=req.data,partial=True)
                 if serialised.is_valid():
                   serialised.save()
-                  returndata={"details":"info updated","affectedfield":fieldaffected}
+                  returndata={"details":"info updated"}
                 else:
                   fieldaffected="username"
                   returndata={"details":"info not updated","affectedfield":fieldaffected}
@@ -100,7 +101,7 @@ def updateuserinfo(req,req_id)->Response:
                 serialised=UserSerializer(db_obj,data=req.data,partial=True)
                 if serialised.is_valid():
                   serialised.save()
-                  returndata={"details":"info updated","affectedfield":fieldaffected}
+                  returndata={"details":"info updated"}
                 else:
                   fieldaffected="email"
                   returndata={"details":"info not updated","affectedfield":fieldaffected}
@@ -182,7 +183,7 @@ def updateuserprofiledata(req,userid)->Response:
           else:
             returndata={"details":"invalid fields"}
       except ValueError:
-        returndata={"details":"incorrect request data error"}
+        returndata={"details":"incorrect request data"}
     else:      
       reqkey= imagerequestkey(req.data)
       if is_requestkeys_valid(reqkey)["details"]== True:
@@ -276,6 +277,53 @@ def getpostsbyuserid(req,userid):
     returndata={"details":"invalid request query"}
   return Response(returndata)
 
+
+@api_view(["GET"])
+def generateposts(req,userid):
+  returndata={}
+  load_more = req.query_params.get('load_more')
+  page_size = int(req.query_params.get('page_size'))
+
+  # Retrieve posts by the user and the followers
+  followers= FollowerModel.objects.filter(user_followed=userid)
+  users_following= FollowerModel.objects.filter(follower= userid)
+  
+  followers_id= [ follower.id for follower in followers ]
+  following_ids= [ following.id for following in users_following ]
+
+  userposts = [Post.objects.filter(user=userid)]
+  posts_by_followers = [Post.objects.filter(user=follower_id) for follower_id in followers_id if Post.objects.filter(user=follower_id).exists()]
+
+  posts_by_following=[Post.objects.filter(user=following_id) for following_id in following_ids if Post.objects.filter(user=following_id).exists()]
+  
+  # Combine the posts
+  randompostsdata= combineposts(userposts,posts_by_followers,posts_by_following)
+  finalposts= randompostsdata["posts"]
+  total_posts= randompostsdata["length"]
+
+  paginated_posts=[]
+  if load_more:
+    start_index = int(req.query_params.get('start_index'))
+    end_index = start_index + page_size
+    paginated_posts = finalposts[start_index:end_index]
+  else:
+    paginated_posts = finalposts[:page_size]
+
+  serialized = PostModelSerialiser(paginated_posts, many=True)
+  
+  returndata = {
+    'total_posts': total_posts,
+    'posts': serialized.data
+  }
+    
+  if load_more and end_index >= total_posts:
+    returndata['load_more'] = False
+  elif not load_more and total_posts > page_size:
+    returndata['load_more'] = True
+    returndata['start_index'] = page_size
+
+  return Response(returndata)
+
 # LIKE MODEL APIS 
 
 @api_view(['POST'])
@@ -363,4 +411,116 @@ def checkusercommentpoststatus(req,postid,userid) -> Response:
     returndata={"has_commented":False}    
   return Response(returndata) 
   
+
+# follower model
+
+@api_view(["POST"])
+def createordeletefollow(req,followerid,userfollowedid):
+  returndata={}
+  try:
+    followerobj= FollowerModel.objects.get(follower=followerid,user_followed=userfollowedid)
+    if followerobj is not None:
+      followerobj.delete()
+      returndata={"details":"object deleted"}
+  except FollowerModel.DoesNotExist:
+    req_data={"follower":followerid,"user_followed":userfollowedid}
+    followerobjsiri= FollowUserSerializer(data=req_data) 
+    if followerobjsiri.is_valid():
+      followerobjsiri.save()
+      returndata={"details":"object created"}
+    else:
+      returndata={"details":"object not created","err":followerobjsiri.errors}  
+  except KeyError:
+    returndata={"details":"invalid query params"}    
+  return Response(returndata)  
+
+@api_view(["GET"])
+def getallfollowers(req,userid):
+  returndata={}
+  try:
+    followerobj= FollowerModel.objects.filter(user_followed=userid).order_by("-created_at")
+    if followerobj is not None and len(followerobj) != 0:
+      serialised= FollowUserSerializer(followerobj,many=True)
+      initreturndata=serialised.data
+      finaldata=filterfollowerobjectfields(initreturndata,related_name="followers")
+      returndata= {"details":finaldata}
+    else:
+      returndata={"details":"no followers"}
+  except KeyError:
+    returndata={"details":"invalid request query"}
+  return Response(returndata)      
+
+@api_view(["GET"])
+def getallfollowing(req,userid):
+  returndata={}
+  try:
+    followerobj= FollowerModel.objects.filter(follower=userid).order_by("-created_at")
+    if followerobj is not None and len(followerobj) != 0:
+      serialised= FollowUserSerializer(followerobj,many=True)
+      init_returndata=serialised.data
+      final_data=filterfollowerobjectfields(init_returndata,related_name="following")
+      returndata= {"details":final_data}
+    else:
+      returndata={"details":"no follows"}
+  except KeyError:
+    returndata={"details":"invalid request query"}
+  return Response(returndata)
+
+@api_view(["GET"])  
+def getuserfollowstatus(req,userid,attempteduserid):
+  returndata={}
+  try:
+    followerobj= FollowerModel.objects.filter(follower=userid,user_followed=attempteduserid)[:1]
+    if followerobj is not None and len(followerobj) != 0:
+      returndata={"details":{"following":True}}
+  except FollowerModel.DoesNotExist:
+    returndata= {"details":{"following":False}}
+  except KeyError:
+    returndata={"details":"invalid request query"}
+  return Response(returndata)  
+    
+
+# notifications
+
+@api_view(["GET"])
+def fetchallnotifications(req,userid):
+  returndata={}
+  try:
+    notif_length=req.headers["Notif-length"]
+    if notif_length == "minimum":
+      notif_obj= Notifcations.objects.filter(user=userid).order_by("-created_at")[:3]
+      notif_siri= NotificationSerializer(notif_obj,many=True)
+      if len(notif_siri.data) == 0:
+        returndata={"details":"no notifications"}
+      else:  
+        returndata={"details":notif_siri.data}
+    else:
+      notif_obj= Notifcations.objects.filter(user=userid).order_by("-created_at")
+      notif_siri= NotificationSerializer(notif_obj,many=True)
+      if len(notif_siri.data) == 0:
+        returndata={"details":"no notifications"}
+      else:  
+        returndata={"details":notif_siri.data}
+  except KeyError:
+    returndata={"details":"incomplete request headers"}
+  return Response(returndata)  
+        
+
+@api_view(["DELETE"])
+def deletenotification(req,notifid):
+  returndata={}
+  try:
+    notification_obj= Notifcations.objects.filter(id=notifid)
+    if len(notification_obj) >= 1:
+      notification_instance= notification_obj[:1][0]
+      notification_instance.delete()
+      returndata={"details":"object deleted"}
+    else:
+      returndata={"details":"invalid notification id"}     
+  except KeyError:
+    returndata={"details":"keyerror"}  
+  return Response(returndata)  
+
+
+
 

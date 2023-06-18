@@ -1,14 +1,20 @@
-from itertools import chain
+import itertools
 import random
 
-from rest_framework.response import Response
 from posts.models import Post
 
 """
 these are my messengers,they are here cos they are second class functions,not worthy to be among the view functions,they are kind of the backend of my backend
 
 """
-            
+
+def combineposts(inp1,inp2,inp3)-> dict:
+  returndata={}
+  combineposts= list(itertools.chain(*inp1,*inp2,*inp3))
+  random.shuffle(combineposts)
+  posts_length= len(combineposts)
+  returndata={"posts":combineposts,"length":posts_length}
+  return returndata
 
 def is_requestkeys_valid(data,model= None)->dict:
   mutatedata= data
@@ -40,22 +46,53 @@ def is_requestkeys_valid(data,model= None)->dict:
   return return_object   
 
 
+
+def filterfollowerobjectfields(data,related_name=None)-> object:
+  returndata={}
+  returnlist=[]
+  allowedkeysfollowers=["follower","created_at"]
+  allowedkeysfollowing=["user_followed","created_at"]
+
+  allowedarray_use_case=[]
+  if related_name == "followers":
+    allowedarray_use_case=allowedkeysfollowers
+  else:
+    allowedarray_use_case=allowedkeysfollowing  
+  if len(data) > 1:
+    for item in data:
+      updated_obj={}
+      for key,value in item.items():
+        if key in allowedarray_use_case:
+          if key == allowedarray_use_case[0]:
+            updated_obj["user"]=value
+          updated_obj[allowedarray_use_case[1]]=value
+      returnlist.append(updated_obj)
+    return returnlist
+  else:
+    obj= data[0]
+    for key,value in obj.items():
+      if key in allowedarray_use_case:
+        if key == allowedarray_use_case[0]:
+          returndata["user"]= value
+        returndata[allowedarray_use_case[1]]=value
+    return returndata 
+  
+
 def imagerequestkey(reqdata)->dict:
   data= reqdata
   listitems= list(data)
   reqdatakey= listitems[0]
   returnformat= {reqdatakey:True}
   return returnformat
-  
+
 
 def usernameobject(reqdata)->dict:
   mutatedata= reqdata
   init_obj={}
-  for key in list(mutatedata.keys()):
+  for key,value in mutatedata.items():
     if key == "username":
-      init_obj={key:mutatedata[key]}
-  return init_obj     
-
+      init_obj[key]=value
+  return init_obj      
 
 def postlike_count(id)->dict:
   returndata={}

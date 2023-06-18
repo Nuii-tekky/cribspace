@@ -10,6 +10,7 @@ class Profile(models.Model):
   bio= models.TextField(default="i am a cribspace user",null=True)
   location= models.CharField(default="somewhere,earth",null= True, max_length= 50)
   occupation= models.CharField(default="cribspace user",null= True, max_length= 50)
+  occupation_catgory=models.CharField(default="technology")
   telephone= models.BigIntegerField(default=10101010101,null=True)
   profileimage= models.ImageField(upload_to= "profile_images",default= "defaullt.jpg") 
   no_of_followers=models.BigIntegerField(default=0)
@@ -20,7 +21,8 @@ class Profile(models.Model):
     
  
 
-class FollowerUser(models.Model):
-  # follower= models.ForeignKey(user,on_delete=models.CASCADE)
-  # user_followed=models.ForeignKey(user,on_delete=models.CASCADE)
-  pass
+class FollowerModel(models.Model):
+  follower= models.ForeignKey(user,on_delete=models.CASCADE,related_name="following")
+  user_followed=models.ForeignKey(user,on_delete=models.CASCADE,related_name="followers")
+  created_at= models.DateTimeField(auto_now_add=True)
+  

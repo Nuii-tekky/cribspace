@@ -11,46 +11,39 @@ and creating notifications for same
 
 """
 
+
 @receiver(post_save,sender=LikePost)
 def addlikecount(sender, instance, created, **kwargs):
   if created:
-    postid=instance.post_id
+    postid=instance.post_id.id
     postinstance= Post.objects.filter(id=postid)[:1][0]
     postinstance.no_of_likes += 1
     postinstance.save()
     if postinstance.user != instance.user:
       message=f"{instance.user.username} liked your post"
-      Notifcations.objects.create(user=instance,text=message,notif_type="react_notif",other_user=instance.user.id)
+      Notifcations.objects.create(user=postinstance.user,text=message,notif_type="react_notif",other_user=instance.user.id)
 
 @receiver(post_delete,sender=LikePost)
 def subtractlikecount(sender, instance,**kwargs):
-  postid=instance.post_id
+  postid=instance.post_id.id
   postinstance= Post.objects.filter(id=postid)[:1][0]
   postinstance.no_of_likes -= 1
   postinstance.save()
   if postinstance.user != instance.user:
     message=f"{instance.user.username} unliked your post"
-    Notifcations.objects.create(user=instance,text=message,notif_type="react_notif",other_user=instance.user.id)
+    Notifcations.objects.create(user=postinstance.user,text=message,notif_type="react_notif",other_user=instance.user.id)
 
 
 
-@receiver(post_save,sender=LikePost)
-def updatelikecount(sender, instance, created, **kwargs):
+@receiver(post_save,sender=CommentPost)
+def updatecommentcount(sender, instance, created, **kwargs):
   if created:
-    postid=instance.post_id
+    postid=instance.post_id.id
     postinstance= Post.objects.filter(id=postid)[:1][0]
-    postinstance.no_of_likes += 1
+    postinstance.no_of_comments += 1
     postinstance.save()
     if postinstance.user != instance.user:
-      message=f"{instance.user.username} liked your post"
-      Notifcations.objects.create(user=instance,text=message,notif_type="react_notif",other_user=instance.user.id)
+      message=f"{instance.user.username} commented on your post"
+      Notifcations.objects.create(user=postinstance.user,text=message,notif_type="react_notif",other_user=instance.user.id)
 
-@receiver(post_delete,sender=LikePost)
-def updatelikecount(sender, instance,**kwargs):
-  postid=instance.post_id
-  postinstance= Post.objects.filter(id=postid)[:1][0]
-  postinstance.no_of_likes -= 1
-  postinstance.save()
-  if postinstance.user != instance.user:
-    message=f"{instance.user.username} unliked your post"
-    Notifcations.objects.create(user=instance,text=message,notif_type="react_notif",other_user=instance.user.id)    
+ 

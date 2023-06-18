@@ -33,11 +33,11 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
+    'posts.apps.PostsConfig',
     'auther',
     'api',
     'followers',
     'home',
-    'posts',
     'notifications',
     'rest_framework',
     'rest_framework.authtoken',

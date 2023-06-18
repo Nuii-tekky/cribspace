@@ -405,7 +405,7 @@ async function submitUserData(a1, a2) {
 
   const res = await fetch(updateendpoint, req_config)
   const res_data = await res.json()
-  if (res_data["details"] === "info updated" && res_data["affectedfield"] === "") {
+  if (res_data["details"] === "info updated") {
     removeUpdateOverlay()
     updateDom()
   }

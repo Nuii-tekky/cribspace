@@ -31,7 +31,7 @@
         <input type="text" placeholder=" search for a user... " id="search-inp" oninput="showInfoToggle(this.id)">
 
       </div>
-      
+
       <div class="nav-user-icon is_online" onclick="settingsMenuToggle()">
 
         <img class="profile-img">
@@ -204,21 +204,42 @@
             <button id="submit-email" onclick="submitClickHandler(this.id)">update</button>
           </div>
           <div class="username-div">
-            <h5>Update work field/job</h5>
-            <input type="text"  maxlength="30" name="occupation" id="occupation-input" spellcheck="false">
-            <button id="submit-occ" onclick="submitClickHandler(this.id)">update</button>
-          </div>
-          <div class="username-div">
             <h5>Update your location</h5>
             <input type="text" maxlength="30" name="location" id="location-input" spellcheck="false">
             <button id="submit-loc" onclick="submitClickHandler(this.id)">update</button>
           </div>
+          <div class="username-div">
+            <h5>Update mobile-number</h5>
+            <input type="number" name="telephone" id="telephone-input">
+            <button id="submit-tele" onclick="submitClickHandler(this.id)">update</button>
+          </div>
+          <div class="username-div">
+            <h5>Update work field/job</h5>
+            <input type="text" maxlength="30" name="occupation" id="occupation-input" spellcheck="false">
+            <button id="submit-occ" onclick="submitClickHandler(this.id)">update</button>
+          </div>
+          <div class="username-div">
+            <h5>Update occupation category</h5>
+            <select id="occ-category" name="occupation_category">
+              <option value="Technology">technology</option>
+              <option value="Education">education</option>
+              <option value="Healthcare">healthcare</option>
+              <option value="Government">government</option>
+              <option value="Entertainment">entertainment</option>
+              <option value="Fashion">fashion</option>
+              <option value="Science">science</option>
+              <option value="Engineering">engineering</option>
+              <option value="Sports">sports</option>
+              <option value="Finance">finance</option>
+              <option value="Security">security</option>
+              <option value="Religious">religious</option>
+              <option value="Business">real estate</option>
+              <option value="Miscallenous">miscallenous</option>
+            </select>
+            <button id="submit-occ-cat" onclick="submitClickHandler(this.id)">update</button>
+          </div>
         </div>
-        <div class="mobile-div">
-          <h5>Update mobile-number</h5>
-          <input type="number" name="telephone" id="telephone-input">
-          <button id="submit-tele" onclick="submitClickHandler(this.id)">update</button>
-        </div>
+
       </div>
 
     </div>

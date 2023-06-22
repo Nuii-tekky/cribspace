@@ -3,14 +3,31 @@ from django.contrib.auth import get_user_model
 
 
 user= get_user_model()
-
 class Profile(models.Model):
+
+  OCCUPATION_CATEGORY_CHOICES=(
+    ("Technology","technology"),
+    ("Science","science"),
+    ("Engineering","engineering"),
+    ("Fashion","fashion"),
+    ("Sports","sports"),
+    ("Entertainment","entertainment"),
+    ("Education","education"),
+    ("Healthcare","healthcare"),
+    ("Government","government"),
+    ("Finance","finance"),
+    ("Security","security"),
+    ("Religious","religious"),
+    ("Business","business"),
+    ("Miscallenous","miscallenous")
+  )
+
   user= models.ForeignKey(user,on_delete=models.CASCADE)
   id_user= models.IntegerField()
   bio= models.TextField(default="i am a cribspace user",null=True)
   location= models.CharField(default="somewhere,earth",null= True, max_length= 50)
   occupation= models.CharField(default="cribspace user",null= True, max_length= 50)
-  occupation_catgory=models.CharField(default="technology")
+  occupation_category=models.CharField(default="technology",choices=OCCUPATION_CATEGORY_CHOICES)
   telephone= models.BigIntegerField(default=10101010101,null=True)
   profileimage= models.ImageField(upload_to= "profile_images",default= "defaullt.jpg") 
   no_of_followers=models.BigIntegerField(default=0)

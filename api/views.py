@@ -202,6 +202,7 @@ def updateuserprofiledata(req,userid)->Response:
     returndata={"details":"invalid user id"}
   return Response(returndata)  
 
+
 @api_view(['GET']) 
 def getuserprofiledata(req)->Response:
   returndata={}
@@ -262,6 +263,7 @@ def getpostbyid(req,post_id)->Response:
     returndata={"details":"invalid request query"}
   return Response(returndata)
 
+
 @api_view(["GET"])
 def getpostsbyuserid(req,userid):
   returndata={}
@@ -285,6 +287,7 @@ def generateposts(req,userid):
   page_size = int(req.query_params.get('page_size'))
 
   # Retrieve posts by the user and the followers
+  
   followers= FollowerModel.objects.filter(user_followed=userid)
   users_following= FollowerModel.objects.filter(follower= userid)
   
@@ -315,7 +318,7 @@ def generateposts(req,userid):
     'total_posts': total_posts,
     'posts': serialized.data
   }
-    
+
   if load_more and end_index >= total_posts:
     returndata['load_more'] = False
   elif not load_more and total_posts > page_size:
@@ -479,6 +482,11 @@ def getuserfollowstatus(req,userid,attempteduserid):
     returndata={"details":"invalid request query"}
   return Response(returndata)  
     
+@api_view(["GET"])
+def recommendedfollowers(req,userid):
+  returndata={}
+  
+
 
 # notifications
 

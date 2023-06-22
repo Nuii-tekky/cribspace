@@ -264,6 +264,7 @@ async function writeContentsToDom(profiledata, userdata) {
   const bio = await profiledata["details"]["bio"]
   const location = await profiledata["details"]["location"]
   const occupation = await profiledata["details"]["occupation"]
+  const category= await profiledata["details"]["occupation_category"]
   const telephone = await profiledata["details"]["telephone"]
 
   profileimgs.forEach((profileimg) => {
@@ -290,6 +291,8 @@ async function writeContentsToDom(profiledata, userdata) {
   locationinput.placeholder = `${location}`
   telephoneinput.placeholder = `+234 ${telephone}`
 
+  const occupation_category_option= document.querySelector(`[value=${category}]`)
+  occupation_category_option.selected= true
 }
 
 async function checkUserAuthenticity() {
@@ -329,6 +332,7 @@ function submitClickHandler(id) {
   const btn_el = document.querySelector(`#${id}`)
   const prev_el = btn_el.previousElementSibling
   const prev_el_val = prev_el.value
+  console.log(prev_el_val)
   if (prev_el_val !== undefined && prev_el_val !== "") {
     updateOverlay()
     updateaffirmbtn.onclick = () => {

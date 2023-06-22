@@ -18,7 +18,7 @@ def combineposts(inp1,inp2,inp3)-> dict:
 
 def is_requestkeys_valid(data,model= None)->dict:
   mutatedata= data
-  allowed_keys_profile_model= ["bio","telephone","location","profileimage","occupation",'csrfmiddlewaretoken']
+  allowed_keys_profile_model= ["bio","telephone","location","profileimage","occupation",'csrfmiddlewaretoken',"occupation_category"]
   allowed_keys_user_model= ["username","email","firstname","lastname"]
   allowed_keys_post_model=["id","no_of_comments","no_of_likes"]
   is_among= []

@@ -5,8 +5,11 @@ from .models import Profile,FollowerModel
 # Register your models here.
 
 
-class ShowId(admin.ModelAdmin):
+class ReadOnlyField(admin.ModelAdmin):
   readonly_fields= (["id"])
 
-admin.site.register(Profile,ShowId)  
-admin.site.register(FollowerModel,ShowId)  
+class inheritditto(ReadOnlyField):
+  readonly_fields= (["id","id_user"])
+
+admin.site.register(Profile,inheritditto)  
+admin.site.register(FollowerModel,ReadOnlyField)  

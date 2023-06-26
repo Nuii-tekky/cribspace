@@ -13,6 +13,7 @@ aiohttp = "*"
 requests = "*"
 python-memcached = "*"
 asgiref = "*"
+fuzzywuzzy = "*"
 
 [dev-packages]
 

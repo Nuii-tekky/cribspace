@@ -6,6 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
+    print("Authenticating and Authorizing....")
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cribspace.settings')
     try:
         from django.core.management import execute_from_command_line

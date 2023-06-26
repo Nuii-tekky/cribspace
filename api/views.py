@@ -1,3 +1,4 @@
+import abc
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -5,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 
-from .messengers import (is_requestkeys_valid,filterfollowerobjectfields,imagerequestkey,usernameobject,postlike_count,commentcount,combineposts)
+from .messengers import (is_requestkeys_valid,filterobjectfields,imagerequestkey,usernameobject,postlike_count,commentcount,combineposts,formatprofilelist)
 
 from .serializers import (UserSerializer,ProfileSerializer,FollowUserSerializer,AboutModelSerialiser,PostModelSerialiser,LikePostModelSerializer,CommentPostSerializer,NotificationSerializer)
 
@@ -343,8 +344,8 @@ def createordeletelike(req,postid,userid)->Response:
     likepostsiri= LikePostModelSerializer(data=reqdata)
     if likepostsiri.is_valid():
       likepostsiri.save()
-      updatepostlike_count_res= postlike_count(postid)
-      returndata={"details":"object created","like_count":updatepostlike_count_res["no_of_likes"]}
+      postlike_count_res= postlike_count(postid)
+      returndata={"details":"object created","like_count":postlike_count_res["no_of_likes"]}
     else:
       returndata = {"details":"objcted not created"} 
   except ValidationError:
@@ -363,7 +364,6 @@ def checkuserlikepoststatus(req,postid,userid):
     returndata={"has_liked":False}     
   return Response(returndata)  
     
-
 # COMMENT MODEL APIS
  
 @api_view(['POST'])
@@ -380,8 +380,8 @@ def createcomment(req,postid,userid)->Response:
     commentsiri= CommentPostSerializer(data=reqdata)
     if commentsiri.is_valid():
       commentsiri.save()
-      updatepostcomment_count_res= commentcount(postid)
-      returndata={"details":"object created","comment_count":updatepostcomment_count_res["no_of_comments"]}
+      comment_count_res= commentcount(postid)
+      returndata={"details":"object created","comment_count":comment_count_res["no_of_comments"]}
     else:
       returndata = {"details":"objcted not created"} 
   except KeyError:
@@ -445,7 +445,7 @@ def getallfollowers(req,userid):
     if followerobj is not None and len(followerobj) != 0:
       serialised= FollowUserSerializer(followerobj,many=True)
       initreturndata=serialised.data
-      finaldata=filterfollowerobjectfields(initreturndata,related_name="followers")
+      finaldata=filterobjectfields(initreturndata,related_name="followers")
       returndata= {"details":finaldata}
     else:
       returndata={"details":"no followers"}
@@ -461,7 +461,7 @@ def getallfollowing(req,userid):
     if followerobj is not None and len(followerobj) != 0:
       serialised= FollowUserSerializer(followerobj,many=True)
       init_returndata=serialised.data
-      final_data=filterfollowerobjectfields(init_returndata,related_name="following")
+      final_data=filterobjectfields(init_returndata,related_name="following")
       returndata= {"details":final_data}
     else:
       returndata={"details":"no follows"}
@@ -485,9 +485,40 @@ def getuserfollowstatus(req,userid,attempteduserid):
 @api_view(["GET"])
 def recommendedfollowers(req,userid):
   returndata={}
+  recommended_followers_list=[]
+  try:
+    req_user_profile= Profile.objects.filter(user=userid)[:1][0] 
+
+    followers_by_occupation_category= Profile.objects.filter(occupation_category= req_user_profile.occupation_category).exclude(user=userid)
+    recommended_followers_list.extend(followers_by_occupation_category)
+
+    users_followed_by_user= req_user_profile.user.following.all()
+    user_objects=[objectt.user_followed for objectt in users_followed_by_user]
+
+    # get the profiles of the followers of the users followed by the req user
+
+    profiles_of_users_following_followers= Profile.objects.filter(user__following__user_followed__in=user_objects).exclude(user=userid)
+    recommended_followers_list.extend(profiles_of_users_following_followers)
+    
+    # get the profiles of the users followed by the users followed by the req user
+    for user in user_objects:
+      user_following= user.following.all()
+      for item in user_following:
+        user_following_profile= Profile.objects.filter(user=item.user_followed).exclude(user=userid)[:1][0]
+        recommended_followers_list.append(user_following_profile)
+    
+    # excude users that have been followed
+    _sorted_list= [_object for _object in recommended_followers_list if _object.user not in user_objects]
+
+    profile_siri= ProfileSerializer(_sorted_list,many=True)
+    init_data= profile_siri.data
+    final_list= formatprofilelist(init_data)
+    length_of_final_list= len(final_list)
+    returndata={"details":final_list}
+  except IndexError:
+    returndata={"details":"invalid userid"}
+  return Response(returndata)
   
-
-
 # notifications
 
 @api_view(["GET"])

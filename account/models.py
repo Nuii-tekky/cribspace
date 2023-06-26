@@ -19,11 +19,12 @@ class Profile(models.Model):
     ("Security","security"),
     ("Religious","religious"),
     ("Business","business"),
+    ("Journalism","journalism"),
     ("Miscallenous","miscallenous")
   )
 
   user= models.ForeignKey(user,on_delete=models.CASCADE)
-  id_user= models.IntegerField()
+  id_user= models.IntegerField(null=True)
   bio= models.TextField(default="i am a cribspace user",null=True)
   location= models.CharField(default="somewhere,earth",null= True, max_length= 50)
   occupation= models.CharField(default="cribspace user",null= True, max_length= 50)

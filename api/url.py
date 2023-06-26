@@ -14,11 +14,12 @@ urlpatterns= [
   path('users/getbasicuserdata',views.getuserinfo,name="basicdata"),
   path('users/getusername',views.getusername,name="getusername"),
 
-  path('users/followuser/follower=<int:followerid>&userfollowed=<int:userfollowedid>',views.createordeletefollow,name="createordeletefollow"),
-  path('users/getfollowers/userid=<int:userid>',views.getallfollowers),
-  path('users/getfollowing/userid=<int:userid>',views.getallfollowing),
+  path('followers/followuser/follower=<int:followerid>&userfollowed=<int:userfollowedid>',views.createordeletefollow,name="createordeletefollow"),
+  path('followers/getfollowers/userid=<int:userid>',views.getallfollowers),
+  path('followers/getfollowing/userid=<int:userid>',views.getallfollowing),
 
-  path('users/getfollowerstatus/user=<int:userid>&otheruser=<int:attempteduserid>',views.getuserfollowstatus),
+  path('followers/getfollowerstatus/user=<int:userid>&otheruser=<int:attempteduserid>',views.getuserfollowstatus),
+  path('followers/recommendedfollowers/userid=<int:userid>',views.recommendedfollowers),
 
   path('profiles/updateprofile/<int:userid>',views.updateuserprofiledata,name="updateuserprofile"),
   path('profiles/getprofiledata',views.getuserprofiledata,name='getprofile'),

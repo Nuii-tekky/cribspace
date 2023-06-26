@@ -1,3 +1,4 @@
+from fuzzywuzzy import process
 import itertools
 import random
 
@@ -7,6 +8,17 @@ from posts.models import Post
 these are my messengers,they are here cos they are second class functions,not worthy to be among the view functions,they are kind of the backend of my backend
 
 """
+
+def closematches(_string,data):
+  returndata={}
+  matches_state=True
+  close_matches= process.extract(_string,data)
+  matches_list= [match[0] for match in close_matches]
+  
+
+
+
+
 
 def combineposts(inp1,inp2,inp3)-> dict:
   returndata={}
@@ -46,8 +58,7 @@ def is_requestkeys_valid(data,model= None)->dict:
   return return_object   
 
 
-
-def filterfollowerobjectfields(data,related_name=None)-> object:
+def filterobjectfields(data,related_name=None)-> object:
   returndata={}
   returnlist=[]
   allowedkeysfollowers=["follower","created_at"]
@@ -77,6 +88,23 @@ def filterfollowerobjectfields(data,related_name=None)-> object:
         returndata[allowedarray_use_case[1]]=value
     return returndata 
   
+
+def formatprofilelist(data) -> list:
+  finallist=[]
+  pseudolist=[]
+  if len(data) >= 1:
+    for value in data:
+      if value not in pseudolist:
+        pseudolist.append(value)
+    for item in pseudolist:
+      updated_obj={}    
+      for key,value in item.items():
+        if key == "user":
+          updated_obj[key]=value
+      finallist.append(updated_obj)    
+  return finallist  
+
+
 
 def imagerequestkey(reqdata)->dict:
   data= reqdata

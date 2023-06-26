@@ -13,6 +13,7 @@ urlpatterns= [
   path('users/verifyuser',views.verifyuserexistence,name="checkuserexists"),
   path('users/getbasicuserdata',views.getuserinfo,name="basicdata"),
   path('users/getusername',views.getusername,name="getusername"),
+  path('users/search',views.searchhandler),
 
   path('followers/followuser/follower=<int:followerid>&userfollowed=<int:userfollowedid>',views.createordeletefollow,name="createordeletefollow"),
   path('followers/getfollowers/userid=<int:userid>',views.getallfollowers),

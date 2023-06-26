@@ -10,20 +10,16 @@ these are my messengers,they are here cos they are second class functions,not wo
 """
 
 def closematches(_string,data):
-  returndata={}
-  matches_state=True
   close_matches= process.extract(_string,data)
-  matches_list= [match[0] for match in close_matches]
-  
-
-
-
-
+  matches_list=[]
+  for _match,score in close_matches:
+    if score >= 46:
+      matches_list.append(_match)
+  return matches_list
 
 def combineposts(inp1,inp2,inp3)-> dict:
   returndata={}
   combineposts= list(itertools.chain(*inp1,*inp2,*inp3))
-  random.shuffle(combineposts)
   posts_length= len(combineposts)
   returndata={"posts":combineposts,"length":posts_length}
   return returndata
@@ -103,7 +99,6 @@ def formatprofilelist(data) -> list:
           updated_obj[key]=value
       finallist.append(updated_obj)    
   return finallist  
-
 
 
 def imagerequestkey(reqdata)->dict:

@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 
-from .messengers import (is_requestkeys_valid,filterobjectfields,imagerequestkey,usernameobject,postlike_count,commentcount,combineposts,formatprofilelist)
+from .messengers import (is_requestkeys_valid,filterobjectfields,imagerequestkey,usernameobject,postlike_count,commentcount,combineposts,formatprofilelist,closematches)
 
 from .serializers import (UserSerializer,ProfileSerializer,FollowUserSerializer,AboutModelSerialiser,PostModelSerialiser,LikePostModelSerializer,CommentPostSerializer,NotificationSerializer)
 
@@ -162,6 +162,33 @@ def getusername(req)->Response:
     returndata={"details":"key error"}
   return Response(returndata)
 
+@api_view(["GET"])
+def searchhandler(req)->Response:
+  returndata={}
+  req_username= req.query_params.get("username")
+  if req_username:
+    max_user_matches= req.query_params.get("max_matches")
+    cribspace_users= get_user_model().objects.all()
+    usernames= [_object.username for _object in cribspace_users]
+    all_matches= closematches(req_username,usernames)
+    length_of_matches=len(all_matches)
+    usernames_list=[]
+    if max_user_matches:
+      if int(max_user_matches) > length_of_matches:
+        usernames_list = all_matches
+      else:
+        final_matches= all_matches[:int(max_user_matches)]
+        usernames_list =final_matches
+    else:
+      usernames_list = all_matches
+    users_profiles=Profile.objects.filter(user__username__in=usernames_list)
+    siri= ProfileSerializer(users_profiles,many=True)
+    returndata={"details":siri.data}  
+  else:
+    returndata={"details":"incomplete query params"}
+  return Response(returndata)
+
+
 # PROFILE MODEL APIS 
     
 @api_view(['PUT','POST'])
@@ -208,7 +235,7 @@ def updateuserprofiledata(req,userid)->Response:
 def getuserprofiledata(req)->Response:
   returndata={}
   try:
-    iduser= req.headers["iduser"]
+    iduser= req.header["iduser"]
     db_obj= Profile.objects.get(id_user= iduser)
     if db_obj is not None and db_obj is not {}:
       serialised_res= ProfileSerializer(db_obj,many=False)
@@ -301,9 +328,9 @@ def generateposts(req,userid):
   posts_by_following=[Post.objects.filter(user=following_id) for following_id in following_ids if Post.objects.filter(user=following_id).exists()]
   
   # Combine the posts
-  randompostsdata= combineposts(userposts,posts_by_followers,posts_by_following)
-  finalposts= randompostsdata["posts"]
-  total_posts= randompostsdata["length"]
+  combinedposts_dict= combineposts(userposts,posts_by_followers,posts_by_following)
+  finalposts= combinedposts_dict["posts"]
+  total_posts= combinedposts_dict["length"]
 
   paginated_posts=[]
   if load_more:
@@ -486,6 +513,7 @@ def getuserfollowstatus(req,userid,attempteduserid):
 def recommendedfollowers(req,userid):
   returndata={}
   recommended_followers_list=[]
+  data_length= int(req.query_params.get("data_length"))
   try:
     req_user_profile= Profile.objects.filter(user=userid)[:1][0] 
 
@@ -514,7 +542,14 @@ def recommendedfollowers(req,userid):
     init_data= profile_siri.data
     final_list= formatprofilelist(init_data)
     length_of_final_list= len(final_list)
-    returndata={"details":final_list}
+    if data_length:
+      if data_length > length_of_final_list:
+        returndata={"details":final_list}
+      else:
+        purged_list= final_list[:data_length]
+        returndata={"details":purged_list}
+    else:
+      returndata={"details":final_list}    
   except IndexError:
     returndata={"details":"invalid userid"}
   return Response(returndata)

@@ -5,18 +5,22 @@ name = "pypi"
 
 [packages]
 django = "==4.2"
-django-rest-framework = "*"
-asyncio = "*"
+djangorestframework = "*"
 pytz = "==2023.3"
-tzdata = "==2023.3"
 aiohttp = "*"
 requests = "*"
 python-memcached = "*"
 asgiref = "*"
 fuzzywuzzy = "*"
 python-levenshtein = "*"
+django-cors-headers = "*"
+python-dotenv = "*"
+psycopg2-binary = "*"
+dj-database-url = "*"
+pillow = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"
+dj-database-url="*"

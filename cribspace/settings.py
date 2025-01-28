@@ -3,14 +3,10 @@ import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'default-secret-key')  # Default for development
-
-DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'False'
-
-# Application definition
+DEBUG= True
 
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
@@ -22,7 +18,6 @@ INSTALLED_APPS = [
     'notifications',
     'rest_framework',
     'rest_framework.authtoken',
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -55,9 +50,6 @@ REST_FRAMEWORK = {
 ROOT_URLCONF = 'cribspace.urls'
 
 WSGI_APPLICATION = 'cribspace.wsgi.application'
-
-
-
 
 DATABASES = {
     'default': dj_database_url.config(

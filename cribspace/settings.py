@@ -12,10 +12,7 @@ SECRET_KEY= os.getenv('SECRET_KEY')
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'posts.apps.PostsConfig',
-    'auther',
     'api',
-    'followers',
-    'home',
     'notifications',
     'rest_framework',
     'rest_framework.authtoken',

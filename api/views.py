@@ -1,4 +1,4 @@
-import abc
+
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -8,11 +8,10 @@ from rest_framework.authtoken.models import Token
 
 from .messengers import (is_requestkeys_valid,filterobjectfields,imagerequestkey,usernameobject,postlike_count,commentcount,combineposts,formatprofilelist,closematches)
 
-from .serializers import (UserSerializer,ProfileSerializer,FollowUserSerializer,AboutModelSerialiser,PostModelSerialiser,LikePostModelSerializer,CommentPostSerializer,NotificationSerializer)
+from .serializers import (UserSerializer,ProfileSerializer,FollowUserSerializer,PostModelSerialiser,LikePostModelSerializer,CommentPostSerializer,NotificationSerializer)
 
 from notifications.models import Notifcations
 from account.models import Profile,FollowerModel
-from home.models import aboutModel
 from posts.models import (Post,LikePost,CommentPost)
 
 
@@ -242,15 +241,6 @@ def getuserprofiledata(req)->Response:
   except KeyError:
     returndata={"details":"invalid inputs"}
   return Response(returndata)  
-
-
-# ABOUT MODEL API
-
-@api_view(["GET"])
-def getaboutobjects(req)->Response:
-  dbobj= aboutModel.objects.all()
-  serialised= AboutModelSerialiser(dbobj,many=True)
-  return Response({"details":serialised.data})
 
 
 # POST MODEL APIS

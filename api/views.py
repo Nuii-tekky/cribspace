@@ -66,57 +66,52 @@ def verifyuserexistence(req,format= None)->Response:
     returndata={"details":"key errror"}
   return Response(returndata)  
 
+@api_view(['PUT'])
+def updateuserinfo(req, req_id) -> Response:
+    returndata = {"details": "Something went wrong"} 
+    status_code = 400 
 
-@api_view(['PUT'])    
-def updateuserinfo(req,req_id)->Response:
-  returndata={}
-  try:
-    req_id
-    db_obj= get_user_model().objects.get(id=req_id)
-    if db_obj is not None:
-      try:
-        reqdata= req.data
-        if is_requestkeys_valid(reqdata,model="usermodel")["details"]==True:
-          try:
-            isUsernameorEmail= req.headers['fieldname']
-            fieldaffected=""
-            if isUsernameorEmail== "username":
-              try:
-                db_obj= get_user_model().objects.get(username= req.data["username"])
-                fieldaffected="username"
-                returndata={"details":"object exists","affectedfield":fieldaffected}
-              except get_user_model().DoesNotExist:
-                serialised=UserSerializer(db_obj,data=req.data,partial=True)
-                if serialised.is_valid():
-                  serialised.save()
-                  returndata={"details":"info updated"}
-                else:
-                  fieldaffected="username"
-                  returndata={"details":"info not updated","affectedfield":fieldaffected}
-            else:
-              try:
-                db_obj= get_user_model().objects.get(email= req.data["email"])
-                fieldaffected="email"
-                returndata={"details":"object exists","affectedfield":fieldaffected}
-              except get_user_model().DoesNotExist:
-                serialised=UserSerializer(db_obj,data=req.data,partial=True)
-                if serialised.is_valid():
-                  serialised.save()
-                  returndata={"details":"info updated"}
-                else:
-                  fieldaffected="email"
-                  returndata={"details":"info not updated","affectedfield":fieldaffected}
-          except KeyError:
-            returndata={"details":"incomplete headers"}
+    try:
+      db_obj = get_user_model().objects.get(id=req_id)
+    except get_user_model().DoesNotExist:
+      returndata["details"] = "User not found"
+      status_code = 404
+    else:
+      req_data = req.data
+      if not req_data:
+          returndata["details"] = "No request data provided"
+          status_code = 400
+      elif not is_requestkeys_valid(req_data, model="usermodel")["details"]:
+        returndata["details"] = "Invalid fields"
+        status_code = 400
+      else:
+        fieldname = req.headers.get("fieldname")
+        if fieldname not in ["username", "email"]:
+          returndata["details"] = "Invalid or missing 'fieldname' in headers"
+          status_code = 400
         else:
-          returndata={"details":"invalid fields"}   
-      except KeyError:
-        returndata={"details":"no request data"} 
-  except get_user_model().DoesNotExist:
-    returndata={"details":"no such user"}
-  except KeyError:
-    returndata={"details":"key error"}
-  return Response(returndata)  
+          field_value = req_data.get(fieldname)
+          if not field_value:
+            returndata["details"] = f"Missing {fieldname} in request body"
+            status_code = 400
+          else:
+            existing_user = get_user_model().objects.filter(**{fieldname: field_value}).exclude(id=req_id).first()
+            if existing_user:
+              returndata["details"] = "Object exists"
+              returndata["affectedfield"] = fieldname
+              status_code = 409
+            else:
+              serializer = UserSerializer(db_obj, data=req_data, partial=True)
+              if serializer.is_valid():
+                serializer.save()
+                returndata["details"] = "Info updated"
+                status_code = 200
+              else:
+                returndata["details"] = "Info not updated"
+                returndata["errors"] = serializer.errors
+                status_code = 400
+    return Response(returndata, status=status_code)
+
 
 
 @api_view(["GET"])

@@ -3,10 +3,9 @@ import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
-
-load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG= True
+load_dotenv()
 SECRET_KEY= os.getenv('SECRET_KEY')
 
 INSTALLED_APPS = [

@@ -8,10 +8,10 @@ patterns for my api endpoints with their respective views
 """
 
 urlpatterns= [
-  path('users/createnewuser',views.createnewuser,name="createnewuser"),
-  path('users/updateuserdata/<int:req_id>',views.updateuserinfo,name="updateuserinfo"),
-  path('users/verifyuser',views.verifyuserexistence,name="checkuserexists"),
-  path('users/getbasicuserdata',views.getuserinfo,name="basicdata"),
+  path('users/register',views.createnewuser,name="createnewuser"),
+  path('users/updateuser/<int:req_id>',views.updateuserinfo,name="updateuserinfo"),
+  path('users/verify',views.verifyuserexistence,name="checkuserexists"),
+  path('users/userdata',views.getuserinfo,name="basicdata"),
   path('users/getusername',views.getusername,name="getusername"),
   path('users/search',views.searchhandler),
 
